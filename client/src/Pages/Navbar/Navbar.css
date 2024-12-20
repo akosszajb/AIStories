@@ -1,0 +1,47 @@
+.Navbar {
+  background-color: #333;
+  padding: 10px;
+}
+
+.nav-links {
+  display: flex;
+  justify-content: space-around; /* Egyenletes távolságot ad a gombok között */
+  align-items: center; /* Középre igazítja a gombokat függőlegesen */
+}
+
+.nav-item {
+  color: white;
+  text-decoration: none;
+}
+
+.nav-item button {
+  background-color: #444;
+  color: white;
+  border: none;
+  padding: 10px 20px; /* Kisebb padding az oldalsó széleken */
+  cursor: pointer;
+  border-radius: 5px; /* Lekerekített sarkok a gomboknak */
+  transition: background-color 0.3s ease; /* Animáció a háttérszín változásához */
+}
+
+.nav-item button:hover {
+  background-color: #555;
+}
+
+/* Reszponzív design, kisebb képernyőkön a gombok elrendezése */
+@media (max-width: 768px) {
+  .nav-links {
+    flex-direction: column; /* A gombokat oszlopba rendezi */
+    align-items: stretch; /* Kiterjeszti a gombokat az oszlop teljes szélességére */
+  }
+
+  .nav-item {
+    width: 100%;
+    text-align: center; /* A gombokat középre igazítja */
+    margin: 5px 0; /* Margin a gombok között */
+  }
+
+  .nav-item button {
+    width: 100%; /* A gombok teljes szélességet kitöltik */
+  }
+}
