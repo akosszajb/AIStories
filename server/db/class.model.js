@@ -19,7 +19,6 @@ const ClassSchema = new Schema({
     type: Number,
     required: true,
   },
-  items: { type: Array, required: true, default: [] },
   created: {
     type: Date,
     default: Date.now,
