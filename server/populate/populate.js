@@ -27,7 +27,6 @@ const populateClasses = async () => {
     attackType: pick(attackTypes),
     attack: 10,
     defense: 10,
-    items: [pick(exampleItems)],
   }));
 
   await ClassModel.create(classes);
