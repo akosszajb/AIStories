@@ -42,12 +42,14 @@ const ClassListPage = () => {
   return (
     <div>
       <h2>Classes</h2>
-
+      <h3>Click on a classname to see the stats</h3>
       <ul>
         {classes.map((cls) => (
           <li key={cls.name}>{cls.name}</li>
         ))}
       </ul>
+
+      <h2>Info:</h2>
     </div>
   );
 };

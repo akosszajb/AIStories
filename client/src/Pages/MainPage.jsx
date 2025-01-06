@@ -1,18 +1,20 @@
 import React, { useEffect, useState } from "react";
 
-const fetchClasses = () => {
-  return fetch("/api/classes").then((res) => {
-    if (!res.ok) {
-      throw new Error("Failed to fetch classes");
-    }
-    return res.json();
-  });
-};
-
 const MainPage = () => {
   return (
     <div>
-      <h2>THIS IS THE MAIN PAGE - SOME TEXT TO HERE</h2>
+      <h2>THIS IS THE MAIN PAGE</h2>
+      {/* <h3>Köszöntés</h3>
+      <h3>mi kell majd még ide:</h3>
+      <ul>
+        <li>ez itt a fő oldal,</li>
+        <li>néhány információ a a projektről - oktatási cél</li>
+        <li>néhány információ a játékról, (játékszabályok?),</li>
+        <li>regisztálás / loginolás,</li>
+        <li>néhány információ a játékról,</li>
+        <li>játék indítása</li>
+      </ul>
+      <h3>Alap story - A Lebegő Torony (Start/continue button)</h3> */}
     </div>
   );
 };
