@@ -3,6 +3,8 @@ import express from "express";
 import mongoose from "mongoose";
 import classNames from "../db/classNames.json" assert { type: "json" };
 import ClassModel from "../db/class.model.js";
+import UserModel from "../db/user.model.js";
+import bcrypt from "bcrypt";
 
 const router = express.Router();
 
@@ -33,12 +35,28 @@ const populateClasses = async () => {
   console.log("Classes created");
 };
 
+const createUser = async () => {
+  // await UserModel.deleteMany({});
+  const psw = "something";
+  const hashedPassword = await bcrypt.hash(psw, 10);
+
+  const firstUser = {
+    username: "first",
+    email: "email@email.com",
+    password: hashedPassword,
+  };
+
+  await UserModel.create(firstUser);
+  console.log("First user created!");
+};
+
 const app = express();
 app.use(express.json());
 
 const main = async () => {
   await mongoose.connect(MONGO_URL);
   await populateClasses();
+  await createUser();
 
   await mongoose.disconnect();
 };

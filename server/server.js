@@ -20,8 +20,14 @@ if (!MONGO_URL) {
 }
 
 const app = express();
+
+const corsOptions = {
+  origin: "http://localhost:5173",
+  methods: "GET,POST,PUT,DELETE",
+};
+
 app.use(express.json());
-app.use(cors());
+app.use(cors(corsOptions));
 
 //ENDPOINTS ---------------------------
 
@@ -126,7 +132,6 @@ app.delete("api/character/:id", async (req, res) => {
 });
 
 // Registration endpoint
-
 app.post("/register", async (req, res) => {
   const { username, email, password } = req.body;
   if (!username || !email || !password) {
@@ -161,7 +166,7 @@ app.post("/register", async (req, res) => {
     if (error.code === 11000) {
       return res.status(400).json({
         status: "error",
-        message: "Email or username already exists!",
+        message: "Username already exists!",
       });
     }
     return res.status(500).json({ error: "Internal Server Error" });
@@ -205,7 +210,6 @@ app.delete("/register", async (req, res) => {
 });
 
 // Login endpoint
-
 app.post("/login", async (req, res) => {
   const { username, password } = req.body;
 
@@ -235,6 +239,7 @@ app.post("/login", async (req, res) => {
     );
 
     return res.status(200).json({
+      token: token,
       status: "success",
       message: `Login with ${username} username was successful!`,
     });
