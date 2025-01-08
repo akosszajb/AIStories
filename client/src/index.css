@@ -1,0 +1,68 @@
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: rgb(255, 255, 255);
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.Navbar nav ul {
+  display: flex;
+  gap: 1rem; 
+  list-style-type: none;
+  padding: 0;
+}
+
+.Navbar a button {
+  padding: 0.7rem 1.7rem;
+  margin-right: 1rem;
+  font-weight: bold;
+  color: white;
+  text-transform: uppercase;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: rgb(134, 197, 92);
+  border: none;
+  transition: background-color 0.3s ease;
+}
+
+.Navbar a button:hover {
+  background-color: rgb(99, 151, 254);
+}
+
+/* További gombok */
+button {
+  padding: 0.7rem 1.7rem;
+  margin-right: 1rem;
+  font-weight: bold;
+  border-radius: 4px;
+  cursor: pointer;
+  background-color: rgb(134, 197, 92);
+}
+
+button:hover {
+  background-color: rgb(99, 151, 254);
+}
+
+.grow {
+  flex: 1;
+}
+
+
+.Navbar {
+  background-color: #333;
+  color: white;
+  padding: 1rem 2rem;
+}
