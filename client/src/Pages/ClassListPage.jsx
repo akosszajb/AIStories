@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 const fetchClasses = () => {
-  return fetch("/api/classes").then((res) => {
+  return fetch("/api/class").then((res) => {
     if (!res.ok) {
       throw new Error("Failed to fetch classes");
     }

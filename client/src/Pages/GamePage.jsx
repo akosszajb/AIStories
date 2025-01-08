@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
 
 const GamePage = () => {
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  // const [loading, setLoading] = useState(true);
+  // const [error, setError] = useState(null);
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+  // if (loading) {
+  //   return <div>Loading...</div>;
+  // }
 
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
+  // if (error) {
+  //   return <div>Error: {error}</div>;
+  // }
 
   return (
     <div>
@@ -46,4 +46,4 @@ const GamePage = () => {
   );
 };
 
-export default ClassListPage;
+export default GamePage;

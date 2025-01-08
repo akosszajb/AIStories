@@ -4,7 +4,8 @@ import "./index.css";
 import { RouterProvider } from "react-router-dom";
 import { router } from "./index.jsx";
 
-createRoot(document.getElementById("root")).render(
+const root = createRoot(document.getElementById("root"));
+root.render(
   <StrictMode>
     <RouterProvider router={router} />
   </StrictMode>

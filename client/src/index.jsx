@@ -8,6 +8,7 @@ import ClassListPage from "./Pages/ClassListPage.jsx";
 import LoginPage from "./Pages/LoginPage.jsx";
 import MainPage from "./Pages/MainPage.jsx";
 import RegisterPage from "./Pages/RegisterPage.jsx";
+import GamePage from "./Pages/GamePage.jsx";
 
 export const router = createBrowserRouter([
   {
@@ -34,13 +35,10 @@ export const router = createBrowserRouter([
         path: "/aitools",
         element: <AiToolsPage />,
       },
+      {
+        path: "/game",
+        element: <GamePage />,
+      },
     ],
   },
 ]);
-
-const root = ReactDOM.createRoot(document.getElementById("root"));
-root.render(
-  <React.StrictMode>
-    <RouterProvider router={router} />
-  </React.StrictMode>
-);
