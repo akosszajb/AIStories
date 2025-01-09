@@ -21,6 +21,13 @@ const UserSchema = new Schema({
     type: String,
     required: true,
   },
+  character: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Character",
+      required: true,
+    },
+  ],
   created: {
     type: Date,
     default: Date.now,
