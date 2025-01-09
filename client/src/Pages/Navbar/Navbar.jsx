@@ -32,11 +32,11 @@ const Navbar = () => {
               <img src="images/home.png" />
             </button>
           </Link>
-          <Link to="/game" classname="nav-item">
+          <Link to="/game" className="nav-item">
             <button type="button">Game</button>
           </Link>
-          <Link to="/classlist" className="nav-item">
-            <button type="button">Let's play - see the ClassList</button>
+          <Link to="/charactercreator" className="nav-item">
+            <button type="button">Character Creator</button>
           </Link>
           {loggedIn ? (
             <button type="button" onClick={handleLogout}>

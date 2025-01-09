@@ -4,7 +4,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import Navbar from "./Pages/Navbar/index.js";
 import AiToolsPage from "./Pages/AiToolsPage.jsx";
-import ClassListPage from "./Pages/ClassListPage.jsx";
+import CharacterCreatorPage from "./Pages/CharacterCreatorPage.jsx";
 import LoginPage from "./Pages/LoginPage.jsx";
 import MainPage from "./Pages/MainPage.jsx";
 import RegisterPage from "./Pages/RegisterPage.jsx";
@@ -20,8 +20,8 @@ export const router = createBrowserRouter([
         element: <MainPage />,
       },
       {
-        path: "/classlist",
-        element: <ClassListPage />,
+        path: "/charactercreator",
+        element: <CharacterCreatorPage />,
       },
       {
         path: "/login",

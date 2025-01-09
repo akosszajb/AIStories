@@ -1,47 +1,151 @@
 import React, { useEffect, useState } from "react";
+import "./GamePage.css";
 
 const GamePage = () => {
-  // const [loading, setLoading] = useState(true);
-  // const [error, setError] = useState(null);
+  const [story, setStory] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [character, setCharacter] = useState([]);
+  const [selectedCharacter, setSelectedCharacter] = useState(null);
 
-  // if (loading) {
-  //   return <div>Loading...</div>;
-  // }
+  let generatedText = "";
+  const token = localStorage.getItem("token");
 
-  // if (error) {
-  //   return <div>Error: {error}</div>;
-  // }
+  const basicStory = `It was a cold, clear day still early in Marpenoth, in the Year of Many Brews.
+    All around, the trees' leaves had already been touched by golden and fiery-orange hues when the Brave Blades arrived at the place they had sought for so long.
+    Their goal loomed dark and silent above them: the Floating Tower, the lifeless fortress of the long-dead Ondil, hidden deep within a chasm somewhere west of the Horn Hills. Ondil's tower hovered patiently, as it had for centuries, under the protection of a dreaded wizard.
+    \n
+    The Blades looked up, then away into the distance — except for "player's name," who stood with a "first item - weapon" raised defiantly and sized up the silently waiting tower from beneath their "second item (e.g., hat).`;
+
+  const fetchCharacterList = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch("/api/characterlist", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await response.json();
+      console.log("Data    " + JSON.stringify(data, null, 2));
+      if (response.ok) {
+        setCharacter(data);
+      } else {
+        setError("Failed to load characters");
+      }
+    } catch (error) {
+      console.error(error);
+      setError("An error occurred while fetching characters.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchCharacterList();
+  }, []);
+
+  const handleCharacterSelection = (character) => {
+    setSelectedCharacter(character);
+    console.log(`Selected character: ${character.name}`);
+  };
+
+  const fetchStory = async (input) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await fetch("/api/generate-story", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ prompt: input }),
+      });
+
+      const data = await response.json();
+
+      if (!data.text) {
+        throw new Error("No text found in the response.");
+      }
+
+      console.log(data);
+
+      const newParagraphs = data.text
+        .split("\n\n")
+        .map((paragraph, index) => <p key={index}>{paragraph}</p>);
+      setStory((prevStory) => [...prevStory, "-----------", ...newParagraphs]);
+    } catch (error) {
+      console.error(error);
+      setError("An error occurred while generating the story.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div>
       <h2>Game</h2>
-
-      <h3>Alap story - A Lebegő Torony</h3>
+      <h3>The Floating Tower</h3>
       <h4>
-        Ide jön pár alap instrukció a játékról, és egy kezdeti szövegrészlet
-        <br />
-        <br />
-        `Nagy kaland? Hah! Rettegés és lopakodás egy kriptában vagy valami
-        rosszabb helyen, vérontás vagy próbálkozás arra, hogy leüss dolgokat,
-        melyek nem véreznek már. Ha mágus vagy, akkor az egész csak addig tart,
-        míg egy másik varázsló gyorsabb nem lesz nálad. Ne beszélj nekem “nagy
-        kalandról"` <br />
-        Theldaun “Tűzdobó" Ieirson: Egy Dühös, Öreg Mágus Tanításai
-        <br />A Griff Évében
+        Become an adventurer in the The Floating Tower Story. Be a wizard, rogue
+        or fighter! IDE KELL MÉG STORY!!!!!!!!!!!!!!!
       </h4>
-      <h5>
-        Hideg, tiszta nap volt még Marpenoth kezdetén, a Több Sör Évében.
-        Körös-körül a fák leveleit már megérintették az arany és tűz-narancs
-        színek, amikor a Bátor Pengék elérték a helyet, mit oly sokáig kerestek.
-        Céljuk sötéten és csendesen függött felettük: a Lebegő Torony, a rég
-        halott Ondil élettelen erődje egy szakadék mélyén rejtőzve, valahol
-        nyugatra a Szarv Domboktól. Ondil tornya türelmesen lebegett, ahogy
-        tette ezt már századok óta egy rettegett varázsló védelmében.
-        <br />A Pengék felnéztek, azután el, a távolba - kivéve az "játékos
-        neve", aki egy harciasan felemelt "első item - fegyver" a kezében állt
-        és a csendesen várakozó tornyot méregette "második item (pl. kalap)"
-        alól.
-      </h5>
+      <h4>Choose your character to play:</h4>
+      {loading && <p>Loading characters...</p>}
+      {error && <p style={{ color: "red" }}>{error}</p>}
+      <ul>
+        <li key={character._id}>
+          <button onClick={() => handleCharacterSelection(character)}>
+            {character.name}
+          </button>
+        </li>
+      </ul>
+
+      {selectedCharacter && (
+        <div>
+          <h5>Character selected: {selectedCharacter.name}</h5>{" "}
+          <button
+            onClick={() =>
+              fetchStory(
+                "The player character wants to go to the right direction!"
+              )
+            }
+          >
+            Right
+          </button>
+          <button
+            onClick={() =>
+              fetchStory(
+                "The player character wants to go to the left direction!"
+              )
+            }
+          >
+            Left
+          </button>
+          <button
+            onClick={() =>
+              fetchStory(
+                "The player character wants to go to fly to happy place!"
+              )
+            }
+          >
+            Fly to happy place
+          </button>
+          <button
+            onClick={() =>
+              fetchStory(
+                `The player character say: "F.ck this I go to the next bar!"`
+              )
+            }
+          >
+            F.ck this I go to the next bar!
+          </button>
+        </div>
+      )}
+      <div>{basicStory}</div>
+      {loading && <p>Loading...</p>}
+      {error && <p style={{ color: "red" }}>{error}</p>}
+      {story && <div className="story-box">{story}</div>}
     </div>
   );
 };

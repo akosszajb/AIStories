@@ -9,7 +9,7 @@ const fetchClasses = () => {
   });
 };
 
-const ClassListPage = () => {
+const CharacterCreatorPage = () => {
   const [classes, setClasses] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -41,7 +41,7 @@ const ClassListPage = () => {
 
   return (
     <div>
-      <h2>Classes</h2>
+      <h2>Character Creator Page</h2>
       <h3>Click on a classname to see the stats</h3>
       <ul>
         {classes.map((cls) => (
@@ -54,4 +54,4 @@ const ClassListPage = () => {
   );
 };
 
-export default ClassListPage;
+export default CharacterCreatorPage;
