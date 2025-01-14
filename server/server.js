@@ -8,7 +8,11 @@ import ClassModel from "./db/class.model.js";
 import CharacterModel from "./db/character.model.js";
 import UserModel from "./db/user.model.js";
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import AIImageCreator from "./imageCreator.js";
+import geminiPromptGenerator from "./geminiPromptCreator.js";
+import pkg from "gridfs-stream";
 
+const { Grid } = pkg;
 const router = express.Router();
 
 dotenv.config();
@@ -34,6 +38,7 @@ const corsOptions = {
 
 const genAI = new GoogleGenerativeAI(GEMINIKEY);
 const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+
 app.use(express.json());
 app.use(cors(corsOptions));
 
@@ -112,12 +117,15 @@ app.get("/api/characterlist", verifyToken, async (req, res) => {
 
   try {
     const user = await UserModel.findById(userId);
+
     if (!user) {
       return res.status(404).json({ message: "User not found." });
     }
-    const character = await CharacterModel.findById(user.character);
+    const characters = await CharacterModel.find({
+      _id: { $in: user.character }, // Tömb alapú keresés
+    });
 
-    return res.status(200).json(character);
+    return res.status(200).json(characters);
   } catch (error) {
     console.error("Error with character GET endpoint:", error);
     return res.status(500).json({ error: "Internal Server Error" });
@@ -279,14 +287,58 @@ app.post("/login", async (req, res) => {
   }
 });
 
-// AI generated stories and pictures endpoints
+// STORY and PICTURE
 
-// AI generated text by gemini with user input
+// Basic story endpoint
+//MAGIC NUMBERS!!!!!!!!!!!!!!!!!!!!
+app.post("/api/basicstories", verifyToken, async (req, res) => {
+  const userId = req.userId;
+  try {
+    if (!userId) {
+      return res.status(400).json({ message: "User ID is missing." });
+    }
+    const user = await UserModel.findById(userId);
+    const character = await CharacterModel.findById(user.character[0]);
+    const stories = character.fullStories[0] + character.fullStories[1];
+
+    const option1Startindex = character.fullStories[2].indexOf("option1 :") + 9;
+    const option2Startindex = character.fullStories[2].indexOf("option2 :") + 9;
+    const option3Startindex = character.fullStories[2].indexOf("option3 :") + 9;
+    const option4Startindex = character.fullStories[2].indexOf("option4 :") + 9;
+
+    const option1Text = character.fullStories[2]
+      .slice(option1Startindex, option2Startindex - 11)
+      .trim();
+    const option2Text = character.fullStories[2]
+      .slice(option2Startindex, option3Startindex - 11)
+      .trim();
+    const option3Text = character.fullStories[2]
+      .slice(option3Startindex, option4Startindex - 11)
+      .trim();
+    const option4Text = character.fullStories[2]
+      .slice(option4Startindex, character.fullStories[2].length)
+      .trim();
+
+    res.status(200).json({
+      basicstories: stories,
+      buttonText1: option1Text,
+      buttonText2: option2Text,
+      buttonText3: option3Text,
+      buttonText4: option4Text,
+    });
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .json({ message: "Internal Server Error", error: error.message });
+  }
+});
+
+// AI generated text by gemini and picture url by pollinatios with user input
+//MAGIC NUMBERS!!!!!!!!!!!!!!!!!!!!
 app.post("/api/generate-story", verifyToken, async (req, res) => {
   const userId = req.userId;
   const input = req.body.prompt;
-  console.log(input);
-
   try {
     if (!userId) {
       return res.status(400).json({ message: "User ID is missing." });
@@ -295,35 +347,51 @@ app.post("/api/generate-story", verifyToken, async (req, res) => {
       return res.status(400).json({ message: "Prompt is missing." });
     }
     const user = await UserModel.findById(userId);
-
     const character = await CharacterModel.findById(user.character[0]);
-
-    let story = "";
-    character.fullStories.forEach((element) => {
-      story += element;
-    });
-
-    const AIprompt =
-      "This is just a starter prompt, I am learning the communication with you. I created a text-adventure game with the starter story: " +
-      story +
-      "And these are some headlines to help you to create the next part of the story" +
-      character.storyheadlines.join() +
-      "After this scene the player give you this direction to move his character: " +
-      input +
-      "Can you give short answer, continue this story? (max 40 words) As a book.";
-
-    const result = await model.generateContent(AIprompt);
-    console.log("Result from AI:", result);
-
+    const result = await model.generateContent(
+      geminiPromptGenerator(character, input)
+    );
     const generatedText = result.response.text();
-
+    console.log(generatedText);
     if (!generatedText) {
       throw new Error("AI did not return any response.");
     }
+    const optionsStartIndex = generatedText.indexOf("xxxx");
+    const headlinesIndex = generatedText.indexOf("yyy");
+    const headlinesToSave = generatedText
+      .slice(headlinesIndex, optionsStartIndex)
+      .trim();
+    const textToSave = generatedText.slice(0, headlinesIndex).trim();
+    character.fullStories.push(textToSave);
+    character.pictureheadlines.push([headlinesToSave]);
 
-    character.fullStories.push(generatedText);
+    const option1Startindex = generatedText.indexOf("option1 : ") + 9;
+    const option2Startindex = generatedText.indexOf("option2 : ") + 9;
+    const option3Startindex = generatedText.indexOf("option3 : ") + 9;
+    const option4Startindex = generatedText.indexOf("option4 : ") + 9;
+
+    const option1Text = generatedText
+      .slice(option1Startindex, option2Startindex - 11)
+      .trim();
+    const option2Text = generatedText
+      .slice(option2Startindex, option3Startindex - 11)
+      .trim();
+    const option3Text = generatedText
+      .slice(option3Startindex, option4Startindex - 11)
+      .trim();
+    const option4Text = generatedText.slice(option4Startindex).trim();
+
+    const aiPicureUrl = AIImageCreator(character);
+    character.aipictureurls.push(aiPicureUrl);
     await character.save();
-    res.status(200).json({ text: generatedText });
+    res.status(200).json({
+      text: textToSave,
+      generatedPicture: aiPicureUrl,
+      buttonText1: option1Text,
+      buttonText2: option2Text,
+      buttonText3: option3Text,
+      buttonText4: option4Text,
+    });
   } catch (error) {
     console.error(error);
     res

@@ -94,6 +94,18 @@ const CharacterSchema = new Schema({
     ],
     // címszavak a LLM prompthoz
   },
+  aipictureurls: {
+    type: Array,
+    required: true,
+    default: [],
+  },
+  pictureheadlines: {
+    type: Array,
+    required: true,
+    default: [
+      ["medievalfantasy", "TheFloatingTower", "adventure", "story", "game"],
+    ],
+  },
   fullStories: {
     type: Array,
     required: true,
@@ -101,8 +113,8 @@ const CharacterSchema = new Schema({
       `It was a cold, clear day still early in Marpenoth, in the Year of Many Brews.
     All around, the trees' leaves had already been touched by golden and fiery-orange hues when the Brave Blades arrived at the place they had sought for so long.
     Their goal loomed dark and silent above them: the Floating Tower, the lifeless fortress of the long-dead Ondil, hidden deep within a chasm somewhere west of the Horn Hills. Ondil's tower hovered patiently, as it had for centuries, under the protection of a dreaded wizard.`,
-      `The Blades looked up, then away into the distance — except for "player's name," who stood with a "first item - weapon" raised defiantly and sized up the silently waiting   tower from beneath their "second item (e.g., hat).`,
-      `Become an adventurer in the The Floating Tower Story. Be a wizard, rouge or fighter! Explore the Forgotten Realms while you meet monsters and bandits and become a renowned Adventurer across the world! You are a newly appointed member in the "The Blades"`,
+      `Become an adventurer in the The Floating Tower Story. Be a wizard, rouge or fighter! Explore the Forgotten Realms while you meet warlocks and bandits and become a renowned Adventurer across the world! You are a newly appointed member in the "The Blades"`,
+      "xxxx option1 : Teleport to the tower, option2 : Lockpicking the gate, option3 : Drink a big glass of beer, option4 : Building a campfire",
     ],
   },
   created: {
