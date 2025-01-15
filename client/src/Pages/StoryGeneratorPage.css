@@ -1,0 +1,17 @@
+.story-text {
+    white-space: pre-line;
+  }
+
+  .generated-image-container {
+    background-size: cover; /* A háttérkép kitölti a rendelkezésre álló helyet */
+    background-position: center; /* A kép középre igazítása */
+    width: 500px; /* Kitölti a konténer szélességét */
+    height: 500px; /* Beállíthatod az egyedi magasságot */
+    display: flex; /* A flexbox használata */
+    justify-content: center; /* Középre igazítja a tartalmat vízszintesen */
+    align-items: center; /* Középre igazítja a tartalmat függőlegesen */
+  }
+
+  .userchoice {
+    font-weight: bolder;
+  }

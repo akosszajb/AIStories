@@ -32,8 +32,8 @@ const Navbar = () => {
               <img src="images/home.png" />
             </button>
           </Link>
-          <Link to="/game" className="nav-item">
-            <button type="button">Game</button>
+          <Link to="/storygeneratorpage" className="nav-item">
+            <button type="button">Story generator</button>
           </Link>
           <Link to="/charactercreator" className="nav-item">
             <button type="button">Character Creator</button>

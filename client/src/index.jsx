@@ -8,7 +8,7 @@ import CharacterCreatorPage from "./Pages/CharacterCreatorPage.jsx";
 import LoginPage from "./Pages/LoginPage.jsx";
 import MainPage from "./Pages/MainPage.jsx";
 import RegisterPage from "./Pages/RegisterPage.jsx";
-import GamePage from "./Pages/GamePage.jsx";
+import StoryGeneratorPage from "./Pages/StoryGeneratorPage.jsx";
 
 export const router = createBrowserRouter([
   {
@@ -36,8 +36,8 @@ export const router = createBrowserRouter([
         element: <AiToolsPage />,
       },
       {
-        path: "/game",
-        element: <GamePage />,
+        path: "/storygeneratorpage",
+        element: <StoryGeneratorPage />,
       },
     ],
   },
