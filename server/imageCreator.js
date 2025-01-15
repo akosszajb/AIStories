@@ -1,5 +1,6 @@
+// pollination img generator
 const imageCreator = (character) => {
-  const prompt = character.pictureheadlines.flat().join("").replace(/\s+/g, "");
+  const prompt = character.picturekeywords.flat().join("").replace(/\s+/g, "");
   const last30Chars = prompt.slice(-40);
 
   const width = 500;

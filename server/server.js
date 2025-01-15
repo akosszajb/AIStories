@@ -299,32 +299,14 @@ app.post("/api/basicstories", verifyToken, async (req, res) => {
     }
     const user = await UserModel.findById(userId);
     const character = await CharacterModel.findById(user.character[0]);
-    const stories = character.fullStories[0] + character.fullStories[1];
-
-    const option1Startindex = character.fullStories[2].indexOf("option1 :") + 9;
-    const option2Startindex = character.fullStories[2].indexOf("option2 :") + 9;
-    const option3Startindex = character.fullStories[2].indexOf("option3 :") + 9;
-    const option4Startindex = character.fullStories[2].indexOf("option4 :") + 9;
-
-    const option1Text = character.fullStories[2]
-      .slice(option1Startindex, option2Startindex - 11)
-      .trim();
-    const option2Text = character.fullStories[2]
-      .slice(option2Startindex, option3Startindex - 11)
-      .trim();
-    const option3Text = character.fullStories[2]
-      .slice(option3Startindex, option4Startindex - 11)
-      .trim();
-    const option4Text = character.fullStories[2]
-      .slice(option4Startindex, character.fullStories[2].length)
-      .trim();
+    const stories = character.fullStories.join("");
 
     res.status(200).json({
       basicstories: stories,
-      buttonText1: option1Text,
-      buttonText2: option2Text,
-      buttonText3: option3Text,
-      buttonText4: option4Text,
+      buttonText1: character.firstChoiceOptions[0],
+      buttonText2: character.firstChoiceOptions[1],
+      buttonText3: character.firstChoiceOptions[2],
+      buttonText4: character.firstChoiceOptions[3],
     });
   } catch (error) {
     console.error(error);
@@ -335,7 +317,6 @@ app.post("/api/basicstories", verifyToken, async (req, res) => {
 });
 
 // AI generated text by gemini and picture url by pollinatios with user input
-//MAGIC NUMBERS!!!!!!!!!!!!!!!!!!!!
 app.post("/api/generate-story", verifyToken, async (req, res) => {
   const userId = req.userId;
   const input = req.body.prompt;
@@ -351,46 +332,29 @@ app.post("/api/generate-story", verifyToken, async (req, res) => {
     const result = await model.generateContent(
       geminiPromptGenerator(character, input)
     );
-    const generatedText = result.response.text();
-    console.log(generatedText);
+
+    const responseText = result.response.text();
+    const cleanedText = responseText.replace(/```json|```/g, "").trim();
+    console.log(cleanedText);
+    const generatedText = JSON.parse(cleanedText);
     if (!generatedText) {
       throw new Error("AI did not return any response.");
     }
-    const optionsStartIndex = generatedText.indexOf("xxxx");
-    const headlinesIndex = generatedText.indexOf("yyy");
-    const headlinesToSave = generatedText
-      .slice(headlinesIndex, optionsStartIndex)
-      .trim();
-    const textToSave = generatedText.slice(0, headlinesIndex).trim();
-    character.fullStories.push(textToSave);
-    character.pictureheadlines.push([headlinesToSave]);
 
-    const option1Startindex = generatedText.indexOf("option1 : ") + 9;
-    const option2Startindex = generatedText.indexOf("option2 : ") + 9;
-    const option3Startindex = generatedText.indexOf("option3 : ") + 9;
-    const option4Startindex = generatedText.indexOf("option4 : ") + 9;
-
-    const option1Text = generatedText
-      .slice(option1Startindex, option2Startindex - 11)
-      .trim();
-    const option2Text = generatedText
-      .slice(option2Startindex, option3Startindex - 11)
-      .trim();
-    const option3Text = generatedText
-      .slice(option3Startindex, option4Startindex - 11)
-      .trim();
-    const option4Text = generatedText.slice(option4Startindex).trim();
+    character.fullStories.push(generatedText.generatedStory);
+    character.picturekeywords.push([generatedText.keywords, input]);
 
     const aiPicureUrl = AIImageCreator(character);
     character.aipictureurls.push(aiPicureUrl);
     await character.save();
+
     res.status(200).json({
-      text: textToSave,
+      text: generatedText.generatedStory,
       generatedPicture: aiPicureUrl,
-      buttonText1: option1Text,
-      buttonText2: option2Text,
-      buttonText3: option3Text,
-      buttonText4: option4Text,
+      buttonText1: generatedText.options[0],
+      buttonText2: generatedText.options[1],
+      buttonText3: generatedText.options[2],
+      buttonText4: generatedText.options[3],
     });
   } catch (error) {
     console.error(error);
