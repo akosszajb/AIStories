@@ -3,10 +3,13 @@ import "./StoryGeneratorPage.css";
 import { v4 as uuidv4 } from "uuid";
 
 const StoryGeneratorPage = () => {
-  const [story, setStory] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [character, setCharacter] = useState([]);
+  const [story, setStory] = useState("");
+  const [basicStoriesList, setBasicStoriesList] = useState([]);
+  const [selectedBasicStory, setSelectedBasicStory] = useState(null);
+  const [stories, setStories] = useState([]);
+  const [characterList, setCharacterList] = useState([]);
   const [selectedCharacter, setSelectedCharacter] = useState(null);
   const [generatedPictureUrl, setGeneratedPictureUrl] = useState(null);
   const [basicStories, setBasicStories] = useState("");
@@ -19,6 +22,29 @@ const StoryGeneratorPage = () => {
 
   const token = localStorage.getItem("token");
 
+  const fetchBasicStoriesList = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch("/api/basicstorieslist", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        setBasicStoriesList(data);
+      } else {
+        setError("Failed to load stories");
+      }
+    } catch (error) {
+      console.error(error);
+      setError("An error occurred while fetching stories.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const fetchCharacterList = async () => {
     try {
       const response = await fetch("/api/characterlist", {
@@ -28,7 +54,7 @@ const StoryGeneratorPage = () => {
       });
       const data = await response.json();
       if (response.ok) {
-        setCharacter(data);
+        setCharacterList(data);
       } else {
         setError("Failed to load characters");
       }
@@ -40,16 +66,20 @@ const StoryGeneratorPage = () => {
     }
   };
 
-  const fetchBasicStory = async () => {
+  const fetchSelectedBasicStory = async (characterID, selectedStoryID) => {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch("/api/basicstories", {
+      const response = await fetch("/api/selectedbasicstory", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
+        body: JSON.stringify({
+          characterID: characterID,
+          selectedStoryID: selectedStoryID,
+        }),
       });
 
       if (!response.ok) {
@@ -57,6 +87,7 @@ const StoryGeneratorPage = () => {
       }
 
       const data = await response.json();
+      setSelectedBasicStory(data.basicstories);
       setBasicStories(data.basicstories);
       setButtonTexts({
         buttonText1: data.buttonText1,
@@ -72,12 +103,26 @@ const StoryGeneratorPage = () => {
     }
   };
 
-  const handleCharacterSelection = (character) => {
-    setSelectedCharacter(character);
-    fetchBasicStory();
+  const handleBasicStorySelection = (selectedBasicStory) => {
+    setSelectedBasicStory(selectedBasicStory);
+    fetchCharacterList();
   };
 
-  const fetchNewStoryandPictureUrl = async (input) => {
+  const handleCharacterSelection = (character) => {
+    setSelectedCharacter(character);
+    fetchSelectedBasicStory(character._id, selectedBasicStory._id);
+  };
+
+  useEffect(() => {
+    fetchBasicStoriesList();
+  }, []);
+
+  useEffect(() => {
+    console.log("Image URL updated:", generatedPictureUrl);
+  }, [generatedPictureUrl]);
+
+  const fetchNewStoryandPictureUrl = async (characterID, input) => {
+    console.log(characterID);
     setLoading(true);
     setError(null);
     try {
@@ -87,7 +132,7 @@ const StoryGeneratorPage = () => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ prompt: input }),
+        body: JSON.stringify({ characterID: characterID, input: input }),
       });
 
       if (!response.ok) {
@@ -95,7 +140,6 @@ const StoryGeneratorPage = () => {
       }
 
       const data = await response.json();
-      console.log(data);
 
       if (!data.text) {
         throw new Error("No text found in the response.");
@@ -131,62 +175,93 @@ const StoryGeneratorPage = () => {
     }
   };
 
-  useEffect(() => {
-    fetchCharacterList();
-  }, []);
-
   return (
     <div>
       <h2>Story generator</h2>
-      <h3>The Floating Tower</h3>
-      <h4>
-        Become an adventurer in the The Floating Tower Story. Be a wizard, rogue
-        or fighter! IDE KELL MÉG STORY!!!!!!!!!!!!!!!
-      </h4>
-      <h4>Choose your character to play:</h4>
-      {loading && <p>Loading characters...</p>}
-      {error && <p style={{ color: "red" }}>{error}</p>}
-      <ul>
-        {character.map((char) => (
-          <li key={char._id}>
-            <button onClick={() => handleCharacterSelection(char)}>
-              {char.name}
-            </button>
-          </li>
-        ))}
-      </ul>
-      {selectedCharacter && (
+
+      {!selectedBasicStory && !selectedCharacter && (
         <div>
-          <h5>Character selected: {selectedCharacter.name}</h5>
+          <h3>Choose your story to play with:</h3>
+          {basicStoriesList.map((story) => (
+            <button
+              key={story._id}
+              onClick={() => handleBasicStorySelection(story)}
+            >
+              {story.name}
+            </button>
+          ))}
+        </div>
+      )}
+      {selectedBasicStory && !selectedCharacter && (
+        <div>
+          <h4>Story selected: {selectedBasicStory.name}</h4>
+          <h4>Choose your character</h4>
+          {loading && <p>Loading characters...</p>}
+          {error && <p style={{ color: "red" }}>{error}</p>}
+          <ul>
+            {characterList.map((char) => (
+              <li key={char._id}>
+                <button onClick={() => handleCharacterSelection(char)}>
+                  {char.name}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+      {selectedBasicStory && selectedCharacter && (
+        <div>
+          <h4>Character selected: {selectedCharacter.name}</h4>
           <div>
-            <h5>Basic Story:</h5>
-            <h6>{basicStories}</h6>
+            <h4>Basic Story:</h4>
+            <h5>{basicStories}</h5>
           </div>
 
           {loading && <p>Loading...</p>}
           {error && <p style={{ color: "red" }}>{error}</p>}
           {story && <div className="story-box">{story}</div>}
-
-          <button
-            onClick={() => fetchNewStoryandPictureUrl(buttonTexts.buttonText1)}
-          >
-            {buttonTexts.buttonText1}
-          </button>
-          <button
-            onClick={() => fetchNewStoryandPictureUrl(buttonTexts.buttonText2)}
-          >
-            {buttonTexts.buttonText2}
-          </button>
-          <button
-            onClick={() => fetchNewStoryandPictureUrl(buttonTexts.buttonText3)}
-          >
-            {buttonTexts.buttonText3}
-          </button>
-          <button
-            onClick={() => fetchNewStoryandPictureUrl(buttonTexts.buttonText4)}
-          >
-            {buttonTexts.buttonText4}
-          </button>
+          <div className="buttons-container">
+            <button
+              onClick={() =>
+                fetchNewStoryandPictureUrl(
+                  selectedCharacter._id,
+                  buttonTexts.buttonText1
+                )
+              }
+            >
+              {buttonTexts.buttonText1}
+            </button>
+            <button
+              onClick={() =>
+                fetchNewStoryandPictureUrl(
+                  selectedCharacter._id,
+                  buttonTexts.buttonText2
+                )
+              }
+            >
+              {buttonTexts.buttonText2}
+            </button>
+            <button
+              onClick={() =>
+                fetchNewStoryandPictureUrl(
+                  selectedCharacter._id,
+                  buttonTexts.buttonText3
+                )
+              }
+            >
+              {buttonTexts.buttonText3}
+            </button>
+            <button
+              onClick={() =>
+                fetchNewStoryandPictureUrl(
+                  selectedCharacter._id,
+                  buttonTexts.buttonText4
+                )
+              }
+            >
+              {buttonTexts.buttonText4}
+            </button>
+          </div>
         </div>
       )}
       {generatedPictureUrl && (
