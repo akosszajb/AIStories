@@ -17,7 +17,7 @@ if (!MONGO_URL) {
 
 const pick = (from) => from[Math.floor(Math.random() * from.length)];
 
-const createCharacter = async () => {
+const createGandalfCharacter = async () => {
   await CharacterModel.deleteMany({});
   const classes = await ClassModel.find();
 
@@ -27,30 +27,15 @@ const createCharacter = async () => {
     weapon: "staff",
     cloth: "robe",
     personality: 99,
-    storykeywords: [
-      "text adventure",
-      "Forgotten Realms",
-      "D&D",
-      "Dungeon and Dragons",
-      "Baldur's Gate",
-      "Tower of Ondil",
+    charStoryKeywords: [
       "The Floating Tower",
       "Member of the Blades",
       "Wizards",
-      "Dragons",
-      "Tombs",
       "Fate",
       "Enchantment",
       "Prophecy",
       "Secrets",
       "Adventure",
-      "Bright Shields",
-      "Rising Rope",
-      "Forbidden Relic",
-      "Cursed Kingdom",
-      "Lost Civilization",
-      "Shadow Assassins",
-      "Draconic Pact",
       "Feywild Intrigue",
       "Strategic Search",
       "Spells",
@@ -60,31 +45,44 @@ const createCharacter = async () => {
       "Power",
       "Blue Flame",
       "Tomb Secrets",
-      "Dragons",
       "Gods & Temples",
-      "Illusions",
-      "Crypts",
-      "Dark",
     ],
-    picturekeywords: [
-      ["medievalfantasy", "TheFloatingTower", "adventure", "story"],
-    ],
-    fullStories: [
-      `It was a cold, clear day still early in Marpenoth, in the Year of Many Brews.
-    All around, the trees' leaves had already been touched by golden and fiery-orange hues when the Brave Blades arrived at the place they had sought for so long.
-    Their goal loomed dark and silent above them: the Floating Tower, the lifeless fortress of the long-dead Ondil, hidden deep within a chasm somewhere west of the Horn Hills. Ondil's tower hovered patiently, as it had for centuries, under the protection of a dreaded wizard.`,
-      `Become an adventurer in the The Floating Tower Story. Be a wizard, rouge or fighter! Explore the Forgotten Realms while you meet warlocks and bandits and become a renowned Adventurer across the world! You are a newly appointed member in the "The Blades"`,
-    ],
-    firstChoiceOptions: [
-      "Teleport to the tower",
-      "Lockpicking the gate",
-      "Drink a big glass of beer",
-      "Build a campfire",
+    pictureKeywords: [
+      ["medievalfantasy", "story", "adventure", "TheFloatingTower"], // from the first 4 keyword one will be added to the picture generation prompt
     ],
   };
 
   await CharacterModel.create(character);
-  console.log("Character created!");
+  console.log("GandalfCharacter created!");
+};
+
+const createSpaceMarineCharacter = async () => {
+  const classes = await ClassModel.find();
+
+  const character = {
+    name: "Peter Quincy Taggart",
+    class: pick(classes),
+    weapon: "sword",
+    cloth: "light armor",
+    personality: 1,
+    charStoryKeywords: [
+      "Space",
+      "Sci-fi",
+      "Comedy",
+      "Starship",
+      "Battle",
+      "humour",
+      "Alien",
+      "Adventure",
+      "Rescue",
+    ],
+    pictureKeywords: [
+      ["scifi", "story", "adventure", "TheFloatingTower"], // from the first 4 keyword one will be added to the picture generation prompt
+    ],
+  };
+
+  await CharacterModel.create(character);
+  console.log("Peter Quincy Taggart created!");
 };
 
 const app = express();
@@ -92,7 +90,8 @@ app.use(express.json());
 
 const main = async () => {
   await mongoose.connect(MONGO_URL);
-  await createCharacter();
+  await createGandalfCharacter();
+  await createSpaceMarineCharacter();
   await mongoose.disconnect();
 };
 

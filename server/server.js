@@ -7,6 +7,7 @@ import jsonwebtoken from "jsonwebtoken";
 import ClassModel from "./db/class.model.js";
 import CharacterModel from "./db/character.model.js";
 import UserModel from "./db/user.model.js";
+import BasicStoryModel from "./db/basicStory.model.js";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import AIImageCreator from "./imageCreator.js";
 import geminiPromptGenerator from "./geminiPromptCreator.js";
@@ -112,25 +113,6 @@ app.delete("api/class/:id", async (req, res) => {
 });
 
 // Character endpoints
-app.get("/api/characterlist", verifyToken, async (req, res) => {
-  const userId = req.userId;
-
-  try {
-    const user = await UserModel.findById(userId);
-
-    if (!user) {
-      return res.status(404).json({ message: "User not found." });
-    }
-    const characters = await CharacterModel.find({
-      _id: { $in: user.character }, // Tömb alapú keresés
-    });
-
-    return res.status(200).json(characters);
-  } catch (error) {
-    console.error("Error with character GET endpoint:", error);
-    return res.status(500).json({ error: "Internal Server Error" });
-  }
-});
 
 app.post("/api/charactercreator", async (req, res) => {
   const newCharacter = req.body;
@@ -287,26 +269,73 @@ app.post("/login", async (req, res) => {
   }
 });
 
-// STORY and PICTURE
-
-// Basic story endpoint
-//MAGIC NUMBERS!!!!!!!!!!!!!!!!!!!!
-app.post("/api/basicstories", verifyToken, async (req, res) => {
+app.get("/api/characterlist", verifyToken, async (req, res) => {
   const userId = req.userId;
+
   try {
+    const user = await UserModel.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found." });
+    }
+    const characters = await CharacterModel.find({
+      _id: { $in: user.character },
+    });
+
+    return res.status(200).json(characters);
+  } catch (error) {
+    console.error("Error with character GET endpoint:", error);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+// STORY and PICTURE
+// Basic stories-list
+app.get("/api/basicstorieslist", verifyToken, async (req, res) => {
+  try {
+    const stories = await BasicStoryModel.find({}, "name _id");
+    res.status(200).json(stories);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Internal Server Error",
+      error: error.message,
+    });
+  }
+});
+
+// Get a basic story- endpoint
+app.post("/api/selectedbasicstory", verifyToken, async (req, res) => {
+  try {
+    const userId = req.userId;
     if (!userId) {
       return res.status(400).json({ message: "User ID is missing." });
     }
     const user = await UserModel.findById(userId);
-    const character = await CharacterModel.findById(user.character[0]);
-    const stories = character.fullStories.join("");
+    if (!user) {
+      return res.status(404).json({ message: "User not found." });
+    }
+    const { selectedStoryID, characterID } = req.body;
+    if (!selectedStoryID) {
+      return res.status(400).json({ message: "Story ID is required" });
+    }
+    const basicStory = await BasicStoryModel.findById(selectedStoryID);
+    if (!basicStory) {
+      return res.status(404).json({ message: "Basic story not found" });
+    }
+    const stories = basicStory.StarterFullStories.join("");
+    const character = await CharacterModel.findById(characterID);
+
+    character.fullStories.push(stories);
+
+    await character.save();
 
     res.status(200).json({
       basicstories: stories,
-      buttonText1: character.firstChoiceOptions[0],
-      buttonText2: character.firstChoiceOptions[1],
-      buttonText3: character.firstChoiceOptions[2],
-      buttonText4: character.firstChoiceOptions[3],
+      buttonText1: basicStory.firstChoiceOptions[0],
+      buttonText2: basicStory.firstChoiceOptions[1],
+      buttonText3: basicStory.firstChoiceOptions[2],
+      buttonText4: basicStory.firstChoiceOptions[3],
     });
   } catch (error) {
     console.error(error);
@@ -319,7 +348,10 @@ app.post("/api/basicstories", verifyToken, async (req, res) => {
 // AI generated text by gemini and picture url by pollinatios with user input
 app.post("/api/generate-story", verifyToken, async (req, res) => {
   const userId = req.userId;
-  const input = req.body.prompt;
+  const { characterID, input } = req.body;
+  console.log("userId" + userId);
+  console.log("characterID" + characterID);
+  console.log("input" + input);
   try {
     if (!userId) {
       return res.status(400).json({ message: "User ID is missing." });
@@ -328,24 +360,24 @@ app.post("/api/generate-story", verifyToken, async (req, res) => {
       return res.status(400).json({ message: "Prompt is missing." });
     }
     const user = await UserModel.findById(userId);
-    const character = await CharacterModel.findById(user.character[0]);
+    const character = await CharacterModel.findById(characterID);
     const result = await model.generateContent(
       geminiPromptGenerator(character, input)
     );
 
     const responseText = result.response.text();
     const cleanedText = responseText.replace(/```json|```/g, "").trim();
-    console.log(cleanedText);
+
     const generatedText = JSON.parse(cleanedText);
     if (!generatedText) {
       throw new Error("AI did not return any response.");
     }
 
     character.fullStories.push(generatedText.generatedStory);
-    character.picturekeywords.push([generatedText.keywords, input]);
+    character.pictureKeywords.push([generatedText.keywords, input]);
 
     const aiPicureUrl = AIImageCreator(character);
-    character.aipictureurls.push(aiPicureUrl);
+    character.aiPictureUrls.push(aiPicureUrl);
     await character.save();
 
     res.status(200).json({

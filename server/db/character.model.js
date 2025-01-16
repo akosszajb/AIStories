@@ -30,29 +30,17 @@ const CharacterSchema = new Schema({
     required: true,
     default: 50,
   },
-  // storykeywords for prompt
-  storykeywords: {
-    type: Array,
-    required: true,
-    default: [
-      "text adventure",
-      "The Floating Tower",
-      "The Floating Tower",
-      "The Floating Tower",
-      "Forgotten Realms",
-      "D&D",
-      "Dungeon and Dragons",
-      "Baldur's Gate",
-      "Tower of Ondil",
-      "The Floating Tower",
-    ],
-  },
-  aipictureurls: {
+  charStoryKeywords: {
     type: Array,
     required: true,
     default: [],
   },
-  picturekeywords: {
+  aiPictureUrls: {
+    type: Array,
+    required: true,
+    default: [],
+  },
+  pictureKeywords: {
     type: Array,
     required: true,
     default: [],
@@ -62,10 +50,10 @@ const CharacterSchema = new Schema({
     required: true,
     default: [],
   },
-  firstChoiceOptions: {
+  choiceOptions: {
     type: Array,
     required: true,
-    default: ["option1", "option2", "option3", "option4"],
+    default: [],
   },
   created: {
     type: Date,

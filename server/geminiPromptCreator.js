@@ -2,7 +2,7 @@
 
 const geminiPromptGenerator = (character, userinput) => {
   const story = character.fullStories.join(" ");
-  let keywords = character.storykeywords.join(", ");
+  let keywords = character.charStoryKeywords.join(", ");
   const prompt = {
     intro:
       "This is just a starter prompt, I am learning the communication with you. I created a text-adventure game with the starter story.",
@@ -17,7 +17,7 @@ const geminiPromptGenerator = (character, userinput) => {
       "Continue the story based on the provided details. " +
       "Return the response in the following structured JSON format: " +
       `{
-        "generatedStory": "The continuation of the story goes here. (max 40 words)",
+        "generatedStory": "The continuation of the story goes here. (min 40 max 100 words), each option max 10 words",
         "keywords": ["keyword1", "keyword2", "keyword3"],
         "options": [
           "Option 1 text",

@@ -28,7 +28,7 @@ const createUser = async () => {
     username: "first",
     email: "email@email.com",
     password: hashedPassword,
-    character: pick(characters),
+    character: characters,
   };
 
   await UserModel.create(firstUser);
