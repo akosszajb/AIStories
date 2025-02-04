@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const { Schema } = mongoose;
 
-const ClassSchema = new Schema({
+const GameClassSchema = new Schema({
   name: {
     type: String,
     required: true,
@@ -25,6 +25,6 @@ const ClassSchema = new Schema({
   },
 });
 
-const ClassModel = mongoose.model("Class", ClassSchema);
+const GameClassModel = mongoose.model("GameClass", GameClassSchema);
 
-export default ClassModel;
+export default GameClassModel;

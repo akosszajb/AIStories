@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import PageTitle from "../Common/PageTitle/PageTitle";
+import "../../globals.css";
 
 const LoginPage = () => {
   const [formData, setFormData] = useState({
@@ -16,7 +18,7 @@ const LoginPage = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await fetch("/login", {
+      const response = await fetch("/api/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
@@ -31,14 +33,15 @@ const LoginPage = () => {
       }
     } catch (error) {
       setMessage(
-        "Error with Login! (This is the handleSubmit function error message)"
+        "Error with Login! (This is the Login - handleSubmit function error message)"
       );
     }
   };
 
   return (
-    <div>
-      <h2>THIS IS THE LOGIN PAGE</h2>
+    <div className="container">
+      <PageTitle title="This is the login page" />
+
       <h3>Login form</h3>
       <form onSubmit={handleSubmit}>
         <input
@@ -47,6 +50,7 @@ const LoginPage = () => {
           placeholder="Username"
           value={formData.username}
           onChange={handleChange}
+          autoComplete="username"
         />
         <input
           type="password"
@@ -54,6 +58,7 @@ const LoginPage = () => {
           placeholder="Password"
           value={formData.password}
           onChange={handleChange}
+          autoComplete="current-password"
         />
         <button type="submit">Login</button>
         {message && <p>{message}</p>}

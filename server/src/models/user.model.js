@@ -21,6 +21,20 @@ const UserSchema = new Schema({
     type: String,
     required: true,
   },
+  plotCharacter: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "PlotCharacter",
+      required: true,
+    },
+  ],
+  gameCharacter: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "GameCharacter",
+      required: true,
+    },
+  ],
   created: {
     type: Date,
     default: Date.now,

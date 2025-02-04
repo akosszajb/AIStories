@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
+import PageTitle from "../Common/PageTitle/PageTitle";
+import "../../globals.css";
 
-const fetchClasses = () => {
-  return fetch("/api/class").then((res) => {
+const fetchGameClasses = async () => {
+  return fetch("/api/gameclass").then((res) => {
     if (!res.ok) {
       throw new Error("Failed to fetch classes");
     }
@@ -9,19 +11,19 @@ const fetchClasses = () => {
   });
 };
 
-const ClassListPage = () => {
-  const [classes, setClasses] = useState(null);
+const GameCharacterCreatorPage = () => {
+  const [gameClasses, setGameClasses] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetchClasses()
-      .then((classes) => {
-        setClasses(classes);
+    fetchGameClasses()
+      .then((gameClasses) => {
+        setGameClasses(gameClasses);
         setLoading(false);
       })
       .catch((error) => {
-        console.error("Error fetching classes:", error);
+        console.error("Error fetching game classes:", error);
         setError(error.message);
         setLoading(false);
       });
@@ -35,16 +37,17 @@ const ClassListPage = () => {
     return <div>Error: {error}</div>;
   }
 
-  if (!classes || classes.length === 0) {
-    return <div>No classes available</div>;
+  if (!gameClasses || gameClasses.length === 0) {
+    return <div>No game classes available</div>;
   }
 
   return (
-    <div>
-      <h2>Classes</h2>
+    <div className="container">
+      <PageTitle title="Game Character Creator Page" />
+
       <h3>Click on a classname to see the stats</h3>
       <ul>
-        {classes.map((cls) => (
+        {gameClasses.map((cls) => (
           <li key={cls.name}>{cls.name}</li>
         ))}
       </ul>
@@ -54,4 +57,4 @@ const ClassListPage = () => {
   );
 };
 
-export default ClassListPage;
+export default GameCharacterCreatorPage;

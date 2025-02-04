@@ -25,23 +25,39 @@ const Navbar = () => {
 
   return (
     <div className="Navbar">
+      <header className="navbar-header">
+        <h1 className="navbar-title">AI Stories</h1>
+      </header>
       <nav>
         <div className="nav-links">
           <Link to="/" className="nav-item">
-            <button type="button">
-              <img src="images/home.png" />
-            </button>
+            <img
+              src="/assets/images/home.png"
+              alt="Home"
+              className="home-icon"
+            />
           </Link>
-          <Link to="/game" classname="nav-item">
-            <button type="button">Game</button>
+          <Link to="/plotgeneratorpage" className="nav-item">
+            <button type="button">Plot/Story Generator</button>
           </Link>
-          <Link to="/classlist" className="nav-item">
-            <button type="button">Let's play - see the ClassList</button>
+          <Link to="/plotsettingspage" className="nav-item">
+            <button type="button">Plot Settings</button>
+          </Link>
+          <Link to="/gamecharactercreator" className="nav-item">
+            <button type="button">Game Character Creator</button>
+          </Link>
+          <Link to="/aitools" className="nav-item">
+            <button type="button">AI Tools</button>
           </Link>
           {loggedIn ? (
-            <button type="button" onClick={handleLogout}>
-              Logout
-            </button>
+            <>
+              <button type="button" onClick={handleLogout}>
+                Logout
+              </button>
+              <Link to="/userprofile" className="nav-item">
+                <button type="button">Profile</button>
+              </Link>
+            </>
           ) : (
             <>
               <Link to="/register" className="nav-item">
@@ -52,9 +68,6 @@ const Navbar = () => {
               </Link>
             </>
           )}
-          <Link to="/aitools" className="nav-item">
-            <button type="button">AI Tools</button>
-          </Link>
         </div>
       </nav>
       <Outlet />

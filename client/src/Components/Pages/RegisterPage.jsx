@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import PageTitle from "../Common/PageTitle/PageTitle";
+import "../../globals.css";
 
 const RegisterPage = () => {
   const [formData, setFormData] = useState({
@@ -15,7 +17,7 @@ const RegisterPage = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await fetch("/register", {
+      const response = await fetch("/api/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
@@ -35,8 +37,8 @@ const RegisterPage = () => {
   };
 
   return (
-    <div>
-      <h2>THIS IS THE REGISTER PAGE</h2>
+    <div className="container">
+      <PageTitle title="This is the register page" />
       <h3> Registration form</h3>
       <form onSubmit={handleSubmit}>
         <input
@@ -52,6 +54,7 @@ const RegisterPage = () => {
           placeholder="example@xyz.com"
           value={formData.email}
           onChange={handleChange}
+          autoComplete="username"
         />
         <input
           type="password"
@@ -59,6 +62,7 @@ const RegisterPage = () => {
           placeholder="Password"
           value={formData.password}
           onChange={handleChange}
+          autoComplete="current-password"
         />
         <button type="submit">Registration</button>
         {message && <p>{message}</p>}
