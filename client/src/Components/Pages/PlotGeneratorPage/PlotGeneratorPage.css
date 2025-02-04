@@ -1,0 +1,96 @@
+.plot-generator-page {
+  display: flex;
+  justify-content: center; /* Az oldal közepére igazítja a tartalmat */
+  gap: 20px; /* Különbség a tartalom és a kép között */
+  flex-wrap: wrap; /* A kisebb képernyőkön átcsúszhatnak alá */
+}
+
+.plot-generator-page .content-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+  max-width: 1200px; /* Maximális szélesség */
+}
+
+.plot-generator-page .story-left {
+  width: 100%;
+  max-width: 700px; /* Történet részének szélessége */
+  padding: 20px;
+  background-color: #1d1818;
+  border-radius: 10px;
+  border: 1px solid #110e0e;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.plot-generator-page .picture-box {
+  width: 500px; /* Kép mérete */
+  height: 500px; /* Kép mérete */
+  background-size: cover; /* A kép kitölti a box-ot */
+  background-position: center; /* Kép középre igazítása */
+  border: 2px solid #000; /* Fekete keret */
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0;
+}
+
+.plot-generator-page .picture-box img {
+  max-width: 100%;
+  max-height: 100%;
+  border-radius: 8px; /* Kép sarkainak lekerekítése */
+}
+
+.plot-generator-page .buttons-container {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.plot-generator-page button,
+.plot-generator-page .btn {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: inherit;
+  font-weight: bold;
+  background-color: #3498db;
+  color: white;
+  transition: background-color 0.3s ease;
+}
+
+.plot-generator-page button:hover,
+.plot-generator-page .btn:hover {
+  background-color: #2980b9;
+}
+
+
+.plot-generator-page .picture-box {
+  width: 500px; /* A kép szélessége */
+  height: 500px; /* A kép magassága */
+  background-size: cover; /* A háttérkép kitöltse a teljes box-ot */
+  background-position: center; /* A kép középre igazítása */
+  border: 2px solid #000; /* Fekete színű keret */
+  border-radius: 10px; /* A sarkok lekerekítése */
+  margin: 20px auto; /* Középre igazítás a szülő elemhez képest */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.plot-generator-page .picture-box img {
+  max-width: 100%;
+  max-height: 100%;
+  border-radius: 8px; /* A kép sarkainak lekerekítése, ha szükséges */
+}
+
+.container {
+  padding: 1.5rem;
+  width: 100%;
+  margin: 0 auto;
+}

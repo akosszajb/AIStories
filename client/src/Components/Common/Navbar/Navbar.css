@@ -1,0 +1,28 @@
+.Navbar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.navbar-header {
+  margin-bottom: 10px;
+  text-align: center;
+  color: #f3eded;
+}
+
+.navbar-title {
+  font-size: 24px;
+  font-weight: bold;
+  color: #f3eded;
+}
+
+.nav-links {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.home-icon {
+  width: 80px;
+  height: auto;
+}
