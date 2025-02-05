@@ -110,3 +110,125 @@ export const generatePlotStoryAndPicture = async (req, res) => {
       .json({ message: "Internal Server Error", error: error.message });
   }
 };
+
+export const getPlotStoryTitles = async (req, res) => {
+  try {
+    const plotStories = await PlotStoryModel.find();
+    const titles = [];
+    plotStories.forEach((story) =>
+      titles.push({ _id: story._id, name: story.name })
+    );
+    res.status(200).json(titles);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Internal Server Error",
+      error: error.message,
+    });
+  }
+};
+
+export const createPlotStory = async (req, res) => {
+  try {
+    const { name, storyKeywords, StarterFullStories, firstChoiceOptions } =
+      req.body;
+    if (!name || !storyKeywords || !StarterFullStories || !firstChoiceOptions) {
+      return res.status(400).json({ message: "All fields are required!" });
+    }
+
+    const newPlotStory = {
+      name: name,
+      storyKeywords: storyKeywords,
+      StarterFullStories: StarterFullStories,
+      firstChoiceOptions: firstChoiceOptions,
+    };
+
+    const saved = await PlotStoryModel.create(newPlotStory);
+    console.log("Saved new plot story:", saved.name);
+
+    return res.status(201).json({
+      status: "success",
+      message: `${name} plot story is created!`,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Internal Server Error",
+      error: error.message,
+    });
+  }
+};
+
+export const getSelectedPlotStoryToModify = async (req, res) => {
+  try {
+    const { _id } = req.body;
+    if (!_id) {
+      return res.status(400).json({
+        message: "Plot Story _id is required (getSelectedPlotStoryToModify)",
+      });
+    }
+    const plotStory = await PlotStoryModel.findById(_id);
+    if (!plotStory) {
+      return res.status(404).json({ message: "Plot story not found" });
+    }
+    console.log(plotStory);
+    res.status(200).json(plotStory);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Internal Server Error",
+      error: error.message,
+    });
+  }
+};
+
+export const updatePlotStory = async (req, res) => {
+  try {
+    const { _id, name, storyKeywords, StarterFullStories, firstChoiceOptions } =
+      req.body;
+    if (!_id) {
+      return res
+        .status(400)
+        .json({ message: "Plot Story _id is required (updatePlotStory)" });
+    }
+    if (!name) {
+      return res.status(400).json({ message: "Plot Story name is required" });
+    }
+    if (!storyKeywords) {
+      return res
+        .status(400)
+        .json({ message: "Plot Story storyKeywords are required" });
+    }
+    if (!StarterFullStories) {
+      return res
+        .status(400)
+        .json({ message: "Plot Story StarterFullStories are required" });
+    }
+    if (!firstChoiceOptions) {
+      return res
+        .status(400)
+        .json({ message: "Plot Story firstChoiceOptions are required" });
+    }
+
+    const updateData = {
+      name,
+      storyKeywords,
+      StarterFullStories,
+      firstChoiceOptions,
+    };
+
+    const plotStory = await PlotStoryModel.findByIdAndUpdate(
+      _id,
+      { $set: updateData },
+      { new: true }
+    );
+
+    res.status(200).json(plotStory);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Internal Server Error",
+      error: error.message,
+    });
+  }
+};
