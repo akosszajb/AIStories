@@ -25,7 +25,6 @@ const UserProfilePage = () => {
       }
 
       const data = await response.json();
-      console.log(data);
       setUserData(data);
     } catch (error) {
       console.error("Error fetching user data:", error);
@@ -61,6 +60,7 @@ const UserProfilePage = () => {
         <strong>Created:</strong>{" "}
         {new Date(userData.created).toISOString().split("T")[0]}
       </p>
+      <button>Send my story to me via email!</button>
     </div>
   );
 };

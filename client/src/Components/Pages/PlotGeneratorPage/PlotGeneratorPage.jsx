@@ -22,7 +22,6 @@ const PlotGeneratorPage = () => {
   });
 
   const token = localStorage.getItem("token");
-  console.log(token);
 
   const fetchPlotStoriesList = async () => {
     setLoading(true);
@@ -34,7 +33,6 @@ const PlotGeneratorPage = () => {
       });
 
       const data = await response.json();
-      console.log(data);
       if (response.ok) {
         setPlotStoriesList(data);
       } else {
