@@ -225,7 +225,6 @@ const PlotSettingsPage = () => {
         form.choiceoption4.value,
       ],
     };
-    console.log(updateFormData);
     try {
       const response = await fetch("/api/updateselectedplotstory", {
         method: "POST",
