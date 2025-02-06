@@ -20,7 +20,7 @@ const populateGameClasses = async () => {
   await GameClassModel.deleteMany({});
 
   const gameClasses = gameClassNames.map((gameClassname) => ({
-    name: gameClassname,
+    gameclassname: gameClassname,
     attackType: pick(attackTypes),
     attack: 10,
     defense: 10,

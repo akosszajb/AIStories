@@ -9,6 +9,7 @@ import {
   createPlotStory,
   getSelectedPlotStoryToModify,
   updatePlotStory,
+  deletePlotStory,
 } from "../controllers/PlotStoryController.js";
 
 const router = express.Router();
@@ -24,5 +25,6 @@ router.post(
   getSelectedPlotStoryToModify
 );
 router.post("/updateselectedplotstory", verifyToken, updatePlotStory);
+router.delete("/deleteselectedplotstory", verifyToken, deletePlotStory);
 
 export default router;

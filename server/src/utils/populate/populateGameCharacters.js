@@ -20,7 +20,7 @@ const createGameElminsterCharacter = async () => {
   const gameClasses = await GameClassModel.find();
 
   const gameCharacter = {
-    name: "Elminster Aumar ",
+    gamecharactername: "Elminster Aumar ",
     gameClass: pick(gameClasses),
     weapon: "staff",
     cloth: "robe",
@@ -58,7 +58,7 @@ const createGameSkywalkerCharacter = async () => {
   const gameClasses = await GameClassModel.find();
 
   const gameCharacter = {
-    name: "Idiot Skywalker",
+    gamecharactername: "Idiot Skywalker",
     gameClass: pick(gameClasses),
     weapon: "lightsaber",
     cloth: "naked",

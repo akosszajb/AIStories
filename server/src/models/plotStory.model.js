@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const { Schema } = mongoose;
 
 const PlotStorySchema = new Schema({
-  name: {
+  title: {
     type: String,
     required: true,
     default: "1. The Floating Tower",
