@@ -5,28 +5,32 @@ import "../../../globals.css";
 import "./PlotsettingsPage.css";
 
 const PlotSettingsPage = () => {
-  const [plotStoryTitles, setPlotStoryTitles] = useState([]);
+  const [plotStoryTitles, setPlotStoryTitles] = useState([""]);
   const [message, setMessage] = useState("");
-  const [formData, setFormData] = useState({
-    _id: "",
-    name: "",
-    storyKeywords: [],
-    StarterFullStories: [],
-    firstChoiceOptions: [],
-  });
-  const [updateFormData, setUpdateFormData] = useState({
-    _id: "",
-    name: "",
-    storyKeywords: [],
-    StarterFullStories: [],
-    firstChoiceOptions: [],
-  });
-
+  const [isSelectedPlotStory, setIsSelectedPlotStory] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const token = localStorage.getItem("token");
+  const [isCreatorFormFilled, setIsCreatorFormFilled] = useState(false);
+  const [inputError, setInputError] = useState("");
+  const [formData, setFormData] = useState({
+    _id: "",
+    title: "",
+    storyKeywords: ["", "", "", ""],
+    StarterFullStories: ["", ""],
+    firstChoiceOptions: ["", "", "", ""],
+  });
+  const [updateFormData, setUpdateFormData] = useState({
+    _id: "",
+    title: "",
+    storyKeywords: ["", "", "", ""],
+    StarterFullStories: ["", ""],
+    firstChoiceOptions: ["", "", "", ""],
+  });
+  //-----------------------------------------------------------
 
   const handleChange = (event) => {
+    setIsCreatorFormFilled(true);
     const { name, value } = event.target;
     setFormData((prevFormData) => ({
       ...prevFormData,
@@ -35,6 +39,11 @@ const PlotSettingsPage = () => {
   };
 
   const handleUpdateFormChange = (event) => {
+    if (!isSelectedPlotStory) {
+      setInputError("Please select a plot story first.");
+      return;
+    }
+    setInputError("");
     const { name, value } = event.target;
     setUpdateFormData((prevFormData) => ({
       ...prevFormData,
@@ -42,7 +51,25 @@ const PlotSettingsPage = () => {
     }));
   };
 
+  const handleFormArrayChange = (fieldName, index, event) => {
+    setIsCreatorFormFilled(true);
+    const { value } = event.target;
+    setFormData((prevFormData) => {
+      const updatedArray = [...prevFormData[fieldName]];
+      updatedArray[index] = value;
+      return {
+        ...prevFormData,
+        [fieldName]: updatedArray,
+      };
+    });
+  };
+
   const handleUpdateFormArrayChange = (event, fieldName, index) => {
+    if (!isSelectedPlotStory) {
+      setInputError("Please select a plot story first.");
+      return;
+    }
+    setInputError("");
     const { value } = event.target;
     setUpdateFormData((prevFormData) => ({
       ...prevFormData,
@@ -50,6 +77,28 @@ const PlotSettingsPage = () => {
         idx === index ? value : item
       ),
     }));
+  };
+
+  const handleClearFormData = () => {
+    setFormData({
+      _id: "",
+      title: "",
+      storyKeywords: ["", "", "", ""],
+      StarterFullStories: ["", ""],
+      firstChoiceOptions: ["", "", "", ""],
+    });
+    setIsCreatorFormFilled(false);
+  };
+
+  const handleClearUpdateFormData = () => {
+    setIsSelectedPlotStory(false);
+    setUpdateFormData({
+      _id: "",
+      title: "",
+      storyKeywords: ["", "", "", ""],
+      StarterFullStories: ["", ""],
+      firstChoiceOptions: ["", "", "", ""],
+    });
   };
 
   const fetchPlotStoryTitles = async () => {
@@ -77,7 +126,7 @@ const PlotSettingsPage = () => {
     event.preventDefault();
     const form = event.target;
     const newPlotStory = {
-      name: form.name.value,
+      title: form.title.value,
       storyKeywords: [
         form.storykeyword1.value,
         form.storykeyword2.value,
@@ -106,11 +155,12 @@ const PlotSettingsPage = () => {
         alert("Success: Story created!");
         setFormData({
           _id: "",
-          name: "",
+          title: "",
           storyKeywords: [],
           StarterFullStories: [],
           firstChoiceOptions: [],
         });
+        setIsCreatorFormFilled(false);
         fetchPlotStoryTitles();
       } else {
         setMessage(result.message || "Story creation failed!");
@@ -137,13 +187,15 @@ const PlotSettingsPage = () => {
       if (response.ok) {
         setUpdateFormData({
           _id: id,
-          name: data.name,
+          title: data.title,
           storyKeywords: data.storyKeywords,
           StarterFullStories: data.StarterFullStories,
           firstChoiceOptions: data.firstChoiceOptions,
         });
+        setIsSelectedPlotStory(true);
       } else {
         setError("Failed to load plot story");
+        setIsSelectedPlotStory(false);
       }
     } catch (error) {
       console.error(error);
@@ -158,7 +210,7 @@ const PlotSettingsPage = () => {
     const form = event.target;
     const updatedPlotStory = {
       _id: updateFormData._id,
-      name: form.name.value,
+      title: form.title.value,
       storyKeywords: [
         form.storykeyword1.value,
         form.storykeyword2.value,
@@ -188,18 +240,56 @@ const PlotSettingsPage = () => {
         alert("Success: Story updated!");
         setUpdateFormData({
           _id: "",
-          name: "",
+          title: "",
           storyKeywords: [],
           StarterFullStories: [],
           firstChoiceOptions: [],
         });
+        setIsSelectedPlotStory(true);
         fetchPlotStoryTitles();
       } else {
+        setIsSelectedPlotStory(false);
         setMessage(result.message || "Story update failed!");
       }
     } catch (error) {
       setMessage(
         "Error with Story Updating! (This is the handlePlotStoryModification function error message)"
+      );
+    }
+  };
+
+  const handleSelectedPlotStoryDelete = async (event) => {
+    event.preventDefault();
+    const _id = updateFormData._id;
+    console.log(_id);
+    try {
+      const response = await fetch("/api/deleteselectedplotstory", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ _id: _id }),
+      });
+      const result = await response.json();
+      if (response.ok) {
+        alert("Success: Story deleted!");
+        setUpdateFormData({
+          _id: "",
+          title: "",
+          storyKeywords: [],
+          StarterFullStories: [],
+          firstChoiceOptions: [],
+        });
+        setIsSelectedPlotStory(false);
+        fetchPlotStoryTitles();
+      } else {
+        setIsSelectedPlotStory(false);
+        setMessage(result.message || "Story delete failed!");
+      }
+    } catch (error) {
+      setMessage(
+        "Error with Story Updating! (This is the handleSelectedPlotStoryDelete function error message)"
       );
     }
   };
@@ -221,27 +311,28 @@ const PlotSettingsPage = () => {
       <PageTitle title="Plot Settings Page" />
       <div className="form-container">
         <div className="plotstorysettingsform">
-          <h3 className="subtitle">Click on a story title to modify it</h3>
+          <h3 className="subtitle">Click on a story to modify/update it</h3>
           {plotStoryTitles.map((story) => (
             <button
               key={story._id}
               onClick={() => handlePlotStorySelectionToModify(story._id)}
             >
-              {story.name}
+              {story.title}
             </button>
           ))}
 
           <form onSubmit={handlePlotStoryModification}>
             <ul>
               <li>
-                <label htmlFor="name">Story title:</label>
+                <label htmlFor="title">Story title:</label>
                 <input
                   type="text"
-                  name="name"
-                  placeholder="Title/name of the story"
-                  value={updateFormData.name}
+                  name="title"
+                  placeholder="Title of the story"
+                  value={updateFormData.title}
                   onChange={handleUpdateFormChange}
-                  autoComplete="name"
+                  autoComplete="title"
+                  disabled={!isSelectedPlotStory}
                 />
               </li>
               <li>
@@ -251,11 +342,12 @@ const PlotSettingsPage = () => {
                   type="text"
                   name="storykeyword1"
                   placeholder="1. Keyword"
-                  value={updateFormData.storyKeywords[0] || ""}
+                  value={updateFormData.storyKeywords[0]}
                   onChange={(e) =>
                     handleUpdateFormArrayChange(e, "storyKeywords", 0)
                   }
                   autoComplete="storykeyword1"
+                  disabled={!isSelectedPlotStory}
                 />
               </li>
               <li>
@@ -264,11 +356,12 @@ const PlotSettingsPage = () => {
                   type="text"
                   name="storykeyword2"
                   placeholder="2. Keyword"
-                  value={updateFormData.storyKeywords[1] || ""}
+                  value={updateFormData.storyKeywords[1]}
                   onChange={(e) =>
                     handleUpdateFormArrayChange(e, "storyKeywords", 1)
                   }
                   autoComplete="storykeyword2"
+                  disabled={!isSelectedPlotStory}
                 />
               </li>
               <li>
@@ -277,11 +370,12 @@ const PlotSettingsPage = () => {
                   type="text"
                   name="storykeyword3"
                   placeholder="3. Keyword"
-                  value={updateFormData.storyKeywords[2] || ""}
+                  value={updateFormData.storyKeywords[2]}
                   onChange={(e) =>
                     handleUpdateFormArrayChange(e, "storyKeywords", 2)
                   }
                   autoComplete="storykeyword3"
+                  disabled={!isSelectedPlotStory}
                 />
               </li>
               <li>
@@ -290,23 +384,26 @@ const PlotSettingsPage = () => {
                   type="text"
                   name="storykeyword4"
                   placeholder="4. Keyword"
-                  value={updateFormData.storyKeywords[3] || ""}
+                  value={updateFormData.storyKeywords[3]}
                   onChange={(e) =>
                     handleUpdateFormArrayChange(e, "storyKeywords", 3)
                   }
                   autoComplete="storykeyword4"
+                  disabled={!isSelectedPlotStory}
                 />
               </li>
+              <h3>Starter story:</h3>
               <li>
                 <label htmlFor="fullstory1">Starter story - 1. part</label>
                 <textarea
                   name="fullstory1"
                   placeholder="Starter story - 1. part"
-                  value={updateFormData.StarterFullStories[0] || ""}
+                  value={updateFormData.StarterFullStories[0]}
                   onChange={(e) =>
                     handleUpdateFormArrayChange(e, "StarterFullStories", 0)
                   }
                   autoComplete="fullstory1"
+                  disabled={!isSelectedPlotStory}
                 />
               </li>
               <li>
@@ -314,15 +411,17 @@ const PlotSettingsPage = () => {
                 <textarea
                   name="fullstory2"
                   placeholder="Starter story - 2. part"
-                  value={updateFormData.StarterFullStories[1] || ""}
+                  value={updateFormData.StarterFullStories[1]}
                   onChange={(e) =>
                     handleUpdateFormArrayChange(e, "StarterFullStories", 1)
                   }
                   autoComplete="fullstory2"
+                  disabled={!isSelectedPlotStory}
                 />
               </li>
+
+              <h3>Choice options for the opening scene:</h3>
               <li>
-                <h3>First choice options:</h3>
                 <label htmlFor="choiceoption1">Choice option 1.</label>
                 <input
                   type="text"
@@ -333,6 +432,7 @@ const PlotSettingsPage = () => {
                     handleUpdateFormArrayChange(e, "firstChoiceOptions", 0)
                   }
                   autoComplete="choiceoption1"
+                  disabled={!isSelectedPlotStory}
                 />
               </li>
               <li>
@@ -346,6 +446,7 @@ const PlotSettingsPage = () => {
                     handleUpdateFormArrayChange(e, "firstChoiceOptions", 1)
                   }
                   autoComplete="choiceoption2"
+                  disabled={!isSelectedPlotStory}
                 />
               </li>
               <li>
@@ -359,6 +460,7 @@ const PlotSettingsPage = () => {
                     handleUpdateFormArrayChange(e, "firstChoiceOptions", 2)
                   }
                   autoComplete="choiceoption3"
+                  disabled={!isSelectedPlotStory}
                 />
               </li>
               <li>
@@ -372,25 +474,21 @@ const PlotSettingsPage = () => {
                     handleUpdateFormArrayChange(e, "firstChoiceOptions", 3)
                   }
                   autoComplete="choiceoption4"
+                  disabled={!isSelectedPlotStory}
                 />
               </li>
 
               <button type="submit">Modify this story</button>
-              <button
-                type="button"
-                onClick={() =>
-                  setUpdateFormData({
-                    _id: "",
-                    name: "",
-                    storyKeywords: [],
-                    StarterFullStories: [],
-                    firstChoiceOptions: ["", "", "", ""],
-                  })
-                }
-              >
-                Clear form
-              </button>
-              <button>Delete this plot story</button>
+              {isSelectedPlotStory && (
+                <div>
+                  <button type="button" onClick={handleClearUpdateFormData}>
+                    Clear update form
+                  </button>
+                  <button type="button" onClick={handleSelectedPlotStoryDelete}>
+                    Delete this plot story
+                  </button>
+                </div>
+              )}
               {message && <p>{message}</p>}
             </ul>
           </form>
@@ -402,14 +500,14 @@ const PlotSettingsPage = () => {
           <form onSubmit={handleSubmitPlotCreator}>
             <ul>
               <li>
-                <label htmlFor="name">Story title:</label>
+                <label htmlFor="title">Story title:</label>
                 <input
                   type="text"
-                  name="name"
-                  placeholder="Title/name of the story"
-                  value={formData.name}
+                  name="title"
+                  placeholder="Title of the story"
+                  value={formData.title}
                   onChange={handleChange}
-                  autoComplete="name"
+                  autoComplete="title"
                 />
               </li>
               <li>
@@ -420,6 +518,7 @@ const PlotSettingsPage = () => {
                   name="storykeyword1"
                   placeholder="1. Keyword"
                   value={formData.storyKeywords[0]}
+                  onChange={(e) => handleFormArrayChange("storyKeywords", 0, e)}
                   autoComplete="storykeyword1"
                 />
               </li>
@@ -430,7 +529,7 @@ const PlotSettingsPage = () => {
                   name="storykeyword2"
                   placeholder="2. Keyword"
                   value={formData.storyKeywords[1]}
-                  onChange={handleChange}
+                  onChange={(e) => handleFormArrayChange("storyKeywords", 1, e)}
                   autoComplete="storykeyword2"
                 />
               </li>
@@ -441,7 +540,7 @@ const PlotSettingsPage = () => {
                   name="storykeyword3"
                   placeholder="3. Keyword"
                   value={formData.storyKeywords[2]}
-                  onChange={handleChange}
+                  onChange={(e) => handleFormArrayChange("storyKeywords", 2, e)}
                   autoComplete="storykeyword3"
                 />
               </li>
@@ -452,7 +551,7 @@ const PlotSettingsPage = () => {
                   name="storykeyword4"
                   placeholder="4. Keyword"
                   value={formData.storyKeywords[3]}
-                  onChange={handleChange}
+                  onChange={(e) => handleFormArrayChange("storyKeywords", 3, e)}
                   autoComplete="storykeyword4"
                 />
               </li>
@@ -462,7 +561,9 @@ const PlotSettingsPage = () => {
                   name="fullstory1"
                   placeholder="Starter story - 1. part"
                   value={formData.StarterFullStories[0]}
-                  onChange={handleChange}
+                  onChange={(e) =>
+                    handleFormArrayChange("StarterFullStories", 0, e)
+                  }
                   autoComplete="fullstory1"
                 />
               </li>
@@ -472,7 +573,9 @@ const PlotSettingsPage = () => {
                   name="fullstory2"
                   placeholder="Starter story - 2. part"
                   value={formData.StarterFullStories[1]}
-                  onChange={handleChange}
+                  onChange={(e) =>
+                    handleFormArrayChange("StarterFullStories", 1, e)
+                  }
                   autoComplete="fullstory2"
                 />
               </li>
@@ -484,7 +587,9 @@ const PlotSettingsPage = () => {
                   name="choiceoption1"
                   placeholder="Choice option 1."
                   value={formData.firstChoiceOptions[0]}
-                  onChange={handleChange}
+                  onChange={(e) =>
+                    handleFormArrayChange("firstChoiceOptions", 0, e)
+                  }
                   autoComplete="choiceoption1"
                 />
               </li>
@@ -495,7 +600,9 @@ const PlotSettingsPage = () => {
                   name="choiceoption2"
                   placeholder="Choice option 2."
                   value={formData.firstChoiceOptions[1]}
-                  onChange={handleChange}
+                  onChange={(e) =>
+                    handleFormArrayChange("firstChoiceOptions", 1, e)
+                  }
                   autoComplete="choiceoption2"
                 />
               </li>
@@ -506,7 +613,9 @@ const PlotSettingsPage = () => {
                   name="choiceoption3"
                   placeholder="Choice option 3."
                   value={formData.firstChoiceOptions[2]}
-                  onChange={handleChange}
+                  onChange={(e) =>
+                    handleFormArrayChange("firstChoiceOptions", 2, e)
+                  }
                   autoComplete="choiceoption3"
                 />
               </li>
@@ -517,25 +626,18 @@ const PlotSettingsPage = () => {
                   name="choiceoption4"
                   placeholder="Choice option 4."
                   value={formData.firstChoiceOptions[3]}
-                  onChange={handleChange}
+                  onChange={(e) =>
+                    handleFormArrayChange("firstChoiceOptions", 3, e)
+                  }
                   autoComplete="choiceoption4"
                 />
               </li>
               <button type="submit">Create story</button>
-              <button
-                type="button"
-                onClick={() =>
-                  setFormData({
-                    _id: "",
-                    name: "",
-                    storyKeywords: [],
-                    StarterFullStories: [],
-                    firstChoiceOptions: ["", "", "", ""],
-                  })
-                }
-              >
-                Clear form
-              </button>
+              {isCreatorFormFilled && (
+                <button type="button" onClick={handleClearFormData}>
+                  Clear creator form
+                </button>
+              )}
               {message && <p>{message}</p>}
             </ul>
           </form>

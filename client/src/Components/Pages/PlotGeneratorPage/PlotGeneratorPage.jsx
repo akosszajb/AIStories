@@ -185,7 +185,7 @@ const PlotGeneratorPage = () => {
                   key={plot._id}
                   onClick={() => handlePlotStorySelection(plot)}
                 >
-                  {plot.name}
+                  {plot.title}
                 </button>
               ))}
             </div>
@@ -193,7 +193,7 @@ const PlotGeneratorPage = () => {
         )}
         {selectedPlotStory && !selectedPlotCharacter && (
           <div>
-            <h4>Plot Story selected: {selectedPlotStory.name}</h4>
+            <h4>Plot Story selected: {selectedPlotStory.title}</h4>
             <h4>Choose your character</h4>
             {loading && <p>Loading characters...</p>}
             {error && <p style={{ color: "red" }}>{error}</p>}
@@ -201,7 +201,7 @@ const PlotGeneratorPage = () => {
               {plotCharacterList.map((char) => (
                 <div key={char._id}>
                   <button onClick={() => handlePlotCharacterSelection(char)}>
-                    {char.name}
+                    {char.plotcharactername}
                   </button>
                 </div>
               ))}
@@ -211,7 +211,9 @@ const PlotGeneratorPage = () => {
         {selectedPlotStory && selectedPlotCharacter && (
           <div className="content-container">
             <div className="story-left">
-              <h4>Character selected: {selectedPlotCharacter.name}</h4>
+              <h4>
+                Character selected: {selectedPlotCharacter.plotcharactername}
+              </h4>
               <div>
                 <h4>Plot Story:</h4>
                 <h5>{plotStories}</h5>
