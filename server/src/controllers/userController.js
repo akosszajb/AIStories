@@ -2,6 +2,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import UserModel from "../models/user.model.js";
 import dotenv from "dotenv";
+import { userProfilePictureCreator } from "../utils/imageCreator.js";
 
 dotenv.config();
 
@@ -134,10 +135,124 @@ export const getUserData = async (req, res) => {
     return res.status(200).json({
       username: user.username,
       email: user.email,
+      currentProfilePicture: user.currentProfilePicture,
       created: user.created,
     });
   } catch (error) {
     console.error("Error with user GET endpoint:", error);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+export const getUserProfilePictures = async (req, res) => {
+  const userId = req.userId;
+  try {
+    const user = await UserModel.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found." });
+    }
+
+    return res.status(200).json(user.profilepictureURL);
+  } catch (error) {
+    console.error("Error with getUserProfilePictures GET endpoint:", error);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+export const newUserProfilePictureGenerator = async (req, res) => {
+  try {
+    const userId = req.userId;
+    const { prompt } = req.body;
+    const user = await UserModel.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found." });
+    }
+    const newUrl = userProfilePictureCreator(prompt);
+    console.log(newUrl);
+    user.profilepictureURL.push(newUrl);
+    await user.save();
+    return res.status(200).json(user.profilepictureURL);
+  } catch (error) {
+    console.error(
+      "Error with newUserProfilePictureGenerator POST endpoint:",
+      error
+    );
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+export const updateUser = async (req, res) => {
+  try {
+    const userId = req.userId;
+    const { username, email, password } = req.body;
+
+    const user = await UserModel.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found." });
+    }
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const updatedUser = await UserModel.findByIdAndUpdate(
+      userId,
+      {
+        username: username,
+        email: email,
+        password: hashedPassword,
+      },
+      { new: true }
+    );
+    return res.status(200).json(updatedUser);
+  } catch (error) {
+    console.error(
+      "Error with newUserProfilePictureGenerator POST endpoint:",
+      error
+    );
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+export const getUserCurrentProfilePicture = async (req, res) => {
+  try {
+    const userId = req.userId;
+    const user = await UserModel.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found." });
+    }
+    return res.status(200).json(user.currentProfilePicture);
+  } catch (error) {
+    console.error(
+      "Error with newUserProfilePictureGenerator POST endpoint:",
+      error
+    );
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+export const updateCurrentProfilePicture = async (req, res) => {
+  try {
+    const userId = req.userId;
+
+    const { currentProfilePicture } = req.body;
+
+    const user = await UserModel.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found." });
+    }
+    const updatedUser = await UserModel.findByIdAndUpdate(
+      userId,
+      {
+        currentProfilePicture: currentProfilePicture,
+      },
+      { new: true }
+    );
+
+    return res.status(200).json(updatedUser);
+  } catch (error) {
+    console.error(
+      "Error with newUserProfilePictureGenerator POST endpoint:",
+      error
+    );
     return res.status(500).json({ error: "Internal Server Error" });
   }
 };

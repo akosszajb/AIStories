@@ -5,6 +5,11 @@ import {
   loginUser,
   deleteUser,
   getUserData,
+  getUserProfilePictures,
+  newUserProfilePictureGenerator,
+  updateUser,
+  getUserCurrentProfilePicture,
+  updateCurrentProfilePicture,
 } from "../controllers/userController.js";
 
 const router = express.Router();
@@ -13,5 +18,22 @@ router.post("/register", registerUser);
 router.post("/login", loginUser);
 router.delete("/register", deleteUser);
 router.get("/userdata", verifyToken, getUserData);
+router.get("/userprofilepictures", verifyToken, getUserProfilePictures);
+router.post(
+  "/generatenewuserprofilepicture",
+  verifyToken,
+  newUserProfilePictureGenerator
+);
+router.post("/updateuserdata", verifyToken, updateUser);
+router.get(
+  "/usercurrentprofilepicture",
+  verifyToken,
+  getUserCurrentProfilePicture
+);
+router.post(
+  "/updatecurrentprofilepicture",
+  verifyToken,
+  updateCurrentProfilePicture
+);
 
 export default router;
