@@ -17,7 +17,7 @@ if (!MONGO_URL) {
 const createPlotStoryMedieval = async () => {
   await PlotStoryModel.deleteMany({});
   const plotStory = {
-    name: "1. The Floating Tower",
+    title: "1. The Floating Tower",
   };
 
   await PlotStoryModel.create(plotStory);
@@ -26,7 +26,7 @@ const createPlotStoryMedieval = async () => {
 
 const createPlotStoryScifi = async () => {
   const plotStory = {
-    name: "2. Galaxy Quest",
+    title: "2. Galaxy Quest",
     StarterFullStories: [
       "Deep beneath the crimson dunes of Mars, Captain Eira Solis uncovered an ancient doorway glowing with unearthly symbols.",
       "As she pressed her hand to the cold metal, it hummed and opened, revealing a vast chamber filled with floating, crystalline orbs.",

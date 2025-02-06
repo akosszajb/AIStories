@@ -48,7 +48,7 @@ const GameCharacterCreatorPage = () => {
       <h3>Click on a classname to see the stats</h3>
       <ul>
         {gameClasses.map((cls) => (
-          <li key={cls.name}>{cls.name}</li>
+          <li key={cls.gameclassname}>{cls.gameclassname}</li>
         ))}
       </ul>
 

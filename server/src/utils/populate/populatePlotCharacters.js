@@ -16,7 +16,7 @@ const createPlotGandalfCharacter = async () => {
   await PlotCharacterModel.deleteMany({});
 
   const plotCharacter = {
-    name: "Gandalf the Debugger ",
+    plotcharactername: "Gandalf the Debugger ",
     personality: 99,
     charStoryKeywords: [
       "The Floating Tower",
@@ -49,7 +49,7 @@ const createPlotGandalfCharacter = async () => {
 
 const createPlotSpaceMarineCharacter = async () => {
   const plotCharacter = {
-    name: "Peter Quincy Taggart",
+    plotcharactername: "Peter Quincy Taggart",
     personality: 1,
     charStoryKeywords: [
       "Space",

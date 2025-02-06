@@ -5,15 +5,17 @@
 }
 
 .navbar-header {
+  font-family: 'Orbitron', sans-serif;
+  color: chartreuse;
   margin-bottom: 10px;
   text-align: center;
-  color: #f3eded;
 }
 
 .navbar-title {
+  font-family: 'Orbitron', sans-serif;
+  color: chartreuse;
   font-size: 24px;
   font-weight: bold;
-  color: #f3eded;
 }
 
 .nav-links {

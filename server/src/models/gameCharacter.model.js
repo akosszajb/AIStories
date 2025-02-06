@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const { Schema } = mongoose;
 
 const GameCharacterSchema = new Schema({
-  name: {
+  charactername: {
     type: String,
     required: true,
     default: "Default character name",

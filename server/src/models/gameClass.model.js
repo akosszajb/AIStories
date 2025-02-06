@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const { Schema } = mongoose;
 
 const GameClassSchema = new Schema({
-  name: {
+  gameclassname: {
     type: String,
     required: true,
   },

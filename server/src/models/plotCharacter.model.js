@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const { Schema } = mongoose;
 
 const PlotCharacterSchema = new Schema({
-  name: {
+  plotcharactername: {
     type: String,
     required: true,
     default: "Default character name",

@@ -1,8 +1,8 @@
 .plot-generator-page {
   display: flex;
-  justify-content: center; /* Az oldal közepére igazítja a tartalmat */
-  gap: 20px; /* Különbség a tartalom és a kép között */
-  flex-wrap: wrap; /* A kisebb képernyőkön átcsúszhatnak alá */
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
 }
 
 .plot-generator-page .content-container {
@@ -11,12 +11,12 @@
   align-items: center;
   gap: 20px;
   width: 100%;
-  max-width: 1200px; /* Maximális szélesség */
+  max-width: 1200px;
 }
 
 .plot-generator-page .story-left {
   width: 100%;
-  max-width: 700px; /* Történet részének szélessége */
+  max-width: 700px;
   padding: 20px;
   background-color: #1d1818;
   border-radius: 10px;
@@ -25,11 +25,11 @@
 }
 
 .plot-generator-page .picture-box {
-  width: 500px; /* Kép mérete */
-  height: 500px; /* Kép mérete */
-  background-size: cover; /* A kép kitölti a box-ot */
-  background-position: center; /* Kép középre igazítása */
-  border: 2px solid #000; /* Fekete keret */
+  width: 500px;
+  height: 500px;
+  background-size: cover;
+  background-position: center;
+  border: 2px solid #000;
   border-radius: 10px;
   display: flex;
   justify-content: center;
@@ -40,7 +40,7 @@
 .plot-generator-page .picture-box img {
   max-width: 100%;
   max-height: 100%;
-  border-radius: 8px; /* Kép sarkainak lekerekítése */
+  border-radius: 8px;
 }
 
 .plot-generator-page .buttons-container {
@@ -71,13 +71,13 @@
 
 
 .plot-generator-page .picture-box {
-  width: 500px; /* A kép szélessége */
-  height: 500px; /* A kép magassága */
-  background-size: cover; /* A háttérkép kitöltse a teljes box-ot */
-  background-position: center; /* A kép középre igazítása */
-  border: 2px solid #000; /* Fekete színű keret */
-  border-radius: 10px; /* A sarkok lekerekítése */
-  margin: 20px auto; /* Középre igazítás a szülő elemhez képest */
+  width: 500px;
+  height: 500px;
+  background-size: cover;
+  background-position: center;
+  border: 2px solid #000;
+  border-radius: 10px;
+  margin: 20px auto;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -86,7 +86,7 @@
 .plot-generator-page .picture-box img {
   max-width: 100%;
   max-height: 100%;
-  border-radius: 8px; /* A kép sarkainak lekerekítése, ha szükséges */
+  border-radius: 8px;
 }
 
 .container {
@@ -94,3 +94,6 @@
   width: 100%;
   margin: 0 auto;
 }
+
+.userchoice { font-family: 'Orbitron', sans-serif;
+  color: chartreuse;}
