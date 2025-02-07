@@ -6,13 +6,17 @@ import {
   updatePlotCharacter,
   deletePlotCharacter,
   getUserAllPlotCharacters,
+  getPlotCharacter,
+  rebootPlotCharacter,
 } from "../controllers/plotCharacterController.js";
 
 const router = express.Router();
 
-router.post("/plotcharactercreator", createPlotCharacter);
-router.patch("/plotcharacter/:id", updatePlotCharacter);
+router.post("/createplotcharacter", verifyToken, createPlotCharacter);
+router.post("/plotcharacter/:id", updatePlotCharacter);
 router.delete("/plotcharacter/:id", deletePlotCharacter);
 router.get("/plotcharacterlist", verifyToken, getUserAllPlotCharacters);
+router.get("/selectedplotcharacter/:id", verifyToken, getPlotCharacter);
+router.post("/rebootcharacter/:id", verifyToken, rebootPlotCharacter);
 
 export default router;

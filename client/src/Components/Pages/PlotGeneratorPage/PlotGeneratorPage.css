@@ -1,14 +1,17 @@
 .plot-generator-page {
   display: flex;
   justify-content: center;
+  align-items: flex-start;
   gap: 20px;
   flex-wrap: wrap;
+  width: 100%;
+  margin: 0 auto;
 }
 
 .plot-generator-page .content-container {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: center; 
   gap: 20px;
   width: 100%;
   max-width: 1200px;
@@ -34,7 +37,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 20px 0;
+  margin: 20px auto;
 }
 
 .plot-generator-page .picture-box img {
@@ -69,31 +72,13 @@
   background-color: #2980b9;
 }
 
-
-.plot-generator-page .picture-box {
-  width: 500px;
-  height: 500px;
-  background-size: cover;
-  background-position: center;
-  border: 2px solid #000;
-  border-radius: 10px;
-  margin: 20px auto;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.plot-generator-page .picture-box img {
-  max-width: 100%;
-  max-height: 100%;
-  border-radius: 8px;
-}
-
 .container {
   padding: 1.5rem;
   width: 100%;
   margin: 0 auto;
 }
 
-.userchoice { font-family: 'Orbitron', sans-serif;
-  color: chartreuse;}
+.userchoice { 
+  font-family: 'Orbitron', sans-serif;
+  color: chartreuse;
+}

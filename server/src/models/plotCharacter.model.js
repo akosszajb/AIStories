@@ -33,11 +33,6 @@ const PlotCharacterSchema = new Schema({
     required: true,
     default: [],
   },
-  choiceOptions: {
-    type: Array,
-    required: true,
-    default: [],
-  },
   created: {
     type: Date,
     default: Date.now,

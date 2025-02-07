@@ -215,7 +215,7 @@ const PlotGeneratorPage = () => {
                 Character selected: {selectedPlotCharacter.plotcharactername}
               </h4>
               <div>
-                <h4>Plot Story:</h4>
+                <h4 className="subtitle">Plot Story:</h4>
                 <h5>{plotStories}</h5>
               </div>
 
@@ -226,12 +226,14 @@ const PlotGeneratorPage = () => {
                   {story}
                   <div className="picture-box">
                     {generatedPictureUrl && (
-                      <div
-                        className="generated-image-container"
-                        style={{
-                          backgroundImage: `url(${generatedPictureUrl})`,
-                        }}
-                      ></div>
+                      <div className="generated-image-container">
+                        <img
+                          src={generatedPictureUrl}
+                          alt="AI Generated Story Picture"
+                          width="450"
+                          height="450"
+                        />
+                      </div>
                     )}
                   </div>
                 </div>

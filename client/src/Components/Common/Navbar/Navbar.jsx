@@ -37,20 +37,24 @@ const Navbar = () => {
               className="home-icon"
             />
           </Link>
-          <Link to="/plotgeneratorpage" className="nav-item">
-            <button type="button">Plot/Story Generator</button>
-          </Link>
-          <Link to="/plotsettingspage" className="nav-item">
-            <button type="button">Plot Settings</button>
-          </Link>
-          <Link to="/gamecharactercreator" className="nav-item">
-            <button type="button">Game Character Creator</button>
-          </Link>
+
           <Link to="/aitools" className="nav-item">
             <button type="button">AI Tools</button>
           </Link>
           {loggedIn ? (
             <>
+              <Link to="/plotgeneratorpage" className="nav-item">
+                <button type="button">Plot/Story Generator</button>
+              </Link>
+              <Link to="/plotsettingspage" className="nav-item">
+                <button type="button">Plot Settings</button>
+              </Link>
+              <Link to="/plotcharacterpage" className="nav-item">
+                <button type="button">Plot Character</button>
+              </Link>
+              <Link to="/gamecharactercreator" className="nav-item">
+                <button type="button">Game Character Creator</button>
+              </Link>
               <button type="button" onClick={handleLogout}>
                 Logout
               </button>

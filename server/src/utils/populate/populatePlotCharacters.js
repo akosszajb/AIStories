@@ -23,24 +23,15 @@ const createPlotGandalfCharacter = async () => {
       "Member of the Blades",
       "Wizards",
       "Fate",
-      "Enchantment",
-      "Prophecy",
-      "Secrets",
       "Adventure",
-      "Feywild Intrigue",
-      "Strategic Search",
-      "Spells",
-      "Magical Sacrifice",
-      "Flight",
-      "Historical Magic",
-      "Power",
-      "Blue Flame",
-      "Tomb Secrets",
-      "Gods & Temples",
+      "Magic",
     ],
     pictureKeywords: [
-      ["medievalfantasy", "story", "adventure", "TheFloatingTower"], // from the first 4 keyword one will be added to the picture generation prompt
-    ],
+      "medievalfantasy",
+      "story",
+      "adventure",
+      "TheFloatingTower",
+    ], // from the first 4 keyword one will be added to the picture generation prompt
   };
 
   await PlotCharacterModel.create(plotCharacter);
@@ -56,11 +47,8 @@ const createPlotSpaceMarineCharacter = async () => {
       "Sci-fi",
       "Comedy",
       "Starship",
-      "Battle",
-      "humour",
-      "Alien",
-      "Adventure",
-      "Rescue",
+      "Science",
+      "Humour",
     ],
     pictureKeywords: [
       ["scifi", "story", "space", "stars"], // from the first 4 keyword one will be added to the picture generation prompt
