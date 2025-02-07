@@ -2,7 +2,7 @@ import UserModel from "../models/user.model.js";
 import PlotCharacterModel from "../models/plotCharacter.model.js";
 import PlotStoryModel from "../models/plotStory.model.js";
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import AIImageCreator from "../utils/imageCreator.js";
+import { imageCreator } from "../utils/imageCreator.js";
 import geminiPlotPromptGenerator from "../utils/geminiPlotPromptCreator.js";
 import pkg from "gridfs-stream";
 
@@ -91,7 +91,7 @@ export const generatePlotStoryAndPicture = async (req, res) => {
     plotCharacter.fullStories.push(generatedText.generatedPlotStory);
     plotCharacter.pictureKeywords.push([generatedText.keywords, input]);
 
-    const aiPicureUrl = AIImageCreator(plotCharacter);
+    const aiPicureUrl = imageCreator(plotCharacter);
     plotCharacter.aiPictureUrls.push(aiPicureUrl);
     await plotCharacter.save();
 

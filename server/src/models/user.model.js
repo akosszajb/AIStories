@@ -35,6 +35,19 @@ const UserSchema = new Schema({
       required: true,
     },
   ],
+  currentProfilePicture: {
+    type: String,
+    required: true,
+    default:
+      "https://image.pollinations.ai/prompt/avatarboy%20picture%20default?width=500&height=500&seed=1234&enhance=true&model=flux",
+  },
+  profilepictureURL: {
+    type: Array,
+    required: true,
+    default: [
+      "https://image.pollinations.ai/prompt/avatarboy%20picture%20default?width=500&height=500&seed=1234&enhance=true&model=flux",
+    ],
+  },
   created: {
     type: Date,
     default: Date.now,

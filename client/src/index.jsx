@@ -12,6 +12,7 @@ import RegisterPage from "./Components/Pages/RegisterPage.jsx";
 import PlotGeneratorPage from "./Components/Pages/PlotGeneratorPage/PlotGeneratorPage.jsx";
 import PlotSettingsPage from "./Components/Pages/PlotSettingsPage/PlotSettingsPage.jsx";
 import UserProfilePage from "./Components/Pages/UserProfilePage/UserProfile.jsx";
+import PlotCharacterPage from "./Components/Pages/PlotCharacterPage/PlotCharacterPage.jsx";
 
 export const router = createBrowserRouter([
   {
@@ -44,6 +45,7 @@ export const router = createBrowserRouter([
       },
       { path: "/plotsettingspage", element: <PlotSettingsPage /> },
       { path: "/userprofile", element: <UserProfilePage /> },
+      { path: "/plotcharacterpage", element: <PlotCharacterPage /> },
     ],
   },
 ]);

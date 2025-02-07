@@ -225,7 +225,6 @@ const PlotSettingsPage = () => {
         form.choiceoption4.value,
       ],
     };
-    console.log(updateFormData);
     try {
       const response = await fetch("/api/updateselectedplotstory", {
         method: "POST",
@@ -309,6 +308,7 @@ const PlotSettingsPage = () => {
   return (
     <div className="container">
       <PageTitle title="Plot Settings Page" />
+      {message && <p>{message}</p>}
       <div className="form-container">
         <div className="plotstorysettingsform">
           <h3 className="subtitle">Click on a story to modify/update it</h3>
@@ -489,7 +489,6 @@ const PlotSettingsPage = () => {
                   </button>
                 </div>
               )}
-              {message && <p>{message}</p>}
             </ul>
           </form>
         </div>
@@ -635,10 +634,9 @@ const PlotSettingsPage = () => {
               <button type="submit">Create story</button>
               {isCreatorFormFilled && (
                 <button type="button" onClick={handleClearFormData}>
-                  Clear creator form
+                  Cancel
                 </button>
               )}
-              {message && <p>{message}</p>}
             </ul>
           </form>
         </div>
