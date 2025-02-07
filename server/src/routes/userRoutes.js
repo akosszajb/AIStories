@@ -10,6 +10,7 @@ import {
   updateUser,
   getUserCurrentProfilePicture,
   updateCurrentProfilePicture,
+  deleteSelectedProfilePicture,
 } from "../controllers/userController.js";
 
 const router = express.Router();
@@ -34,6 +35,11 @@ router.post(
   "/updatecurrentprofilepicture",
   verifyToken,
   updateCurrentProfilePicture
+);
+router.delete(
+  "/deleteprofilepicture",
+  verifyToken,
+  deleteSelectedProfilePicture
 );
 
 export default router;

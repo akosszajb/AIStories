@@ -256,3 +256,41 @@ export const updateCurrentProfilePicture = async (req, res) => {
     return res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
+export const deleteSelectedProfilePicture = async (req, res) => {
+  try {
+    const userId = req.userId;
+    const user = await UserModel.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found." });
+    }
+
+    const { profilePictureToDelete } = req.body;
+    if (!profilePictureToDelete) {
+      return res.status(400).json({
+        message: "profilePictureToDelete required to delete a picture!",
+      });
+    }
+
+    const newURLs = user.profilepictureURL.filter(
+      (element) => element !== profilePictureToDelete
+    );
+    const updatedUser = await UserModel.findByIdAndUpdate(
+      userId,
+      {
+        profilepictureURL: newURLs,
+        currentProfilePicture:
+          user.currentProfilePicture === profilePictureToDelete
+            ? null
+            : user.currentProfilePicture,
+      },
+      { new: true }
+    );
+
+    return res.status(200).json(updatedUser);
+  } catch (error) {
+    console.error("Error deleting profile picture:", error);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+};

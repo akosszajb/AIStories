@@ -269,10 +269,42 @@ const UserProfilePage = () => {
         alert("Profile picture saved successful!");
         setCurrentPictureUrl(data.currentProfilePicture);
         setIsProfilePicutureSelectorVisible(false);
+        setGeneratedPictureUrl(currentPictureUrl);
         return;
       }
     } catch (error) {
       console.error("Error updating user data:", error);
+      setError(error.message || "An error occurred while updating user data.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleProfilePictureDelete = async () => {
+    setLoading(true);
+    setError(null);
+    console.log(generatedAIpictureURL);
+    try {
+      const response = await fetch("/api/deleteprofilepicture", {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ profilePictureToDelete: generatedAIpictureURL }),
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      if (response.status === 200) {
+        alert("Profile picture deleted successful!");
+        loadNextUserProfilePicture();
+        setIsProfilePicutureSelectorVisible(false);
+        setGeneratedPictureUrl("");
+        return;
+      }
+    } catch (error) {
+      console.error("Error handleProfilePictureDelete:", error);
       setError(error.message || "An error occurred while updating user data.");
     } finally {
       setLoading(false);
@@ -327,6 +359,9 @@ const UserProfilePage = () => {
                   </button>
                   <button onClick={savePictureToCurrentProfilePicture}>
                     Save
+                  </button>
+                  <button onClick={handleProfilePictureDelete}>
+                    Delete this picture
                   </button>
                   <button onClick={cancelPictureToCurrentProfilePicture}>
                     Cancel
