@@ -9,6 +9,7 @@
     "gridfs-stream": "^1.1.1",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.9.6",
+    "nodemailer": "^6.10.0",
     "openai": "^4.78.1",
     "react-router-dom": "^7.0.2",
     "uuid": "^11.0.5"
