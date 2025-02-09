@@ -87,7 +87,7 @@ export const generatePlotStoryAndPicture = async (req, res) => {
     if (!generatedText) {
       throw new Error("AI did not return any response.");
     }
-
+    plotCharacter.selectedUserOptions.push(input);
     plotCharacter.fullStories.push(generatedText.generatedPlotStory);
     plotCharacter.pictureKeywords.push([generatedText.keywords, input]);
 
