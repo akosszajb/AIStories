@@ -1,21 +1,9 @@
-import dotenv from "dotenv";
-import express from "express";
-import mongoose from "mongoose";
 import PlotCharacterModel from "../../models/plotCharacter.model.js";
 
-dotenv.config({ path: "../../../.env" });
-
-const { MONGO_URL } = process.env;
-
-if (!MONGO_URL) {
-  console.error("Missing MONGO_URL environment varible!");
-  process.exit(1);
-}
-
-const createPlotGandalfCharacter = async () => {
+export const createPlotGandalfCharacter = async () => {
   await PlotCharacterModel.deleteMany({});
 
-  const plotCharacter = {
+  const plotCharacterGandalf = {
     plotcharactername: "Gandalf the Debugger ",
     personality: 99,
     charStoryKeywords: [
@@ -33,15 +21,14 @@ const createPlotGandalfCharacter = async () => {
       "TheFloatingTower",
     ], // from the first 4 keyword one will be added to the picture generation prompt
   };
-
-  await PlotCharacterModel.create(plotCharacter);
-  console.log("Gandalf Plot Character is created!");
+  await PlotCharacterModel.create(plotCharacterGandalf);
+  console.log("Plot Character - Gandalf is created!");
 };
 
-const createPlotSpaceMarineCharacter = async () => {
+export const createPlotSpaceMarineCharacter = async () => {
   const plotCharacter = {
     plotcharactername: "Peter Quincy Taggart",
-    personality: 1,
+    personality: 50,
     charStoryKeywords: [
       "Space",
       "Sci-fi",
@@ -51,25 +38,85 @@ const createPlotSpaceMarineCharacter = async () => {
       "Humour",
     ],
     pictureKeywords: [
-      ["scifi", "story", "space", "stars"], // from the first 4 keyword one will be added to the picture generation prompt
+      "scifi",
+      "story",
+      "space",
+      "stars", // from the first 4 keyword one will be added to the picture generation prompt
     ],
   };
 
   await PlotCharacterModel.create(plotCharacter);
-  console.log("Peter Quincy Taggart Plot Character is created!");
+  console.log("Plot Character - Peter Quincy Taggart is created!");
 };
 
-const app = express();
-app.use(express.json());
+export const createPlotCharcterDetective = async () => {
+  const plotCharacter = {
+    plotcharactername: "Detective Harper Blythe",
+    personality: 85,
+    charStoryKeywords: [
+      "The Silent Witness",
+      "Mystery",
+      "Detective",
+      "Secrets",
+      "Suspense",
+      "Puzzle",
+    ],
+    pictureKeywords: [
+      "noir",
+      "detective",
+      "modern",
+      "city", // from the first 4 keyword one will be added to the picture generation prompt
+    ],
+  };
 
-const main = async () => {
-  await mongoose.connect(MONGO_URL);
-  await createPlotGandalfCharacter();
-  await createPlotSpaceMarineCharacter();
-  await mongoose.disconnect();
+  await PlotCharacterModel.create(plotCharacter);
+  console.log("Plot Character - Detective Harper Blythe is created!");
 };
 
-main().catch((err) => {
-  console.error(err);
-  process.exit(1);
-});
+export const createPlotCharacterFunny = async () => {
+  const plotCharacter = {
+    plotcharactername: "Dave 'The Schemer' Reynolds",
+    personality: 75,
+    charStoryKeywords: [
+      "The Great Couch Caper",
+      "Comedy",
+      "Chaos",
+      "Friendship",
+      "Ridiculous Plans",
+      "Talking animals",
+    ],
+    pictureKeywords: [
+      "comedy",
+      "adventure",
+      "modern",
+      "funny", // from the first 4 keyword one will be added to the picture generation prompt
+    ],
+  };
+
+  await PlotCharacterModel.create(plotCharacter);
+  console.log("Plot Character - Dave 'The Schemer' Reynolds is created!");
+};
+
+export const createPlotCharacterMilitary = async () => {
+  const plotCharacter = {
+    plotcharactername: "Major Elena 'Shadow' Carter",
+    personality: 12,
+    charStoryKeywords: [
+      "Operation Shadow Strike",
+      "Military",
+      "Action",
+      "Covert Mission",
+      "High Stakes",
+      "Combat",
+    ],
+    pictureKeywords: [
+      "military",
+      "action",
+      "tactical",
+      "intense", // from the first 4 keyword one will be added to the picture generation prompt
+    ],
+  };
+
+  await PlotCharacterModel.create(plotCharacter);
+  console.log("Plot Character - Major Elena 'Shadow' Carter is created!");
+};

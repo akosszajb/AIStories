@@ -1,21 +1,9 @@
-import dotenv from "dotenv";
-import express from "express";
-import mongoose from "mongoose";
 import GameCharacterModel from "../../models/gameCharacter.model.js";
 import GameClassModel from "../../models/gameClass.model.js";
 
-dotenv.config({ path: "../../../.env" });
-
-const { MONGO_URL } = process.env;
-
-if (!MONGO_URL) {
-  console.error("Missing MONGO_URL environment varible!");
-  process.exit(1);
-}
-
 const pick = (from) => from[Math.floor(Math.random() * from.length)];
 
-const createGameElminsterCharacter = async () => {
+export const createGameElminsterCharacter = async () => {
   await GameCharacterModel.deleteMany({});
   const gameClasses = await GameClassModel.find();
 
@@ -51,10 +39,10 @@ const createGameElminsterCharacter = async () => {
   };
 
   await GameCharacterModel.create(gameCharacter);
-  console.log("Elminster Aumar Game Character is created!");
+  console.log("Game Character - Elminster Aumar is created!");
 };
 
-const createGameSkywalkerCharacter = async () => {
+export const createGameSkywalkerCharacter = async () => {
   const gameClasses = await GameClassModel.find();
 
   const gameCharacter = {
@@ -80,20 +68,5 @@ const createGameSkywalkerCharacter = async () => {
   };
 
   await GameCharacterModel.create(gameCharacter);
-  console.log("Idiot Skywalker Game Character is created!");
+  console.log("Game Character - Idiot Skywalker is created!");
 };
-
-const app = express();
-app.use(express.json());
-
-const main = async () => {
-  await mongoose.connect(MONGO_URL);
-  await createGameElminsterCharacter();
-  await createGameSkywalkerCharacter();
-  await mongoose.disconnect();
-};
-
-main().catch((err) => {
-  console.error(err);
-  process.exit(1);
-});
