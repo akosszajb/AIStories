@@ -244,7 +244,7 @@ const PlotSettingsPage = () => {
           StarterFullStories: [],
           firstChoiceOptions: [],
         });
-        setIsSelectedPlotStory(true);
+        setIsSelectedPlotStory(false);
         fetchPlotStoryTitles();
       } else {
         setIsSelectedPlotStory(false);
@@ -320,166 +320,166 @@ const PlotSettingsPage = () => {
               {story.title}
             </button>
           ))}
+          {isSelectedPlotStory && (
+            <form onSubmit={handlePlotStoryModification}>
+              <ul>
+                <li>
+                  <label htmlFor="title">Story title:</label>
+                  <input
+                    type="text"
+                    name="title"
+                    placeholder="Title of the story"
+                    value={updateFormData.title}
+                    onChange={handleUpdateFormChange}
+                    autoComplete="title"
+                    disabled={!isSelectedPlotStory}
+                  />
+                </li>
+                <li>
+                  <h3>Story keywords:</h3>
+                  <label htmlFor="storykeyword1">1. Keyword:</label>
+                  <input
+                    type="text"
+                    name="storykeyword1"
+                    placeholder="1. Keyword"
+                    value={updateFormData.storyKeywords[0]}
+                    onChange={(e) =>
+                      handleUpdateFormArrayChange(e, "storyKeywords", 0)
+                    }
+                    autoComplete="storykeyword1"
+                    disabled={!isSelectedPlotStory}
+                  />
+                </li>
+                <li>
+                  <label htmlFor="storykeyword2">2. Keyword:</label>
+                  <input
+                    type="text"
+                    name="storykeyword2"
+                    placeholder="2. Keyword"
+                    value={updateFormData.storyKeywords[1]}
+                    onChange={(e) =>
+                      handleUpdateFormArrayChange(e, "storyKeywords", 1)
+                    }
+                    autoComplete="storykeyword2"
+                    disabled={!isSelectedPlotStory}
+                  />
+                </li>
+                <li>
+                  <label htmlFor="storykeyword3">3. Keyword:</label>
+                  <input
+                    type="text"
+                    name="storykeyword3"
+                    placeholder="3. Keyword"
+                    value={updateFormData.storyKeywords[2]}
+                    onChange={(e) =>
+                      handleUpdateFormArrayChange(e, "storyKeywords", 2)
+                    }
+                    autoComplete="storykeyword3"
+                    disabled={!isSelectedPlotStory}
+                  />
+                </li>
+                <li>
+                  <label htmlFor="storykeyword4">4. Keyword:</label>
+                  <input
+                    type="text"
+                    name="storykeyword4"
+                    placeholder="4. Keyword"
+                    value={updateFormData.storyKeywords[3]}
+                    onChange={(e) =>
+                      handleUpdateFormArrayChange(e, "storyKeywords", 3)
+                    }
+                    autoComplete="storykeyword4"
+                    disabled={!isSelectedPlotStory}
+                  />
+                </li>
+                <h3>Starter story:</h3>
+                <li>
+                  <label htmlFor="fullstory1">Starter story - 1. part</label>
+                  <textarea
+                    name="fullstory1"
+                    placeholder="Starter story - 1. part"
+                    value={updateFormData.StarterFullStories[0]}
+                    onChange={(e) =>
+                      handleUpdateFormArrayChange(e, "StarterFullStories", 0)
+                    }
+                    autoComplete="fullstory1"
+                    disabled={!isSelectedPlotStory}
+                  />
+                </li>
+                <li>
+                  <label htmlFor="fullstory2">Starter story - 2. part</label>
+                  <textarea
+                    name="fullstory2"
+                    placeholder="Starter story - 2. part"
+                    value={updateFormData.StarterFullStories[1]}
+                    onChange={(e) =>
+                      handleUpdateFormArrayChange(e, "StarterFullStories", 1)
+                    }
+                    autoComplete="fullstory2"
+                    disabled={!isSelectedPlotStory}
+                  />
+                </li>
 
-          <form onSubmit={handlePlotStoryModification}>
-            <ul>
-              <li>
-                <label htmlFor="title">Story title:</label>
-                <input
-                  type="text"
-                  name="title"
-                  placeholder="Title of the story"
-                  value={updateFormData.title}
-                  onChange={handleUpdateFormChange}
-                  autoComplete="title"
-                  disabled={!isSelectedPlotStory}
-                />
-              </li>
-              <li>
-                <h3>Story keywords:</h3>
-                <label htmlFor="storykeyword1">1. Keyword:</label>
-                <input
-                  type="text"
-                  name="storykeyword1"
-                  placeholder="1. Keyword"
-                  value={updateFormData.storyKeywords[0]}
-                  onChange={(e) =>
-                    handleUpdateFormArrayChange(e, "storyKeywords", 0)
-                  }
-                  autoComplete="storykeyword1"
-                  disabled={!isSelectedPlotStory}
-                />
-              </li>
-              <li>
-                <label htmlFor="storykeyword2">2. Keyword:</label>
-                <input
-                  type="text"
-                  name="storykeyword2"
-                  placeholder="2. Keyword"
-                  value={updateFormData.storyKeywords[1]}
-                  onChange={(e) =>
-                    handleUpdateFormArrayChange(e, "storyKeywords", 1)
-                  }
-                  autoComplete="storykeyword2"
-                  disabled={!isSelectedPlotStory}
-                />
-              </li>
-              <li>
-                <label htmlFor="storykeyword3">3. Keyword:</label>
-                <input
-                  type="text"
-                  name="storykeyword3"
-                  placeholder="3. Keyword"
-                  value={updateFormData.storyKeywords[2]}
-                  onChange={(e) =>
-                    handleUpdateFormArrayChange(e, "storyKeywords", 2)
-                  }
-                  autoComplete="storykeyword3"
-                  disabled={!isSelectedPlotStory}
-                />
-              </li>
-              <li>
-                <label htmlFor="storykeyword4">4. Keyword:</label>
-                <input
-                  type="text"
-                  name="storykeyword4"
-                  placeholder="4. Keyword"
-                  value={updateFormData.storyKeywords[3]}
-                  onChange={(e) =>
-                    handleUpdateFormArrayChange(e, "storyKeywords", 3)
-                  }
-                  autoComplete="storykeyword4"
-                  disabled={!isSelectedPlotStory}
-                />
-              </li>
-              <h3>Starter story:</h3>
-              <li>
-                <label htmlFor="fullstory1">Starter story - 1. part</label>
-                <textarea
-                  name="fullstory1"
-                  placeholder="Starter story - 1. part"
-                  value={updateFormData.StarterFullStories[0]}
-                  onChange={(e) =>
-                    handleUpdateFormArrayChange(e, "StarterFullStories", 0)
-                  }
-                  autoComplete="fullstory1"
-                  disabled={!isSelectedPlotStory}
-                />
-              </li>
-              <li>
-                <label htmlFor="fullstory2">Starter story - 2. part</label>
-                <textarea
-                  name="fullstory2"
-                  placeholder="Starter story - 2. part"
-                  value={updateFormData.StarterFullStories[1]}
-                  onChange={(e) =>
-                    handleUpdateFormArrayChange(e, "StarterFullStories", 1)
-                  }
-                  autoComplete="fullstory2"
-                  disabled={!isSelectedPlotStory}
-                />
-              </li>
+                <h3>Choice options for the opening scene:</h3>
+                <li>
+                  <label htmlFor="choiceoption1">Choice option 1.</label>
+                  <input
+                    type="text"
+                    name="choiceoption1"
+                    placeholder="Choice option 1."
+                    value={updateFormData.firstChoiceOptions[0]}
+                    onChange={(e) =>
+                      handleUpdateFormArrayChange(e, "firstChoiceOptions", 0)
+                    }
+                    autoComplete="choiceoption1"
+                    disabled={!isSelectedPlotStory}
+                  />
+                </li>
+                <li>
+                  <label htmlFor="choiceoption2">Choice option 2.</label>
+                  <input
+                    type="text"
+                    name="choiceoption2"
+                    placeholder="Choice option 2."
+                    value={updateFormData.firstChoiceOptions[1]}
+                    onChange={(e) =>
+                      handleUpdateFormArrayChange(e, "firstChoiceOptions", 1)
+                    }
+                    autoComplete="choiceoption2"
+                    disabled={!isSelectedPlotStory}
+                  />
+                </li>
+                <li>
+                  <label htmlFor="choiceoption3">Choice option 3.</label>
+                  <input
+                    type="text"
+                    name="choiceoption3"
+                    placeholder="Choice option 3."
+                    value={updateFormData.firstChoiceOptions[2]}
+                    onChange={(e) =>
+                      handleUpdateFormArrayChange(e, "firstChoiceOptions", 2)
+                    }
+                    autoComplete="choiceoption3"
+                    disabled={!isSelectedPlotStory}
+                  />
+                </li>
+                <li>
+                  <label htmlFor="choiceoption4">Choice option 4.</label>
+                  <input
+                    type="text"
+                    name="choiceoption4"
+                    placeholder="Choice option 4."
+                    value={updateFormData.firstChoiceOptions[3]}
+                    onChange={(e) =>
+                      handleUpdateFormArrayChange(e, "firstChoiceOptions", 3)
+                    }
+                    autoComplete="choiceoption4"
+                    disabled={!isSelectedPlotStory}
+                  />
+                </li>
 
-              <h3>Choice options for the opening scene:</h3>
-              <li>
-                <label htmlFor="choiceoption1">Choice option 1.</label>
-                <input
-                  type="text"
-                  name="choiceoption1"
-                  placeholder="Choice option 1."
-                  value={updateFormData.firstChoiceOptions[0]}
-                  onChange={(e) =>
-                    handleUpdateFormArrayChange(e, "firstChoiceOptions", 0)
-                  }
-                  autoComplete="choiceoption1"
-                  disabled={!isSelectedPlotStory}
-                />
-              </li>
-              <li>
-                <label htmlFor="choiceoption2">Choice option 2.</label>
-                <input
-                  type="text"
-                  name="choiceoption2"
-                  placeholder="Choice option 2."
-                  value={updateFormData.firstChoiceOptions[1]}
-                  onChange={(e) =>
-                    handleUpdateFormArrayChange(e, "firstChoiceOptions", 1)
-                  }
-                  autoComplete="choiceoption2"
-                  disabled={!isSelectedPlotStory}
-                />
-              </li>
-              <li>
-                <label htmlFor="choiceoption3">Choice option 3.</label>
-                <input
-                  type="text"
-                  name="choiceoption3"
-                  placeholder="Choice option 3."
-                  value={updateFormData.firstChoiceOptions[2]}
-                  onChange={(e) =>
-                    handleUpdateFormArrayChange(e, "firstChoiceOptions", 2)
-                  }
-                  autoComplete="choiceoption3"
-                  disabled={!isSelectedPlotStory}
-                />
-              </li>
-              <li>
-                <label htmlFor="choiceoption4">Choice option 4.</label>
-                <input
-                  type="text"
-                  name="choiceoption4"
-                  placeholder="Choice option 4."
-                  value={updateFormData.firstChoiceOptions[3]}
-                  onChange={(e) =>
-                    handleUpdateFormArrayChange(e, "firstChoiceOptions", 3)
-                  }
-                  autoComplete="choiceoption4"
-                  disabled={!isSelectedPlotStory}
-                />
-              </li>
+                <button type="submit">Modify this story</button>
 
-              <button type="submit">Modify this story</button>
-              {isSelectedPlotStory && (
                 <div>
                   <button type="button" onClick={handleClearUpdateFormData}>
                     Clear update form
@@ -488,9 +488,9 @@ const PlotSettingsPage = () => {
                     Delete this plot story
                   </button>
                 </div>
-              )}
-            </ul>
-          </form>
+              </ul>
+            </form>
+          )}
         </div>
 
         <div className="plotstorycreatingform">
