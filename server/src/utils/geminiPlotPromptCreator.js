@@ -17,7 +17,7 @@ const geminiPlotPromptGenerator = (plotCharacter, userinput) => {
       "Consider the character's past choices, personality, and previous actions. " +
       "Return the response in the following structured JSON format: " +
       `{
-        "generatedPlotStory": "The continuation of the story goes here. (min 10 max 25 words), each option max 10 words",
+        "generatedPlotStory": "The continuation of the story goes here. (min 15 max 23 words), each option max 10 words",
         "keywords": ["keyword1", "keyword2", "keyword3"],
         "options": [
           "Option 1 text",
