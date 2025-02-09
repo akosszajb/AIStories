@@ -16,14 +16,14 @@ const PlotCharacterPage = () => {
     plotcharactername: "",
     personality: 0,
     charStoryKeywords: ["", "", "", "", "", ""],
-    pictureKeywords: [],
+    pictureKeywords: ["", "", "", ""],
   });
   const [updateFormData, setUpdateFormData] = useState({
     _id: "",
     plotcharactername: "",
     personality: 0,
     charStoryKeywords: ["", "", "", "", "", ""],
-    pictureKeywords: [],
+    pictureKeywords: ["", "", "", ""],
   });
 
   const token = localStorage.getItem("token");
@@ -80,6 +80,7 @@ const PlotCharacterPage = () => {
   const handleSelectedPlotCharacterDelete = async (event) => {
     event.preventDefault();
     const _id = updateFormData._id;
+    console.log(`/api/plotcharacter/${_id}`);
     try {
       const response = await fetch(`/api/plotcharacter/${_id}`, {
         method: "DELETE",
@@ -96,7 +97,7 @@ const PlotCharacterPage = () => {
           plotcharactername: "",
           personality: 0,
           charStoryKeywords: ["", "", "", "", "", ""],
-          pictureKeywords: [],
+          pictureKeywords: ["", "", "", ""],
         });
         setIsSelectedPlotCharacter(false);
         fetchPlotCharacterList();
@@ -133,6 +134,7 @@ const PlotCharacterPage = () => {
         ],
         aiPictureUrls: [],
         fullStories: [],
+        selectedUserOptions: [],
       };
 
       if (!rebootedCharacter.plotcharactername) {
@@ -167,7 +169,7 @@ const PlotCharacterPage = () => {
           plotcharactername: "",
           personality: 0,
           charStoryKeywords: ["", "", "", "", "", ""],
-          pictureKeywords: [],
+          pictureKeywords: ["", "", "", ""],
         });
         setIsSelectedPlotCharacter(false);
         fetchPlotCharacterList();
@@ -237,8 +239,8 @@ const PlotCharacterPage = () => {
           _id: "",
           plotcharactername: "",
           personality: 0,
-          charStoryKeywords: ["", "", "", ""],
-          pictureKeywords: [],
+          charStoryKeywords: ["", "", "", "", "", ""],
+          pictureKeywords: ["", "", "", ""],
         });
         setIsSelectedPlotCharacter(false);
         fetchPlotCharacterList();
@@ -291,7 +293,7 @@ const PlotCharacterPage = () => {
       plotcharactername: "",
       personality: 0,
       charStoryKeywords: ["", "", "", "", "", ""],
-      pictureKeywords: [],
+      pictureKeywords: ["", "", "", ""],
     });
     setIsSelectedPlotCharacter(false);
   };
@@ -337,7 +339,7 @@ const PlotCharacterPage = () => {
           plotcharactername: "",
           personality: 0,
           charStoryKeywords: ["", "", "", "", "", ""],
-          pictureKeywords: [],
+          pictureKeywords: ["", "", "", ""],
         });
         setIsCreatorFormFilled(false);
         fetchPlotCharacterList();
@@ -379,7 +381,7 @@ const PlotCharacterPage = () => {
       plotcharactername: "",
       personality: 0,
       charStoryKeywords: ["", "", "", "", "", ""],
-      pictureKeywords: [],
+      pictureKeywords: ["", "", "", ""],
     });
     setIsCreatorFormFilled(false);
   };
@@ -403,8 +405,6 @@ const PlotCharacterPage = () => {
       <div className="form-container">
         <div className="plot-character-updater-form">
           <h3 className="subtitle">Click on a character to modify/update it</h3>
-          {/* {loading && <p>Loading characters...</p>}
-          {error && <p style={{ color: "red" }}>{error}</p>} */}
           {plotCharacterList.map((char) => (
             <button
               key={char._id}
@@ -413,189 +413,191 @@ const PlotCharacterPage = () => {
               {char.plotcharactername}
             </button>
           ))}
+          {isSelectedPlotCharacter && (
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                const submitter = e.nativeEvent.submitter;
+                if (submitter.name === "updater") {
+                  handlePlotCharacterUpdate();
+                } else if (submitter.name === "reboot") {
+                  rebootSelectedPlotCharacterData();
+                }
+              }}
+            >
+              <ul>
+                <li>
+                  <label htmlFor="plotcharactername">
+                    Plot character name:
+                  </label>
+                  <input
+                    type="text"
+                    name="plotcharactername"
+                    placeholder="Plot character name"
+                    value={updateFormData.plotcharactername || ""}
+                    onChange={handleUpdateFormChange}
+                    autoComplete="plotcharactername"
+                    disabled={!isSelectedPlotCharacter}
+                  />
+                </li>
+                <li>
+                  <label htmlFor="personality">
+                    Plot character personality (evil:0 - good:100):
+                  </label>
+                  <input
+                    type="number"
+                    name="personality"
+                    placeholder="Plot character personality"
+                    value={updateFormData.personality || 0}
+                    onChange={handleUpdateFormChange}
+                    autoComplete="personality"
+                    disabled={!isSelectedPlotCharacter}
+                  />
+                </li>
+                <h4>Keywords to generate story with this character</h4>
+                <li>
+                  <label htmlFor="charStoryKeyword1">Keyword1</label>
+                  <input
+                    type="text"
+                    name="charStoryKeyword1"
+                    placeholder="keyword1"
+                    value={updateFormData.charStoryKeywords[0] || ""}
+                    onChange={(e) =>
+                      handleUpdateFormArrayChange(e, "charStoryKeywords", 0)
+                    }
+                    autoComplete="keyword1"
+                    disabled={!isSelectedPlotCharacter}
+                  />
+                </li>
+                <li>
+                  <label htmlFor="charStoryKeyword2">Keyword2</label>
+                  <input
+                    type="text"
+                    name="charStoryKeyword2"
+                    placeholder="keyword2"
+                    value={updateFormData.charStoryKeywords[1] || ""}
+                    onChange={(e) =>
+                      handleUpdateFormArrayChange(e, "charStoryKeywords", 1)
+                    }
+                    autoComplete="keyword2"
+                    disabled={!isSelectedPlotCharacter}
+                  />
+                </li>
+                <li>
+                  <label htmlFor="charStoryKeyword3">Keyword3</label>
+                  <input
+                    type="text"
+                    name="charStoryKeyword3"
+                    placeholder="keyword3"
+                    value={updateFormData.charStoryKeywords[2] || ""}
+                    onChange={(e) =>
+                      handleUpdateFormArrayChange(e, "charStoryKeywords", 2)
+                    }
+                    autoComplete="keyword3"
+                    disabled={!isSelectedPlotCharacter}
+                  />
+                </li>
+                <li>
+                  <label htmlFor="charStoryKeyword4">Keyword4</label>
+                  <input
+                    type="text"
+                    name="charStoryKeyword4"
+                    placeholder="keyword4"
+                    value={updateFormData.charStoryKeywords[3] || ""}
+                    onChange={(e) =>
+                      handleUpdateFormArrayChange(e, "charStoryKeywords", 3)
+                    }
+                    autoComplete="keyword4"
+                    disabled={!isSelectedPlotCharacter}
+                  />
+                </li>
+                <li>
+                  <label htmlFor="charStoryKeyword5">Keyword5</label>
+                  <input
+                    type="text"
+                    name="charStoryKeyword5"
+                    placeholder="keyword5"
+                    value={updateFormData.charStoryKeywords[4] || ""}
+                    onChange={(e) =>
+                      handleUpdateFormArrayChange(e, "charStoryKeywords", 4)
+                    }
+                    autoComplete="keyword5"
+                    disabled={!isSelectedPlotCharacter}
+                  />
+                </li>
 
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              const submitter = e.nativeEvent.submitter;
-              if (submitter.name === "updater") {
-                handlePlotCharacterUpdate();
-              } else if (submitter.name === "reboot") {
-                rebootSelectedPlotCharacterData();
-              }
-            }}
-          >
-            <ul>
-              <li>
-                <label htmlFor="plotcharactername">Plot character name:</label>
-                <input
-                  type="text"
-                  name="plotcharactername"
-                  placeholder="Plot character name"
-                  value={updateFormData.plotcharactername || ""}
-                  onChange={handleUpdateFormChange}
-                  autoComplete="plotcharactername"
-                  disabled={!isSelectedPlotCharacter}
-                />
-              </li>
-              <li>
-                <label htmlFor="personality">
-                  Plot character personality (evil:0 - good:100):
-                </label>
-                <input
-                  type="number"
-                  name="personality"
-                  placeholder="Plot character personality"
-                  value={updateFormData.personality || 0}
-                  onChange={handleUpdateFormChange}
-                  autoComplete="personality"
-                  disabled={!isSelectedPlotCharacter}
-                />
-              </li>
-              <h4>Keywords to generate story with this character</h4>
-              <li>
-                <label htmlFor="charStoryKeyword1">Keyword1</label>
-                <input
-                  type="text"
-                  name="charStoryKeyword1"
-                  placeholder="keyword1"
-                  value={updateFormData.charStoryKeywords[0] || ""}
-                  onChange={(e) =>
-                    handleUpdateFormArrayChange(e, "charStoryKeywords", 0)
-                  }
-                  autoComplete="keyword1"
-                  disabled={!isSelectedPlotCharacter}
-                />
-              </li>
-              <li>
-                <label htmlFor="charStoryKeyword2">Keyword2</label>
-                <input
-                  type="text"
-                  name="charStoryKeyword2"
-                  placeholder="keyword2"
-                  value={updateFormData.charStoryKeywords[1] || ""}
-                  onChange={(e) =>
-                    handleUpdateFormArrayChange(e, "charStoryKeywords", 1)
-                  }
-                  autoComplete="keyword2"
-                  disabled={!isSelectedPlotCharacter}
-                />
-              </li>
-              <li>
-                <label htmlFor="charStoryKeyword3">Keyword3</label>
-                <input
-                  type="text"
-                  name="charStoryKeyword3"
-                  placeholder="keyword3"
-                  value={updateFormData.charStoryKeywords[2] || ""}
-                  onChange={(e) =>
-                    handleUpdateFormArrayChange(e, "charStoryKeywords", 2)
-                  }
-                  autoComplete="keyword3"
-                  disabled={!isSelectedPlotCharacter}
-                />
-              </li>
-              <li>
-                <label htmlFor="charStoryKeyword4">Keyword4</label>
-                <input
-                  type="text"
-                  name="charStoryKeyword4"
-                  placeholder="keyword4"
-                  value={updateFormData.charStoryKeywords[3] || ""}
-                  onChange={(e) =>
-                    handleUpdateFormArrayChange(e, "charStoryKeywords", 3)
-                  }
-                  autoComplete="keyword4"
-                  disabled={!isSelectedPlotCharacter}
-                />
-              </li>
-              <li>
-                <label htmlFor="charStoryKeyword5">Keyword5</label>
-                <input
-                  type="text"
-                  name="charStoryKeyword5"
-                  placeholder="keyword5"
-                  value={updateFormData.charStoryKeywords[4] || ""}
-                  onChange={(e) =>
-                    handleUpdateFormArrayChange(e, "charStoryKeywords", 4)
-                  }
-                  autoComplete="keyword5"
-                  disabled={!isSelectedPlotCharacter}
-                />
-              </li>
+                <li>
+                  <label htmlFor="charStoryKeyword6">Keyword6</label>
+                  <input
+                    type="text"
+                    name="charStoryKeyword6"
+                    placeholder="keyword6"
+                    value={updateFormData.charStoryKeywords[5] || ""}
+                    onChange={(e) =>
+                      handleUpdateFormArrayChange(e, "charStoryKeywords", 5)
+                    }
+                    autoComplete="keyword6"
+                    disabled={!isSelectedPlotCharacter}
+                  />
+                </li>
+                <h4>Keywords to generate story-picures with this character</h4>
+                <li>
+                  <label htmlFor="pictureKeywords1">Picture Keyword 1</label>
+                  <input
+                    type="text"
+                    name="pictureKeywords1"
+                    placeholder="Picture Keyword 1"
+                    value={updateFormData.pictureKeywords[0] || ""}
+                    onChange={(e) =>
+                      handleUpdateFormArrayChange(e, "pictureKeywords", 0)
+                    }
+                    autoComplete="pictureKeywords1"
+                    disabled={!isSelectedPlotCharacter}
+                  />
+                </li>
+                <li>
+                  <label htmlFor="pictureKeywords2">Picture Keyword 2</label>
+                  <input
+                    type="text"
+                    name="pictureKeywords2"
+                    placeholder="Picture Keyword 2"
+                    value={updateFormData.pictureKeywords[1] || ""}
+                    onChange={(e) =>
+                      handleUpdateFormArrayChange(e, "pictureKeywords", 1)
+                    }
+                    autoComplete="pictureKeywords2"
+                    disabled={!isSelectedPlotCharacter}
+                  />
+                </li>
+                <li>
+                  <label htmlFor="pictureKeywords3">Picture Keyword 3</label>
+                  <input
+                    type="text"
+                    name="pictureKeywords3"
+                    placeholder="Picture Keyword 3"
+                    value={updateFormData.pictureKeywords[2] || ""}
+                    onChange={(e) =>
+                      handleUpdateFormArrayChange(e, "pictureKeywords", 2)
+                    }
+                    autoComplete="pictureKeywords3"
+                    disabled={!isSelectedPlotCharacter}
+                  />
+                </li>
+                <li>
+                  <label htmlFor="pictureKeywords4">Picture Keyword 4</label>
+                  <input
+                    type="text"
+                    name="pictureKeywords4"
+                    placeholder="Picture Keyword 4"
+                    value={updateFormData.pictureKeywords[3] || ""}
+                    onChange={(e) =>
+                      handleUpdateFormArrayChange(e, "pictureKeywords", 3)
+                    }
+                    autoComplete="pictureKeywords4"
+                    disabled={!isSelectedPlotCharacter}
+                  />
+                </li>
 
-              <li>
-                <label htmlFor="charStoryKeyword6">Keyword6</label>
-                <input
-                  type="text"
-                  name="charStoryKeyword6"
-                  placeholder="keyword6"
-                  value={updateFormData.charStoryKeywords[5] || ""}
-                  onChange={(e) =>
-                    handleUpdateFormArrayChange(e, "charStoryKeywords", 5)
-                  }
-                  autoComplete="keyword6"
-                  disabled={!isSelectedPlotCharacter}
-                />
-              </li>
-              <h4>Keywords to generate story-picures with this character</h4>
-              <li>
-                <label htmlFor="pictureKeywords1">Picture Keyword 1</label>
-                <input
-                  type="text"
-                  name="pictureKeywords1"
-                  placeholder="Picture Keyword 1"
-                  value={updateFormData.pictureKeywords[0] || ""}
-                  onChange={(e) =>
-                    handleUpdateFormArrayChange(e, "pictureKeywords", 0)
-                  }
-                  autoComplete="pictureKeywords1"
-                  disabled={!isSelectedPlotCharacter}
-                />
-              </li>
-              <li>
-                <label htmlFor="pictureKeywords2">Picture Keyword 2</label>
-                <input
-                  type="text"
-                  name="pictureKeywords2"
-                  placeholder="Picture Keyword 2"
-                  value={updateFormData.pictureKeywords[1] || ""}
-                  onChange={(e) =>
-                    handleUpdateFormArrayChange(e, "pictureKeywords", 1)
-                  }
-                  autoComplete="pictureKeywords2"
-                  disabled={!isSelectedPlotCharacter}
-                />
-              </li>
-              <li>
-                <label htmlFor="pictureKeywords3">Picture Keyword 3</label>
-                <input
-                  type="text"
-                  name="pictureKeywords3"
-                  placeholder="Picture Keyword 3"
-                  value={updateFormData.pictureKeywords[2] || ""}
-                  onChange={(e) =>
-                    handleUpdateFormArrayChange(e, "pictureKeywords", 2)
-                  }
-                  autoComplete="pictureKeywords3"
-                  disabled={!isSelectedPlotCharacter}
-                />
-              </li>
-              <li>
-                <label htmlFor="pictureKeywords4">Picture Keyword 4</label>
-                <input
-                  type="text"
-                  name="pictureKeywords4"
-                  placeholder="Picture Keyword 4"
-                  value={updateFormData.pictureKeywords[3] || ""}
-                  onChange={(e) =>
-                    handleUpdateFormArrayChange(e, "pictureKeywords", 3)
-                  }
-                  autoComplete="pictureKeywords4"
-                  disabled={!isSelectedPlotCharacter}
-                />
-              </li>
-              {isSelectedPlotCharacter && (
                 <div>
                   <button type="submit" name="updater">
                     Click here to modify this plot character
@@ -616,9 +618,9 @@ const PlotCharacterPage = () => {
                     Reboot this plot character
                   </button>
                 </div>
-              )}
-            </ul>
-          </form>
+              </ul>
+            </form>
+          )}
         </div>
         <div className="plot-character-create-form">
           <h3 className="subtitle">Plot character creator form</h3>
@@ -796,7 +798,6 @@ const PlotCharacterPage = () => {
               </div>
             </ul>
           </form>
-          {message && <p>{message}</p>}
         </div>
       </div>
     </div>
