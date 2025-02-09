@@ -30,24 +30,31 @@ const MainPage = () => {
       </section>
 
       <section className="story-description">
-        <h2>The Floating Tower</h2>
+        <h2 className="defaultstoriestitle">Default stories</h2>
+        <h3>The Floating Tower</h3>
         <p>
           Embark on the mystical journey of "The Floating Tower", where every
           decision shapes your destiny. Discover secrets, solve puzzles, and
           face challenges in a world crafted by cutting-edge AI.
         </p>
-        <h2>Galaxy Quest</h2>
+        <h3>Galaxy Quest</h3>
         <p>
-          Deep beneath the crimson dunes of Mars, Captain Eira Solis uncovered
-          an ancient doorway glowing with unearthly symbols.As she pressed her
-          hand to the cold metal, it hummed and opened, revealing a vast chamber
-          filled with floating, crystalline orbs.Her AI companion, Delta, warned
-          of an energy surge, but curiosity drove her forward, reaching for the
-          largest orbIn an instant, she was transported to a starship brimming
-          with alien lifeforms, all staring at her with a mix of awe and
-          suspicionTheir leader, a towering figure of light, declared, “You are
-          the chosen navigator of the lost Nexus, destined to save our galaxy
-          from the Void.
+          Captain Eira Solis discovers a hidden doorway beneath the Martian
+          dunes, leading her to a starship filled with alien beings. Chosen as
+          the navigator of the Nexus, she must unite the galaxy to stop a
+          looming threat known as the Void.
+        </p>
+        <h3>The Great Couch Caper</h3>
+        <p>
+          Follow your roommate Dave on a side-splitting adventure to recover his
+          lost couch. From crashing high-society galas to outwitting a gang of
+          thieving squirrels, every moment is a whirlwind of chaos and laughter.
+        </p>
+        <h3>Operation Shadow Strike</h3>
+        <p>
+          A high-stakes military mission behind enemy lines turns into a
+          desperate fight for survival. As the team uncovers a deadly plot,
+          their courage and strategy will decide the fate of millions.
         </p>
       </section>
     </div>
