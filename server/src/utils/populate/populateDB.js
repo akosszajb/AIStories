@@ -15,14 +15,13 @@ import {
   createGameSkywalkerCharacter,
 } from "./populateGameCharacters.js";
 import { populateGameClasses } from "./populateGameClasses.js";
-import {
-  createPlotGandalfCharacter,
-  createPlotSpaceMarineCharacter,
-  createPlotCharcterDetective,
-  createPlotCharacterFunny,
-  createPlotCharacterMilitary,
-} from "./populatePlotCharacters.js";
-
+// import {
+//   createPlotGandalfCharacter,
+//   createPlotSpaceMarineCharacter,
+//   createPlotCharcterDetective,
+//   createPlotCharacterFunny,
+//   createPlotCharacterMilitary,
+// } from "./populatePlotCharacters.js";
 dotenv.config({ path: "../../../.env" });
 
 const { MONGO_URL } = process.env;
@@ -54,11 +53,11 @@ const main = async () => {
     await createGameSkywalkerCharacter();
 
     // plot characters
-    await createPlotGandalfCharacter();
-    await createPlotSpaceMarineCharacter();
-    await createPlotCharcterDetective();
-    await createPlotCharacterFunny();
-    await createPlotCharacterMilitary();
+    // await createPlotGandalfCharacter();
+    // await createPlotSpaceMarineCharacter();
+    // await createPlotCharcterDetective();
+    // await createPlotCharacterFunny();
+    // await createPlotCharacterMilitary();
 
     // admin user
     await createUser();

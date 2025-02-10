@@ -8,8 +8,9 @@ import {
   generatedStoryTextCreator,
 } from "../utils/emailTextCreator.js";
 
-dotenv.config();
-
+dotenv.config({
+  path: "C:\\Users\\Akos\\Desktop\\codecool\\PET\\AdventureGame\\AIStories\\.env",
+});
 const { EMAIL, EMAILPSW } = process.env;
 
 if (!EMAIL) {
@@ -135,6 +136,7 @@ export const getPlotCharacter = async (req, res) => {
     if (!plotCharacter) {
       return res.status(404).json({ message: "plotCharacter not found." });
     }
+
     return res.status(200).json(plotCharacter);
   } catch (error) {
     console.error("Error with character GET endpoint:", error);

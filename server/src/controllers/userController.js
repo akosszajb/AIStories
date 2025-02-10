@@ -3,18 +3,50 @@ import jwt from "jsonwebtoken";
 import UserModel from "../models/user.model.js";
 import dotenv from "dotenv";
 import { userProfilePictureCreator } from "../utils/imageCreator.js";
+import PlotCharacterModel from "../models/plotCharacter.model.js";
+import { defaultPlotCharacters } from "../models/exampleData/defaultPlotCharacters.js";
+import path from "path";
 
-dotenv.config();
+const envPath = path.resolve(process.cwd(), ".env");
+
+dotenv.config({ path: envPath });
 
 const { JWTKEY } = process.env;
 
 export const registerUser = async (req, res) => {
-  const { username, email, password } = req.body;
-  if (!username || !email || !password) {
-    return res.status(400).json({ message: "All fields are required!" });
-  }
-
   try {
+    const { username, email, password } = req.body;
+    if (!username) {
+      return res
+        .status(400)
+        .json({ message: "All fields are required! - username is missing" });
+    }
+    if (!email) {
+      return res
+        .status(400)
+        .json({ message: "All fields are required! - email is missing" });
+    }
+    if (!password) {
+      return res
+        .status(400)
+        .json({ message: "All fields are required! - password is missing" });
+    }
+    if (username.length < 1 || username.length > 15) {
+      return res
+        .status(400)
+        .json({ message: "username length must be between 1 and 15." });
+    }
+    if (password.length < 1 || password.length > 15) {
+      return res
+        .status(400)
+        .json({ message: "password length must be between 1 and 15." });
+    }
+    if (email.length < 1 || email.length > 100) {
+      return res
+        .status(400)
+        .json({ message: "email length must be between 1 and 100." });
+    }
+
     const existingUser = await UserModel.findOne({ email });
 
     if (existingUser) {
@@ -24,10 +56,19 @@ export const registerUser = async (req, res) => {
     }
     const hashedPassword = await bcrypt.hash(password, 10);
 
+    const createdPlotCharacters = await PlotCharacterModel.insertMany(
+      defaultPlotCharacters.map((character) => ({
+        ...character,
+      }))
+    );
+
+    const plotCharacterIds = createdPlotCharacters.map((char) => char._id);
+
     const newUser = {
       username: username,
       email: email,
       password: hashedPassword,
+      plotCharacter: plotCharacterIds,
     };
 
     const saved = await UserModel.create(newUser);
@@ -52,25 +93,27 @@ export const registerUser = async (req, res) => {
 export const loginUser = async (req, res) => {
   const { username, password } = req.body;
 
-  if (!username || !password) {
-    return res
-      .status(400)
-      .json({ message: "Username and password are required!" });
+  if (!username) {
+    return res.status(400).json({ message: "Username is required!" });
+  }
+
+  if (!password) {
+    return res.status(400).json({ message: "Password is required!" });
+  }
+
+  const user = await UserModel.findOne({ username });
+
+  if (!user) {
+    return res.status(404).json({ message: "Username is not found!" });
+  }
+
+  const isPswMatch = await bcrypt.compare(password, user.password);
+
+  if (!isPswMatch) {
+    return res.status(400).json({ message: "Password is incorrect." });
   }
 
   try {
-    const user = await UserModel.findOne({ username });
-
-    if (!user) {
-      return res.status(404).json({ message: "Username is not found!" });
-    }
-
-    const isPswMatch = await bcrypt.compare(password, user.password);
-
-    if (!isPswMatch) {
-      return res.status(400).json({ message: "Password is incorrect." });
-    }
-
     const token = jwt.sign(
       { userid: user._id, username: user.username },
       JWTKEY,

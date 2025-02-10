@@ -34,8 +34,11 @@ export const createGameElminsterCharacter = async () => {
       "Gods & Temples",
     ],
     pictureKeywords: [
-      ["medievalfantasy", "story", "adventure", "TheFloatingTower"], // from the first 4 keyword one will be added to the picture generation prompt
-    ],
+      "medievalfantasy",
+      "story",
+      "adventure",
+      "TheFloatingTower",
+    ], // from the first 4 keyword one will be added to the picture generation prompt
   };
 
   await GameCharacterModel.create(gameCharacter);

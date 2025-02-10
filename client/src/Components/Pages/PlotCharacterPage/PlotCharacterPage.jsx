@@ -10,7 +10,6 @@ const PlotCharacterPage = () => {
   const [plotCharacterList, setPlotCharacterList] = useState([]);
   const [isCreatorFormFilled, setIsCreatorFormFilled] = useState(false);
   const [isSelectedPlotCharacter, setIsSelectedPlotCharacter] = useState(false);
-  const [inputError, setInputError] = useState("");
   const [creatorFormData, setCreatorFormData] = useState({
     _id: "",
     plotcharactername: "",
@@ -51,10 +50,10 @@ const PlotCharacterPage = () => {
 
   const handleUpdateFormChange = (event) => {
     if (!isSelectedPlotCharacter) {
-      setInputError("Please select a plot story first.");
+      alert("Please select a plot story first.");
       return;
     }
-    setInputError("");
+
     const { name, value } = event.target;
     setUpdateFormData((prevFormData) => ({
       ...prevFormData,
@@ -64,10 +63,10 @@ const PlotCharacterPage = () => {
 
   const handleUpdateFormArrayChange = (event, fieldName, index) => {
     if (!isSelectedPlotCharacter) {
-      setInputError("Please select a character first.");
+      alert("Please select a character first.");
       return;
     }
-    setInputError("");
+
     const { value } = event.target;
     setUpdateFormData((prevFormData) => ({
       ...prevFormData,
@@ -80,7 +79,6 @@ const PlotCharacterPage = () => {
   const handleSelectedPlotCharacterDelete = async (event) => {
     event.preventDefault();
     const _id = updateFormData._id;
-    console.log(`/api/plotcharacter/${_id}`);
     try {
       const response = await fetch(`/api/plotcharacter/${_id}`, {
         method: "DELETE",
@@ -115,7 +113,6 @@ const PlotCharacterPage = () => {
   const rebootSelectedPlotCharacterData = async (event) => {
     try {
       event.preventDefault();
-      console.log(updateFormData);
       const rebootedCharacter = {
         _id: updateFormData._id,
         plotcharactername: updateFormData.plotcharactername,
@@ -125,6 +122,8 @@ const PlotCharacterPage = () => {
           updateFormData.charStoryKeywords[1],
           updateFormData.charStoryKeywords[2],
           updateFormData.charStoryKeywords[3],
+          updateFormData.charStoryKeywords[4],
+          updateFormData.charStoryKeywords[5],
         ],
         pictureKeywords: [
           updateFormData.pictureKeywords[0],
@@ -138,7 +137,7 @@ const PlotCharacterPage = () => {
       };
 
       if (!rebootedCharacter.plotcharactername) {
-        setInputError("Plot character name is required to reboot");
+        alert("Plot character name is required to reboot");
         return;
       }
 
@@ -146,7 +145,7 @@ const PlotCharacterPage = () => {
         rebootedCharacter.personality < 0 ||
         rebootedCharacter.personality > 100
       ) {
-        setInputError("Personality must be between 0 and 100.");
+        alert("Personality must be between 0 and 100.");
         return;
       }
       const response = await fetch(
@@ -161,7 +160,6 @@ const PlotCharacterPage = () => {
         }
       );
       const result = await response.json();
-      console.log(result);
       if (response.ok) {
         alert("Success: Character rebooted!");
         setUpdateFormData({
@@ -206,10 +204,9 @@ const PlotCharacterPage = () => {
         form.pictureKeywords4.value,
       ],
     };
-    console.log(updateFormData);
 
     if (!updatedCharacter.plotcharactername) {
-      setInputError("Plot character name is required.");
+      alert("Plot character name is required.");
       return;
     }
 
@@ -217,7 +214,7 @@ const PlotCharacterPage = () => {
       updatedCharacter.personality < 0 ||
       updatedCharacter.personality > 100
     ) {
-      setInputError("Personality must be between 0 and 100.");
+      alert("Personality must be between 0 and 100.");
       return;
     }
     try {
@@ -320,7 +317,11 @@ const PlotCharacterPage = () => {
       aiPictureUrls: [],
       fullStories: [],
     };
-    console.log(newCharacter);
+
+    if (creatorFormData.personality < 0 || creatorFormData.personality > 100) {
+      alert("Personality must be between 0 and 100.");
+      return;
+    }
     try {
       const response = await fetch("/api/createplotcharacter", {
         method: "POST",
@@ -331,7 +332,6 @@ const PlotCharacterPage = () => {
         body: JSON.stringify(newCharacter),
       });
       const result = await response.json();
-      console.log(result);
       if (response.ok) {
         alert("Success: Plot character created!");
         setCreatorFormData({
@@ -419,9 +419,9 @@ const PlotCharacterPage = () => {
                 e.preventDefault();
                 const submitter = e.nativeEvent.submitter;
                 if (submitter.name === "updater") {
-                  handlePlotCharacterUpdate();
+                  handlePlotCharacterUpdate(e);
                 } else if (submitter.name === "reboot") {
-                  rebootSelectedPlotCharacterData();
+                  rebootSelectedPlotCharacterData(e);
                 }
               }}
             >
@@ -432,6 +432,7 @@ const PlotCharacterPage = () => {
                   </label>
                   <input
                     type="text"
+                    id="plotcharactername"
                     name="plotcharactername"
                     placeholder="Plot character name"
                     value={updateFormData.plotcharactername || ""}
@@ -446,6 +447,7 @@ const PlotCharacterPage = () => {
                   </label>
                   <input
                     type="number"
+                    id="personality"
                     name="personality"
                     placeholder="Plot character personality"
                     value={updateFormData.personality || 0}
@@ -459,6 +461,7 @@ const PlotCharacterPage = () => {
                   <label htmlFor="charStoryKeyword1">Keyword1</label>
                   <input
                     type="text"
+                    id="charStoryKeyword1"
                     name="charStoryKeyword1"
                     placeholder="keyword1"
                     value={updateFormData.charStoryKeywords[0] || ""}
@@ -473,6 +476,7 @@ const PlotCharacterPage = () => {
                   <label htmlFor="charStoryKeyword2">Keyword2</label>
                   <input
                     type="text"
+                    id="charStoryKeyword2"
                     name="charStoryKeyword2"
                     placeholder="keyword2"
                     value={updateFormData.charStoryKeywords[1] || ""}
@@ -487,6 +491,7 @@ const PlotCharacterPage = () => {
                   <label htmlFor="charStoryKeyword3">Keyword3</label>
                   <input
                     type="text"
+                    id="charStoryKeyword3"
                     name="charStoryKeyword3"
                     placeholder="keyword3"
                     value={updateFormData.charStoryKeywords[2] || ""}
@@ -501,6 +506,7 @@ const PlotCharacterPage = () => {
                   <label htmlFor="charStoryKeyword4">Keyword4</label>
                   <input
                     type="text"
+                    id="charStoryKeyword4"
                     name="charStoryKeyword4"
                     placeholder="keyword4"
                     value={updateFormData.charStoryKeywords[3] || ""}
@@ -515,6 +521,7 @@ const PlotCharacterPage = () => {
                   <label htmlFor="charStoryKeyword5">Keyword5</label>
                   <input
                     type="text"
+                    id="charStoryKeyword5"
                     name="charStoryKeyword5"
                     placeholder="keyword5"
                     value={updateFormData.charStoryKeywords[4] || ""}
@@ -530,6 +537,7 @@ const PlotCharacterPage = () => {
                   <label htmlFor="charStoryKeyword6">Keyword6</label>
                   <input
                     type="text"
+                    id="charStoryKeyword6"
                     name="charStoryKeyword6"
                     placeholder="keyword6"
                     value={updateFormData.charStoryKeywords[5] || ""}
@@ -545,6 +553,7 @@ const PlotCharacterPage = () => {
                   <label htmlFor="pictureKeywords1">Picture Keyword 1</label>
                   <input
                     type="text"
+                    id="pictureKeywords1"
                     name="pictureKeywords1"
                     placeholder="Picture Keyword 1"
                     value={updateFormData.pictureKeywords[0] || ""}
@@ -559,6 +568,7 @@ const PlotCharacterPage = () => {
                   <label htmlFor="pictureKeywords2">Picture Keyword 2</label>
                   <input
                     type="text"
+                    id="pictureKeywords2"
                     name="pictureKeywords2"
                     placeholder="Picture Keyword 2"
                     value={updateFormData.pictureKeywords[1] || ""}
@@ -573,6 +583,7 @@ const PlotCharacterPage = () => {
                   <label htmlFor="pictureKeywords3">Picture Keyword 3</label>
                   <input
                     type="text"
+                    id="pictureKeywords3"
                     name="pictureKeywords3"
                     placeholder="Picture Keyword 3"
                     value={updateFormData.pictureKeywords[2] || ""}
@@ -587,6 +598,7 @@ const PlotCharacterPage = () => {
                   <label htmlFor="pictureKeywords4">Picture Keyword 4</label>
                   <input
                     type="text"
+                    id="pictureKeywords4"
                     name="pictureKeywords4"
                     placeholder="Picture Keyword 4"
                     value={updateFormData.pictureKeywords[3] || ""}
@@ -624,8 +636,8 @@ const PlotCharacterPage = () => {
         </div>
         <div className="plot-character-create-form">
           <h3 className="subtitle">Plot character creator form</h3>
-          {/* {loading && <p>Loading characters...</p>}
-          {error && <p style={{ color: "red" }}>{error}</p>} */}
+          {loading && <p>Loading characters...</p>}
+          {error && <p style={{ color: "red" }}>{error}</p>}
 
           <form onSubmit={handlePlotCharacterCreation}>
             <ul>
@@ -633,6 +645,7 @@ const PlotCharacterPage = () => {
                 <label htmlFor="plotcharactername">Plot character name:</label>
                 <input
                   type="text"
+                  id="plotcharactername"
                   name="plotcharactername"
                   placeholder="Plot character name"
                   value={creatorFormData.plotcharactername || ""}
@@ -646,6 +659,7 @@ const PlotCharacterPage = () => {
                 </label>
                 <input
                   type="number"
+                  id="personality"
                   name="personality"
                   placeholder="Plot character personality"
                   value={creatorFormData.personality || 0}
@@ -658,6 +672,7 @@ const PlotCharacterPage = () => {
                 <label htmlFor="charStoryKeyword1">Keyword1</label>
                 <input
                   type="text"
+                  id="charStoryKeyword1"
                   name="charStoryKeyword1"
                   placeholder="keyword1"
                   value={creatorFormData.charStoryKeywords[0] || ""}
@@ -671,6 +686,7 @@ const PlotCharacterPage = () => {
                 <label htmlFor="charStoryKeyword2">Keyword2</label>
                 <input
                   type="text"
+                  id="charStoryKeyword2"
                   name="charStoryKeyword2"
                   placeholder="keyword2"
                   value={creatorFormData.charStoryKeywords[1] || ""}
@@ -684,6 +700,7 @@ const PlotCharacterPage = () => {
                 <label htmlFor="charStoryKeyword3">Keyword3</label>
                 <input
                   type="text"
+                  id="charStoryKeyword3"
                   name="charStoryKeyword3"
                   placeholder="keyword3"
                   value={creatorFormData.charStoryKeywords[2] || ""}
@@ -697,6 +714,7 @@ const PlotCharacterPage = () => {
                 <label htmlFor="charStoryKeyword4">Keyword4</label>
                 <input
                   type="text"
+                  id="charStoryKeyword4"
                   name="charStoryKeyword4"
                   placeholder="keyword4"
                   value={creatorFormData.charStoryKeywords[3] || ""}
@@ -710,6 +728,7 @@ const PlotCharacterPage = () => {
                 <label htmlFor="charStoryKeyword5">Keyword5</label>
                 <input
                   type="text"
+                  id="charStoryKeyword5"
                   name="charStoryKeyword5"
                   placeholder="keyword5"
                   value={creatorFormData.charStoryKeywords[4] || ""}
@@ -724,6 +743,7 @@ const PlotCharacterPage = () => {
                 <label htmlFor="charStoryKeyword6">Keyword6</label>
                 <input
                   type="text"
+                  id="charStoryKeyword6"
                   name="charStoryKeyword6"
                   placeholder="keyword6"
                   value={creatorFormData.charStoryKeywords[5] || ""}
@@ -738,6 +758,7 @@ const PlotCharacterPage = () => {
                 <label htmlFor="pictureKeywords1">Picture Keyword 1</label>
                 <input
                   type="text"
+                  id="pictureKeywords1"
                   name="pictureKeywords1"
                   placeholder="Picture Keyword 1"
                   value={creatorFormData.pictureKeywords[0] || ""}
@@ -751,6 +772,7 @@ const PlotCharacterPage = () => {
                 <label htmlFor="pictureKeywords2">Picture Keyword 2</label>
                 <input
                   type="text"
+                  id="pictureKeywords2"
                   name="pictureKeywords2"
                   placeholder="Picture Keyword 2"
                   value={creatorFormData.pictureKeywords[1] || ""}
@@ -764,6 +786,7 @@ const PlotCharacterPage = () => {
                 <label htmlFor="pictureKeywords3">Picture Keyword 3</label>
                 <input
                   type="text"
+                  id="pictureKeywords3"
                   name="pictureKeywords3"
                   placeholder="Picture Keyword 3"
                   value={creatorFormData.pictureKeywords[2] || ""}
@@ -777,6 +800,7 @@ const PlotCharacterPage = () => {
                 <label htmlFor="pictureKeywords4">Picture Keyword 4</label>
                 <input
                   type="text"
+                  id="pictureKeywords4"
                   name="pictureKeywords4"
                   placeholder="Picture Keyword 4"
                   value={creatorFormData.pictureKeywords[3] || ""}

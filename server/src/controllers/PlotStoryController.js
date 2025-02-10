@@ -89,7 +89,9 @@ export const generatePlotStoryAndPicture = async (req, res) => {
     }
     plotCharacter.selectedUserOptions.push(input);
     plotCharacter.fullStories.push(generatedText.generatedPlotStory);
-    plotCharacter.pictureKeywords.push([generatedText.keywords, input]);
+    generatedText.keywords.forEach((element) => {
+      plotCharacter.pictureKeywords.push(element);
+    });
 
     const aiPicureUrl = imageCreator(plotCharacter);
     plotCharacter.aiPictureUrls.push(aiPicureUrl);

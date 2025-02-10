@@ -7,7 +7,7 @@ import classRoutes from "./src/routes/gameClassRoutes.js";
 import plotCharacterRoutes from "./src/routes/plotCharacterRoutes.js";
 import storyRoutes from "./src/routes/plotStoryRoutes.js";
 
-dotenv.config();
+dotenv.config({ path: "../.env" });
 
 const app = express();
 const { MONGO_URL, PORT, JWTKEY, GEMINIKEY } = process.env;

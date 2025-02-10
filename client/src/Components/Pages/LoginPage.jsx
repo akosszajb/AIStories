@@ -4,6 +4,7 @@ import PageTitle from "../Common/PageTitle/PageTitle";
 import "../../globals.css";
 
 const LoginPage = () => {
+  const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     username: "",
     password: "",
@@ -18,6 +19,15 @@ const LoginPage = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
+      if (formData.username.length < 1 || formData.username.length > 15) {
+        setMessage("username length must be between 1 and 15.");
+        return;
+      }
+
+      if (formData.password.length < 1 || formData.password.length > 15) {
+        setMessage("password length must be between 1 and 15.");
+        return;
+      }
       const response = await fetch("/api/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -52,14 +62,22 @@ const LoginPage = () => {
           onChange={handleChange}
           autoComplete="username"
         />
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          value={formData.password}
-          onChange={handleChange}
-          autoComplete="current-password"
-        />
+        <div className="password-input-container">
+          <input
+            type={showPassword ? "text" : "password"}
+            name="password"
+            placeholder="Password"
+            value={formData.password}
+            onChange={handleChange}
+            autoComplete="password"
+          />
+          <span
+            onClick={() => setShowPassword(!showPassword)} // kattintásra vált
+            style={{ cursor: "pointer" }}
+          >
+            👁️
+          </span>
+        </div>
         <button type="submit">Login</button>
         {message && <p>{message}</p>}
       </form>

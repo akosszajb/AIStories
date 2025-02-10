@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import PageTitle from "../Common/PageTitle/PageTitle";
 import "../../globals.css";
 
@@ -9,6 +9,7 @@ const RegisterPage = () => {
     password: "",
   });
   const [message, setMessage] = useState("");
+  const [showPassword, setShowPassword] = useState(false); // jelszó láthatóság állapot
 
   const handleChange = (event) => {
     setFormData({ ...formData, [event.target.name]: event.target.value });
@@ -17,6 +18,20 @@ const RegisterPage = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
+      if (formData.username.length < 1 || formData.username.length > 15) {
+        setMessage("username length must be between 1 and 15.");
+        return;
+      }
+
+      if (formData.password.length < 1 || formData.password.length > 15) {
+        setMessage("password length must be between 1 and 15.");
+        return;
+      }
+
+      if (formData.email.length < 1 || formData.email.length > 100) {
+        setMessage("email length must be between 1 and 100.");
+        return;
+      }
       const response = await fetch("/api/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -47,6 +62,7 @@ const RegisterPage = () => {
           placeholder="Username"
           value={formData.username}
           onChange={handleChange}
+          autoComplete="username"
         />
         <input
           type="email"
@@ -54,16 +70,24 @@ const RegisterPage = () => {
           placeholder="example@xyz.com"
           value={formData.email}
           onChange={handleChange}
-          autoComplete="username"
+          autoComplete="email"
         />
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          value={formData.password}
-          onChange={handleChange}
-          autoComplete="current-password"
-        />
+        <div className="password-input-container">
+          <input
+            type={showPassword ? "text" : "password"} // itt változik a type
+            name="password"
+            placeholder="Password"
+            value={formData.password}
+            onChange={handleChange}
+            autoComplete="password"
+          />
+          <span
+            onClick={() => setShowPassword(!showPassword)} // kattintásra vált
+            style={{ cursor: "pointer" }}
+          >
+            👁️
+          </span>
+        </div>
         <button type="submit">Registration</button>
         {message && <p>{message}</p>}
       </form>
