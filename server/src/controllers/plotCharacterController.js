@@ -8,13 +8,14 @@ import {
   generatedStoryTextCreator,
 } from "../utils/emailTextCreator.js";
 
-dotenv.config({
-  path: "C:\\Users\\Akos\\Desktop\\codecool\\PET\\AdventureGame\\AIStories\\.env",
-});
+dotenv.config({ path: "../.env" });
+
 const { EMAIL, EMAILPSW } = process.env;
 
 if (!EMAIL) {
-  console.error("Missing EMAIL environment varible!");
+  console.error(
+    "plotCharacterController.js: Missing EMAIL environment varible!"
+  );
   process.exit(1);
 }
 

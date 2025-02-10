@@ -6,19 +6,21 @@ import userRoutes from "./src/routes/userRoutes.js";
 import classRoutes from "./src/routes/gameClassRoutes.js";
 import plotCharacterRoutes from "./src/routes/plotCharacterRoutes.js";
 import storyRoutes from "./src/routes/plotStoryRoutes.js";
+import path from "path";
 
-dotenv.config({ path: "../.env" });
+const envPath = path.resolve(process.cwd(), ".env");
+dotenv.config({ path: envPath });
 
 const app = express();
 const { MONGO_URL, PORT, JWTKEY, GEMINIKEY } = process.env;
 
 if (!MONGO_URL) {
-  console.error("Missing MONGO_URL environment varible!");
+  console.error("Server.js :Missing MONGO_URL environment varible!");
   process.exit(1);
 }
 
 if (!GEMINIKEY) {
-  console.error("Missing GEMINIKEY environment varible!");
+  console.error("Server.js :Missing GEMINIKEY environment varible!");
   process.exit(1);
 }
 

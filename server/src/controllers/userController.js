@@ -5,11 +5,8 @@ import dotenv from "dotenv";
 import { userProfilePictureCreator } from "../utils/imageCreator.js";
 import PlotCharacterModel from "../models/plotCharacter.model.js";
 import { defaultPlotCharacters } from "../models/exampleData/defaultPlotCharacters.js";
-import path from "path";
 
-const envPath = path.resolve(process.cwd(), ".env");
-
-dotenv.config({ path: envPath });
+dotenv.config({ path: "../.env" });
 
 const { JWTKEY } = process.env;
 

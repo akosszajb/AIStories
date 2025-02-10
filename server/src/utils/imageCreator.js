@@ -9,11 +9,11 @@ export const imageCreator = (plotCharacter) => {
   const height = 500;
   const seed = Math.floor(Math.random() * 10000);
   const model = "flux";
-  console.log("prompt                    " + prompt);
+
   const imageUrl = `https://pollinations.ai/p/${encodeURIComponent(
     prompt
   )}?width=${width}&height=${height}&seed=${seed}&enhance=${true}&model=${model}`;
-  console.log("Created imgURL");
+
   return imageUrl;
 };
 
@@ -28,6 +28,6 @@ export const userProfilePictureCreator = (promptarray) => {
   const imageUrl = `https://pollinations.ai/p/${encodeURIComponent(
     promptstring
   )}?width=${width}&height=${height}&seed=${seed}&enhance=${true}&model=${model}`;
-  console.log("Created imgURL");
+
   return imageUrl;
 };

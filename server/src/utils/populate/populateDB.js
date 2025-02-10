@@ -1,4 +1,3 @@
-import dotenv from "dotenv";
 import express from "express";
 import mongoose from "mongoose";
 import { createUser } from "./createFirstUser.js";
@@ -15,19 +14,14 @@ import {
   createGameSkywalkerCharacter,
 } from "./populateGameCharacters.js";
 import { populateGameClasses } from "./populateGameClasses.js";
-// import {
-//   createPlotGandalfCharacter,
-//   createPlotSpaceMarineCharacter,
-//   createPlotCharcterDetective,
-//   createPlotCharacterFunny,
-//   createPlotCharacterMilitary,
-// } from "./populatePlotCharacters.js";
-dotenv.config({ path: "../../../.env" });
+import dotenv from "dotenv";
+
+dotenv.config({ path: "../../../../.env" });
 
 const { MONGO_URL } = process.env;
 
 if (!MONGO_URL) {
-  console.error("Missing MONGO_URL environment varible!");
+  console.error("PopulateDB.js: Missing MONGO_URL environment varible!");
   process.exit(1);
 }
 
