@@ -260,7 +260,6 @@ const PlotSettingsPage = () => {
   const handleSelectedPlotStoryDelete = async (event) => {
     event.preventDefault();
     const _id = updateFormData._id;
-    console.log(_id);
     try {
       const response = await fetch("/api/deleteselectedplotstory", {
         method: "DELETE",
