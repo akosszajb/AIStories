@@ -1,12 +1,7 @@
+import "./setupEnv.js";
 import supertest from "supertest";
 import app from "./userTestsSetup.js";
 import jwt from "jsonwebtoken";
-import dotenv from "dotenv";
-import path from "path";
-
-const envPath = path.resolve(process.cwd(), ".env");
-
-dotenv.config({ path: envPath });
 
 const registrateBeforeLogin = async () => {
   const username = "01_testuser";
@@ -22,15 +17,10 @@ const registrateBeforeLogin = async () => {
   expect(regResponse.body.message).toBe(
     `Registration of ${username} is successful!`
   );
-  console.log("Registration complete. Proceeding with login.");
+  return regResponse;
 };
 
-// Error handling tests
-// Edge case tests
-// Security tests
-
 // database tests
-
 test("userLogin_test_01_Valid username and password - successful login", async () => {
   await registrateBeforeLogin();
 
@@ -38,7 +28,6 @@ test("userLogin_test_01_Valid username and password - successful login", async (
     username: "01_testuser",
     password: "password1",
   });
-
   expect(loginResponse.status).toBe(200);
   expect(loginResponse.body.message).toBe(
     `Login with 01_testuser username was successful!`
@@ -53,14 +42,11 @@ test("userLogin_test_02_Wrong password", async () => {
     password: "wrongpassword",
   });
 
-  console.log(loginResponse);
-
   expect(loginResponse.status).toBe(400);
   expect(loginResponse.body.message).toBe(`Password is incorrect.`);
 });
 
 // input validation tests
-
 test("userLogin_test_03_Username is missing", async () => {
   const password = "password123";
   const response = await supertest(app).post("/login").send({
@@ -89,9 +75,21 @@ test("userLogin_test_05_Username and password are missing", async () => {
   expect(response.body.message).toBe(`Username is required!`);
 });
 
-// token tests
+test("userLogin_test_06_username is not found", async () => {
+  const username = "nonexistentuser";
+  const password = "password1";
 
-test("userLogin_test_06_Token generation", async () => {
+  const response = await supertest(app).post("/login").send({
+    username: username,
+    password: password,
+  });
+
+  expect(response.status).toBe(404);
+  expect(response.body.message).toBe(`Username is not found!`);
+});
+
+// token tests
+test("userLogin_test_07_Token generation", async () => {
   await registrateBeforeLogin();
 
   const loginResponse = await supertest(app).post("/login").send({
