@@ -140,7 +140,7 @@ test("userRegistration_test_10_Should return 400 if the username is too long (16
 });
 
 // Password tests
-// BVA password - 0, 1, 5, 10, 13, 14, 15 (pasword.length)
+// BVA password - 0, 1, 5, 10, 13, 14, 15 (password.length)
 
 test("userRegistration_test_11_Should return 400 if password is missing", async () => {
   const username = "testuser";

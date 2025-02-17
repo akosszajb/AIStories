@@ -50,6 +50,13 @@ const MainPage = () => {
           lost couch. From crashing high-society galas to outwitting a gang of
           thieving squirrels, every moment is a whirlwind of chaos and laughter.
         </p>
+        <h3>The Silent Witness</h3>
+        <p>
+          A famous author is found dead in his study, with only his cat,
+          Whiskers, as a witness. As the investigator digs deeper, cryptic
+          letters lead to a hidden room, revealing long-buried secrets and the
+          truth about the author's final moments.
+        </p>
         <h3>Operation Shadow Strike</h3>
         <p>
           A high-stakes military mission behind enemy lines turns into a
