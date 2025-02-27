@@ -1,6 +1,6 @@
-import "./setupEnv.js";
+import "../setupEnv.js";
 import supertest from "supertest";
-import app from "./userTestsSetup.js";
+import app from "../setupTests.js";
 import jwt from "jsonwebtoken";
 
 const registrateBeforeLogin = async () => {

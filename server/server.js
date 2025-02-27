@@ -12,7 +12,7 @@ const envPath = path.resolve(process.cwd(), ".env");
 dotenv.config({ path: envPath });
 
 const app = express();
-const { MONGO_URL, PORT, JWTKEY, GEMINIKEY } = process.env;
+const { MONGO_URL, PORT, GEMINIKEY } = process.env;
 
 if (!MONGO_URL) {
   console.error("Server.js :Missing MONGO_URL environment varible!");

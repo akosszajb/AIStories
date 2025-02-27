@@ -1,7 +1,6 @@
-import "./setupEnv.js";
+import "../setupEnv.js";
 import supertest from "supertest";
-import app from "./userTestsSetup.js";
-import jwt from "jsonwebtoken";
+import app from "../setupTests.js";
 
 const username = "01_testuser";
 const password = "password1";

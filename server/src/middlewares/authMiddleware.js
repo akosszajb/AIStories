@@ -17,7 +17,7 @@ export const verifyToken = (req, res, next) => {
 
   jwt.verify(token, JWTKEY, (err, decoded) => {
     if (err) {
-      console.log(err);
+      console.error(err);
       return res
         .status(403)
         .json({ message: "Failed to authenticate token!!!!" });

@@ -1,181 +1,17 @@
-import "./setupEnv.js";
+import "../setupEnv.js";
 import supertest from "supertest";
-import app from "./userTestsSetup.js";
+import app from "../setupTests.js";
+
+const username = "testuser";
+const email = "test@test.com";
+const password = "password123";
+const email100 = `a@${"a".repeat(94)}.com`;
+const email101 = `a@${"a".repeat(95)}.com`;
 
 test("userRegistration_test_01_User should be created with valid username, email and password", async () => {
-  const username = "01_testuser";
   const response = await supertest(app).post("/register").send({
     username: username,
-    email: "test@test.hu",
-    password: "password123",
-  });
-
-  expect(response.status).toBe(201);
-  expect(response.body.status).toBe("success");
-  expect(response.body.message).toBe(
-    `Registration of ${username} is successful!`
-  );
-});
-
-test("userRegistration_test_02_Should return 400 if all reg field are missing", async () => {
-  const response = await supertest(app).post("/register").send({});
-
-  expect(response.status).toBe(400);
-});
-
-// Username tests
-// BVA username  - 0, 1, 2, 8, 14, 15, 16 (username.length)
-
-test("userRegistration_test_03_Should return 400 if the username is missing", async () => {
-  const response = await supertest(app).post("/register").send({
-    email: "test@test.hu",
-    password: "password123",
-  });
-
-  expect(response.status).toBe(400);
-  expect(response.body.message).toBe(
-    "All fields are required! - username is missing"
-  );
-});
-
-test("userRegistration_test_04_Should return 400 if the username is too short (0)", async () => {
-  const response = await supertest(app).post("/register").send({
-    username: "",
-    email: "test@test.hu",
-    password: "testpassword1",
-  });
-
-  expect(response.status).toBe(400);
-  expect(response.body.message).toBe(
-    "All fields are required! - username is missing"
-  );
-});
-
-test("userRegistration_test_05_Should return 201 if the username has a correct length (1) - minimum", async () => {
-  const username = "b";
-  const response = await supertest(app).post("/register").send({
-    username: username,
-    email: "test@test.hu",
-    password: "password123",
-  });
-
-  expect(response.status).toBe(201);
-  expect(response.body.status).toBe("success");
-  expect(response.body.message).toBe(
-    `Registration of ${username} is successful!`
-  );
-});
-
-test("userRegistration_test_06_Should return 201 if the username has a correct length (2)", async () => {
-  const username = "te";
-  const response = await supertest(app).post("/register").send({
-    username: username,
-    email: "test@test.hu",
-    password: "password123",
-  });
-
-  expect(response.status).toBe(201);
-  expect(response.body.status).toBe("success");
-  expect(response.body.message).toBe(
-    `Registration of ${username} is successful!`
-  );
-});
-
-test("userRegistration_test_07_Should return 201 if the username has a correct length (8)", async () => {
-  const username = "testuser";
-  const response = await supertest(app).post("/register").send({
-    username: username,
-    email: "test@test.hu",
-    password: "password123",
-  });
-
-  expect(response.status).toBe(201);
-  expect(response.body.status).toBe("success");
-  expect(response.body.message).toBe(
-    `Registration of ${username} is successful!`
-  );
-});
-
-test("userRegistration_test_08_Should return 201 if the username has a correct length (14)", async () => {
-  const username = "07_testuser_14";
-  const response = await supertest(app).post("/register").send({
-    username: username,
-    email: "test@test.hu",
-    password: "password123",
-  });
-
-  expect(response.status).toBe(201);
-  expect(response.body.status).toBe("success");
-  expect(response.body.message).toBe(
-    `Registration of ${username} is successful!`
-  );
-});
-
-test("userRegistration_test_09_Should return 201 if the username has a correct length (15) - maximum", async () => {
-  const username = "08_testuser__15";
-  const response = await supertest(app).post("/register").send({
-    username: username,
-    email: "test@test.hu",
-    password: "password123",
-  });
-
-  expect(response.status).toBe(201);
-  expect(response.body.status).toBe("success");
-  expect(response.body.message).toBe(
-    `Registration of ${username} is successful!`
-  );
-});
-
-test("userRegistration_test_10_Should return 400 if the username is too long (16)", async () => {
-  const response = await supertest(app).post("/register").send({
-    username: "09_wrongtestuser",
-    email: "test@test.hu",
-    password: "testpassword1",
-  });
-
-  expect(response.status).toBe(400);
-  expect(response.body.message).toBe(
-    "username length must be between 1 and 15."
-  );
-});
-
-// Password tests
-// BVA password - 0, 1, 5, 10, 13, 14, 15 (password.length)
-
-test("userRegistration_test_11_Should return 400 if password is missing", async () => {
-  const username = "testuser";
-  const response = await supertest(app).post("/register").send({
-    username: username,
-    email: "test@test.hu",
-  });
-
-  expect(response.status).toBe(400);
-  expect(response.body.message).toBe(
-    "All fields are required! - password is missing"
-  );
-});
-
-test("userRegistration_test_12_Should return 400 if the password is too short (0)", async () => {
-  const password = "";
-  const username = "testuser";
-  const response = await supertest(app).post("/register").send({
-    username: username,
-    email: "test@test.hu",
-    password: password,
-  });
-
-  expect(response.status).toBe(400);
-  expect(response.body.message).toBe(
-    "All fields are required! - password is missing"
-  );
-});
-
-test("userRegistration_test_13_Should return 201 if the password has a correct length (1) - minimum", async () => {
-  const password = "b";
-  const username = "testuser";
-  const response = await supertest(app).post("/register").send({
-    username: username,
-    email: "test@test.hu",
+    email: email,
     password: password,
   });
 
@@ -186,421 +22,361 @@ test("userRegistration_test_13_Should return 201 if the password has a correct l
   );
 });
 
-test("userRegistration_test_14_Should return 201 if the password has a correct length (2)", async () => {
-  const password = "te";
-  const username = "testuser";
-  const response = await supertest(app).post("/register").send({
-    username: username,
-    email: "test@test.hu",
-    password: password,
-  });
+describe("User Registration", () => {
+  const testCases = [
+    [
+      "userRegistration_test_02: Should return 400 if all reg field are missing",
+      undefined,
+      undefined,
+      undefined,
+      400,
+      "All fields are required! - username is missing",
+    ],
+    [
+      "userRegistration_test_03: Should return 400 if the username is missing",
+      undefined,
+      email,
+      password,
+      400,
+      "All fields are required! - username is missing",
+    ],
+    [
+      "userRegistration_test_04: Should return 400 if the username is too short (0)",
+      "",
+      email,
+      password,
+      400,
+      "All fields are required! - username is missing",
+    ],
+    [
+      "userRegistration_test_05: Should return 201 if the username has a correct length (1) - minimum",
+      "b",
+      email,
+      password,
+      201,
+      "Registration of b is successful!",
+    ],
+    [
+      "userRegistration_test_06: Should return 201 if the username has a correct length (2)",
+      "te",
+      email,
+      password,
+      201,
+      "Registration of te is successful!",
+    ],
+    [
+      "userRegistration_test_07: Should return 201 if the username has a correct length (8)",
+      username,
+      email,
+      password,
+      201,
+      "Registration of testuser is successful!",
+    ],
+    [
+      "userRegistration_test_08: Should return 201 if the username has a correct length (14)",
+      "07_testuser_14",
+      email,
+      password,
+      201,
+      "Registration of 07_testuser_14 is successful!",
+    ],
+    [
+      "userRegistration_test_09: Should return 201 if the username has a correct length (15) - maximum",
+      "08_testuser__15",
+      email,
+      password,
+      201,
+      "Registration of 08_testuser__15 is successful!",
+    ],
+    [
+      "userRegistration_test_10: Should return 400 if the username is too long (16) - maximum",
+      "09_wrongtestuser",
+      email,
+      password,
+      400,
+      "registerUser: username length must be between 1 and 15.",
+    ],
+    [
+      "userRegistration_test_11: Should return 400 if password is missing",
+      username,
+      email,
+      undefined,
+      400,
+      "All fields are required! - password is missing",
+    ],
+    [
+      "userRegistration_test_12: Should return 400 if the password is too short (0)",
+      username,
+      email,
+      undefined,
+      400,
+      "All fields are required! - password is missing",
+    ],
+    [
+      "userRegistration_test_13: Should return 201 if the password has a correct length (1) - minimum",
+      username,
+      email,
+      "p",
+      201,
+      `Registration of ${username} is successful!`,
+    ],
+    [
+      "userRegistration_test_14:Should return 201 if the password has a correct length (2)",
+      username,
+      email,
+      "pa",
+      201,
+      `Registration of ${username} is successful!`,
+    ],
+    [
+      "userRegistration_test_15: Should return 201 if the password has a correct length (8)",
+      username,
+      email,
+      "password",
+      201,
+      `Registration of ${username} is successful!`,
+    ],
+    [
+      "userRegistration_test_16: Should return 201 if the password has a correct length (14)",
+      username,
+      email,
+      "correctpasswor",
+      201,
+      `Registration of ${username} is successful!`,
+    ],
+    [
+      "userRegistration_test_17: Should return 201 if the password has a correct length (15) - maximum",
+      username,
+      email,
+      "correctpassword",
+      201,
+      `Registration of ${username} is successful!`,
+    ],
+    [
+      "userRegistration_test_18: Should return 400 if the password is too long (16)",
+      username,
+      email,
+      "wrongpassword_16",
+      400,
+      `registerUser: password length must be between 1 and 15.`,
+    ],
+    [
+      "userRegistration_test_19: User should be created with valid simple email - test@example.com",
+      username,
+      "test@example.com",
+      password,
+      201,
+      `Registration of ${username} is successful!`,
+    ],
+    [
+      "userRegistration_test_20: User should be created with valid email - first.last@example.co.uk",
+      username,
+      "first.last@example.co.uk",
+      password,
+      201,
+      `Registration of ${username} is successful!`,
+    ],
+    [
+      "userRegistration_test_21: User should be created with valid email - user+label@example.com",
+      username,
+      "user+label@example.com",
+      password,
+      201,
+      `Registration of ${username} is successful!`,
+    ],
+    [
+      "userRegistration_test_22: User should be created with valid email - 123user@domain.org",
+      username,
+      "123user@domain.org",
+      password,
+      201,
+      `Registration of ${username} is successful!`,
+    ],
+    [
+      "userRegistration_test_23: User should be created with valid email - user@sub.domain.com",
+      username,
+      "user@sub.domain.com",
+      password,
+      201,
+      `Registration of ${username} is successful!`,
+    ],
+    [
+      "userRegistration_test_24: User should be created with valid email - user@domain.name",
+      username,
+      "user@domain.name",
+      password,
+      201,
+      `Registration of ${username} is successful!`,
+    ],
+    [
+      "userRegistration_test_25: Should return 400 if email is missing",
+      username,
+      undefined,
+      password,
+      400,
+      "All fields are required! - email is missing",
+    ],
+    [
+      "userRegistration_test_26: User should be created with valid email - a@b.c",
+      username,
+      "a@b.c",
+      password,
+      201,
+      `Registration of ${username} is successful!`,
+    ],
+    [
+      "userRegistration_test_27: User should be created with valid email - username_with_underscores@example.com",
+      username,
+      "username_with_underscores@example.com",
+      password,
+      201,
+      `Registration of ${username} is successful!`,
+    ],
+    [
+      "userRegistration_test_28: User should be created with valid email - 100 char",
+      username,
+      email100,
+      password,
+      201,
+      `Registration of ${username} is successful!`,
+    ],
+    [
+      "userRegistration_test_29: Should return 400 if email is too long 101",
+      username,
+      email101,
+      password,
+      400,
+      `registerUser: email length must be between 1 and 100.`,
+    ],
+    [
+      "userRegistration_test_30: Should return 400 if the email is too short (0)",
+      username,
+      "",
+      password,
+      400,
+      "All fields are required! - email is missing",
+    ],
+  ];
 
-  expect(response.status).toBe(201);
-  expect(response.body.status).toBe("success");
-  expect(response.body.message).toBe(
-    `Registration of ${username} is successful!`
+  testCases.forEach(
+    ([
+      testTitle,
+      username,
+      email,
+      password,
+      expectedStatus,
+      expectedMessage,
+    ]) => {
+      it(`${testTitle}`, async () => {
+        const response = await supertest(app).post("/register").send({
+          username,
+          email,
+          password,
+        });
+
+        expect(response.status).toBe(expectedStatus);
+        expect(response.body.message).toBe(expectedMessage);
+      });
+    }
   );
 });
 
-test("userRegistration_test_15_Should return 201 if the password has a correct length (8)", async () => {
-  const password = "password";
-  const username = "testuser";
-  const response = await supertest(app).post("/register").send({
-    username: username,
-    email: "test@test.hu",
-    password: password,
+describe("User Registration - database validation", () => {
+  const testCases = [
+    [
+      "userRegistration_test_31: User should not be created with invalid email - plainaddress",
+      username,
+      "plainaddress",
+      password,
+    ],
+    [
+      "userRegistration_test_32: User should not be created with invalid email - @missinguser.com",
+      username,
+      "@missinguser.com",
+      password,
+    ],
+    [
+      "userRegistration_test_33: User should not be created with invalid email - missingdomain@",
+      username,
+      "missingdomain@",
+      password,
+    ],
+    [
+      "userRegistration_test_34: User should not be created with invalid email - user@.com",
+      username,
+      "user@.com",
+      password,
+    ],
+    [
+      "userRegistration_test_35: User should not be created with invalid email - user@com",
+      username,
+      "user@com",
+      password,
+    ],
+    [
+      "userRegistration_test_36: User should not be created with invalid email - user@domain..com",
+      username,
+      "user@domain..com",
+      password,
+    ],
+    [
+      "userRegistration_test_37: User should not be created with invalid email - user@domain,com",
+      username,
+      "user@domain,com",
+      password,
+    ],
+    [
+      "userRegistration_test_38: User should not be created with invalid email - user@domain!.com",
+      username,
+      "user@domain!.com",
+      password,
+    ],
+    [
+      "userRegistration_test_39: User should not be created with invalid email - user@ domain.com",
+      username,
+      "user@ domain.com",
+      password,
+    ],
+    [
+      "userRegistration_test_40: User should not be created with invalid email - user@domain..sub.com",
+      username,
+      "user@domain..sub.com",
+      password,
+    ],
+    [
+      "userRegistration_test_41: Should return 400 if email in wrong format: user@.sub.domain.com",
+      username,
+      "user@.sub.domain.com",
+      password,
+    ],
+  ];
+
+  testCases.forEach(([testTitle, username, email, password]) => {
+    it(`${testTitle}`, async () => {
+      try {
+        const response = await supertest(app).post("/register").send({
+          username,
+          email,
+          password,
+        });
+      } catch (error) {
+        expect(error).toMatchObject({
+          name: "ValidationError",
+          errors: {
+            email: {
+              message: "Please use a valid email address. (xyz@example.com)",
+              kind: "regexp",
+              path: "email",
+              value: "invalidemail",
+            },
+          },
+        });
+      }
+    });
   });
-
-  expect(response.status).toBe(201);
-  expect(response.body.status).toBe("success");
-  expect(response.body.message).toBe(
-    `Registration of ${username} is successful!`
-  );
 });
 
-test("userRegistration_test_16_Should return 201 if the password has a correct length (14)", async () => {
-  const password = "correctpasswor";
-  const username = "testuser";
-  const response = await supertest(app).post("/register").send({
-    username: username,
-    email: "test@test.hu",
-    password: password,
-  });
-
-  expect(response.status).toBe(201);
-  expect(response.body.status).toBe("success");
-  expect(response.body.message).toBe(
-    `Registration of ${username} is successful!`
-  );
-});
-
-test("userRegistration_test_17_Should return 201 if the password has a correct length (15) - maximum", async () => {
-  const password = "correctpassword";
-  const username = "testuser";
-  const response = await supertest(app).post("/register").send({
-    username: username,
-    email: "test@test.hu",
-    password: password,
-  });
-
-  expect(response.status).toBe(201);
-  expect(response.body.status).toBe("success");
-  expect(response.body.message).toBe(
-    `Registration of ${username} is successful!`
-  );
-});
-
-test("userRegistration_test_18_Should return 400 if the password is too long (16)", async () => {
-  const password = "wrongpassword_16";
-  const username = "testuser";
-  const response = await supertest(app).post("/register").send({
-    username: username,
-    email: "test@test.hu",
-    password: password,
-  });
-
-  expect(response.status).toBe(400);
-  expect(response.body.message).toBe(
-    "password length must be between 1 and 15."
-  );
-});
-
-// Email tests
-// BVA email.length - registerUser validation
-// Email characters - mongoose validation
-
-// mongoDB validation tests
-
-test("userRegistration_test_19_User should be created with valid simple email - test@example.com", async () => {
-  const username = "testuser";
-  const response = await supertest(app).post("/register").send({
-    username: username,
-    email: "test@example.com",
-    password: "password123",
-  });
-  expect(response.status).toBe(201);
-  expect(response.body.status).toBe("success");
-  expect(response.body.message).toBe(
-    `Registration of ${username} is successful!`
-  );
-});
-
-test("userRegistration_test_20_User should be created with valid email - first.last@example.co.uk", async () => {
-  const username = "testuser";
-  const response = await supertest(app).post("/register").send({
-    username: username,
-    email: "first.last@example.co.uk",
-    password: "password123",
-  });
-  expect(response.status).toBe(201);
-  expect(response.body.status).toBe("success");
-  expect(response.body.message).toBe(
-    `Registration of ${username} is successful!`
-  );
-});
-
-test("userRegistration_test_21_User should be created with valid email - user+label@example.com", async () => {
-  const username = "testuser";
-  const response = await supertest(app).post("/register").send({
-    username: username,
-    email: "user+label@example.com",
-    password: "password123",
-  });
-  expect(response.status).toBe(201);
-  expect(response.body.status).toBe("success");
-  expect(response.body.message).toBe(
-    `Registration of ${username} is successful!`
-  );
-});
-
-test("userRegistration_test_22_User should be created with valid email - 123user@domain.org", async () => {
-  const username = "testuser";
-  const response = await supertest(app).post("/register").send({
-    username: username,
-    email: "123user@domain.org",
-    password: "password123",
-  });
-  expect(response.status).toBe(201);
-  expect(response.body.status).toBe("success");
-  expect(response.body.message).toBe(
-    `Registration of ${username} is successful!`
-  );
-});
-
-test("userRegistration_test_23_User should be created with valid email - user@sub.domain.com", async () => {
-  const username = "testuser";
-  const response = await supertest(app).post("/register").send({
-    username: username,
-    email: "user@sub.domain.com",
-    password: "password123",
-  });
-  expect(response.status).toBe(201);
-  expect(response.body.status).toBe("success");
-  expect(response.body.message).toBe(
-    `Registration of ${username} is successful!`
-  );
-});
-
-test("userRegistration_test_24_User should be created with valid email - user@domain.name", async () => {
-  const username = "testuser";
-  const response = await supertest(app).post("/register").send({
-    username: username,
-    email: "user@domain.name",
-    password: "password123",
-  });
-  expect(response.status).toBe(201);
-  expect(response.body.status).toBe("success");
-  expect(response.body.message).toBe(
-    `Registration of ${username} is successful!`
-  );
-});
-
-test("userRegistration_test_25_User should not be created with invalid email - plainaddress", async () => {
-  try {
-    const username = "testuser";
-    const response = await supertest(app).post("/register").send({
-      username: username,
-      email: "plainaddress",
-      password: "password123",
-    });
-  } catch (error) {
-    expect(error).toMatchObject({
-      name: "ValidationError",
-      errors: {
-        email: {
-          message: "Please use a valid email address. (xyz@example.com)",
-          kind: "regexp",
-          path: "email",
-          value: "invalidemail",
-        },
-      },
-    });
-  }
-});
-
-test("userRegistration_test_26_User should not be created with invalid email - @missinguser.com", async () => {
-  try {
-    const username = "testuser";
-    const response = await supertest(app).post("/register").send({
-      username: username,
-      email: "@missinguser.com",
-      password: "password123",
-    });
-  } catch (error) {
-    expect(error).toMatchObject({
-      name: "ValidationError",
-      errors: {
-        email: {
-          message: "Please use a valid email address. (xyz@example.com)",
-          kind: "regexp",
-          path: "email",
-          value: "invalidemail",
-        },
-      },
-    });
-  }
-});
-
-test("userRegistration_test_27_User should not be created with invalid email - missingdomain@", async () => {
-  try {
-    const username = "testuser";
-    const response = await supertest(app).post("/register").send({
-      username: username,
-      email: "missingdomain@",
-      password: "password123",
-    });
-  } catch (error) {
-    expect(error).toMatchObject({
-      name: "ValidationError",
-      errors: {
-        email: {
-          message: "Please use a valid email address. (xyz@example.com)",
-          kind: "regexp",
-          path: "email",
-          value: "invalidemail",
-        },
-      },
-    });
-  }
-});
-
-test("userRegistration_test_27_User should not be created with invalid email - user@.com", async () => {
-  try {
-    const username = "testuser";
-    const response = await supertest(app).post("/register").send({
-      username: username,
-      email: "user@.com",
-      password: "password123",
-    });
-  } catch (error) {
-    expect(error).toMatchObject({
-      name: "ValidationError",
-      errors: {
-        email: {
-          message: "Please use a valid email address. (xyz@example.com)",
-          kind: "regexp",
-          path: "email",
-          value: "invalidemail",
-        },
-      },
-    });
-  }
-});
-
-test("userRegistration_test_29_User should not be created with invalid email - user@com", async () => {
-  try {
-    const username = "testuser";
-    const response = await supertest(app).post("/register").send({
-      username: username,
-      email: "user@com",
-      password: "password123",
-    });
-  } catch (error) {
-    expect(error).toMatchObject({
-      name: "ValidationError",
-      errors: {
-        email: {
-          message: "Please use a valid email address. (xyz@example.com)",
-          kind: "regexp",
-          path: "email",
-          value: "invalidemail",
-        },
-      },
-    });
-  }
-});
-
-test("userRegistration_test_30_User should not be created with invalid email - user@domain..com", async () => {
-  try {
-    const username = "testuser";
-    const response = await supertest(app).post("/register").send({
-      username: username,
-      email: "user@com",
-      password: "password123",
-    });
-  } catch (error) {
-    expect(error).toMatchObject({
-      name: "ValidationError",
-      errors: {
-        email: {
-          message: "Please use a valid email address. (xyz@example.com)",
-          kind: "regexp",
-          path: "email",
-          value: "invalidemail",
-        },
-      },
-    });
-  }
-});
-
-test("userRegistration_test_31_User should not be created with invalid email - user@domain,com", async () => {
-  try {
-    const username = "testuser";
-    const response = await supertest(app).post("/register").send({
-      username: username,
-      email: "user@domain,com",
-      password: "password123",
-    });
-  } catch (error) {
-    expect(error).toMatchObject({
-      name: "ValidationError",
-      errors: {
-        email: {
-          message: "Please use a valid email address. (xyz@example.com)",
-          kind: "regexp",
-          path: "email",
-          value: "invalidemail",
-        },
-      },
-    });
-  }
-});
-
-test("userRegistration_test_32_User should not be created with invalid email - user@domain!.com", async () => {
-  try {
-    const username = "testuser";
-    const response = await supertest(app).post("/register").send({
-      username: username,
-      email: "user@domain!.com",
-      password: "password123",
-    });
-  } catch (error) {
-    expect(error).toMatchObject({
-      name: "ValidationError",
-      errors: {
-        email: {
-          message: "Please use a valid email address. (xyz@example.com)",
-          kind: "regexp",
-          path: "email",
-          value: "invalidemail",
-        },
-      },
-    });
-  }
-});
-
-test("userRegistration_test_33_User should not be created with invalid email - user@ domain.com", async () => {
-  try {
-    const username = "testuser";
-    const response = await supertest(app).post("/register").send({
-      username: username,
-      email: "user@ domain.com",
-      password: "password123",
-    });
-  } catch (error) {
-    expect(error).toMatchObject({
-      name: "ValidationError",
-      errors: {
-        email: {
-          message: "Please use a valid email address. (xyz@example.com)",
-          kind: "regexp",
-          path: "email",
-          value: "invalidemail",
-        },
-      },
-    });
-  }
-});
-
-test("userRegistration_test_34_User should not be created with invalid email - user@domain..sub.com", async () => {
-  try {
-    const username = "testuser";
-    const response = await supertest(app).post("/register").send({
-      username: username,
-      email: "user@domain..sub.com",
-      password: "password123",
-    });
-  } catch (error) {
-    expect(error).toMatchObject({
-      name: "ValidationError",
-      errors: {
-        email: {
-          message: "Please use a valid email address. (xyz@example.com)",
-          kind: "regexp",
-          path: "email",
-          value: "invalidemail",
-        },
-      },
-    });
-  }
-});
-
-test("userRegistration_test_35_Should return 400 if email is missing", async () => {
-  const response = await supertest(app).post("/register").send({
-    username: "testUsername",
-    password: "password123",
-  });
-
-  expect(response.status).toBe(400);
-  expect(response.body.message).toBe(
-    "All fields are required! - email is missing"
-  );
-});
-
-test("userRegistration_test_36_Should return 400 if email is already used", async () => {
-  const username = "testuser";
-  const email = "test@test.hu";
-  const password = "password123";
+test("userRegistration_test_42_Should return 400 if email is already used", async () => {
   const response1 = await supertest(app).post("/register").send({
     username: username,
     email: email,
@@ -617,239 +393,4 @@ test("userRegistration_test_36_Should return 400 if email is already used", asyn
   expect(response2.body.message).toBe(
     "This email address is already associated with another user!"
   );
-});
-
-// registerUser function validation tests
-
-test("userRegistration_test_37_User should be created with valid email - a@b.c", async () => {
-  const username = "testuser";
-  const response = await supertest(app).post("/register").send({
-    username: username,
-    email: "a@b.c",
-    password: "password123",
-  });
-  expect(response.status).toBe(201);
-  expect(response.body.status).toBe("success");
-  expect(response.body.message).toBe(
-    `Registration of ${username} is successful!`
-  );
-});
-
-test("userRegistration_test_38_User should be created with valid email - simple@example.com", async () => {
-  const username = "testuser";
-  const response = await supertest(app).post("/register").send({
-    username: username,
-    email: "simple@example.com",
-    password: "password123",
-  });
-  expect(response.status).toBe(201);
-  expect(response.body.status).toBe("success");
-  expect(response.body.message).toBe(
-    `Registration of ${username} is successful!`
-  );
-});
-
-test("userRegistration_test_39_User should be created with valid email - very.common@example.com", async () => {
-  const username = "testuser";
-  const response = await supertest(app).post("/register").send({
-    username: username,
-    email: "very.common@example.com",
-    password: "password123",
-  });
-  expect(response.status).toBe(201);
-  expect(response.body.status).toBe("success");
-  expect(response.body.message).toBe(
-    `Registration of ${username} is successful!`
-  );
-});
-
-test("userRegistration_test_40_User should be created with valid email - disposable.style.email.with+symbol@example.com", async () => {
-  const username = "testuser";
-  const response = await supertest(app).post("/register").send({
-    username: username,
-    email: "disposable.style.email.with+symbol@example.com",
-    password: "password123",
-  });
-  expect(response.status).toBe(201);
-  expect(response.body.status).toBe("success");
-  expect(response.body.message).toBe(
-    `Registration of ${username} is successful!`
-  );
-});
-
-test("userRegistration_test_41_User should be created with valid email - other.email-with-dash@example.com", async () => {
-  const username = "testuser";
-  const response = await supertest(app).post("/register").send({
-    username: username,
-    email: "other.email-with-dash@example.com",
-    password: "password123",
-  });
-  expect(response.status).toBe(201);
-  expect(response.body.status).toBe("success");
-  expect(response.body.message).toBe(
-    `Registration of ${username} is successful!`
-  );
-});
-
-test("userRegistration_test_42_User should be created with valid email - user@sub.domain.com", async () => {
-  const username = "testuser";
-  const response = await supertest(app).post("/register").send({
-    username: username,
-    email: "user@sub.domain.com",
-    password: "password123",
-  });
-  expect(response.status).toBe(201);
-  expect(response.body.status).toBe("success");
-  expect(response.body.message).toBe(
-    `Registration of ${username} is successful!`
-  );
-});
-
-test("userRegistration_test_43_User should be created with valid email - user@domain.co.uk", async () => {
-  const username = "testuser";
-  const response = await supertest(app).post("/register").send({
-    username: username,
-    email: "user@domain.co.uk",
-    password: "password123",
-  });
-  expect(response.status).toBe(201);
-  expect(response.body.status).toBe("success");
-  expect(response.body.message).toBe(
-    `Registration of ${username} is successful!`
-  );
-});
-
-test("userRegistration_test_44_User should be created with valid email - user@domain.name", async () => {
-  const username = "testuser";
-  const response = await supertest(app).post("/register").send({
-    username: username,
-    email: "user@domain.name",
-    password: "password123",
-  });
-  expect(response.status).toBe(201);
-  expect(response.body.status).toBe("success");
-  expect(response.body.message).toBe(
-    `Registration of ${username} is successful!`
-  );
-});
-
-test("userRegistration_test_45_User should be created with valid email - username_with_underscores@example.com", async () => {
-  const username = "testuser";
-  const response = await supertest(app).post("/register").send({
-    username: username,
-    email: "username_with_underscores@example.com",
-    password: "password123",
-  });
-  expect(response.status).toBe(201);
-  expect(response.body.status).toBe("success");
-  expect(response.body.message).toBe(
-    `Registration of ${username} is successful!`
-  );
-});
-
-test("userRegistration_test_46_User should be created with valid email - 100 char", async () => {
-  const email = `a@${"a".repeat(94)}.com`;
-  const username = "testuser";
-  const response = await supertest(app).post("/register").send({
-    username: username,
-    email: email,
-    password: "password123",
-  });
-  expect(response.status).toBe(201);
-  expect(response.body.status).toBe("success");
-  expect(response.body.message).toBe(
-    `Registration of ${username} is successful!`
-  );
-});
-
-test("userRegistration_test_47_Should return 400 if email is missing", async () => {
-  const response = await supertest(app).post("/register").send({
-    email: "",
-    username: "testUsername",
-    password: "password123",
-  });
-
-  expect(response.status).toBe(400);
-  expect(response.body.message).toBe(
-    "All fields are required! - email is missing"
-  );
-});
-
-test("userRegistration_test_48_Should return 400 if email is too long 101", async () => {
-  const email = `a@${"a".repeat(95)}.com`;
-
-  const response = await supertest(app).post("/register").send({
-    email: email,
-    username: "testUsername",
-    password: "password123",
-  });
-
-  expect(response.status).toBe(400);
-  expect(response.body.message).toBe("email length must be between 1 and 100.");
-});
-
-test("userRegistration_test_49_Should return 400 if email in wrong format: user@.sub.domain.com", async () => {
-  try {
-    const response = await supertest(app).post("/register").send({
-      email: "user@.sub.domain.com",
-      username: "testUsername",
-      password: "password123",
-    });
-  } catch (error) {
-    expect(error).toMatchObject({
-      name: "ValidationError",
-      errors: {
-        email: {
-          message: "Please use a valid email address. (xyz@example.com)",
-          kind: "regexp",
-          path: "email",
-          value: "invalidemail",
-        },
-      },
-    });
-  }
-});
-
-test("userRegistration_test_50_Should return 400 if email in wrong format: user @example.com", async () => {
-  try {
-    const response = await supertest(app).post("/register").send({
-      email: "user @example.com",
-      username: "testUsername",
-      password: "password123",
-    });
-  } catch (error) {
-    expect(error).toMatchObject({
-      name: "ValidationError",
-      errors: {
-        email: {
-          message: "Please use a valid email address. (xyz@example.com)",
-          kind: "regexp",
-          path: "email",
-          value: "invalidemail",
-        },
-      },
-    });
-  }
-});
-
-test("userRegistration_test_51_Should return 400 if email in wrong format: user@example..com", async () => {
-  try {
-    const response = await supertest(app).post("/register").send({
-      email: "user@example..com",
-      username: "testUsername",
-      password: "password123",
-    });
-  } catch (error) {
-    expect(error).toMatchObject({
-      name: "ValidationError",
-      errors: {
-        email: {
-          message: "Please use a valid email address. (xyz@example.com)",
-          kind: "regexp",
-          path: "email",
-          value: "invalidemail",
-        },
-      },
-    });
-  }
 });

@@ -24,7 +24,6 @@ export const userProfilePictureCreator = (promptarray) => {
   const height = 500;
   const seed = Math.floor(Math.random() * 1000);
   const model = "flux";
-  console.log("prompt                    " + promptstring);
   const imageUrl = `https://pollinations.ai/p/${encodeURIComponent(
     promptstring
   )}?width=${width}&height=${height}&seed=${seed}&enhance=${true}&model=${model}`;
