@@ -6,6 +6,7 @@ const GameClassSchema = new Schema({
   gameclassname: {
     type: String,
     required: true,
+    unique: true,
   },
   attackType: {
     type: String,

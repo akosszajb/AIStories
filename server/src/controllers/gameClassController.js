@@ -24,12 +24,26 @@ export const createGameClass = async (req, res) => {
 export const updateGameClass = async (req, res) => {
   const id = req.params.id;
   try {
+    const { gameclassname, attackType, attack, defense, created } = req.body;
+    if (!gameclassname && !attackType && !attack && !defense) {
+      return res
+        .status(400)
+        .json({ message: "At least one field is required to update!" });
+    }
     const updatedGameClass = await GameClassModel.findOneAndUpdate(
       { _id: id },
-      { $set: { ...req.body } },
+      {
+        $set: {
+          gameclassname: gameclassname,
+          attackType: attackType,
+          attack: attack,
+          defense: defense,
+          created: created,
+        },
+      },
       { new: true }
     );
-    return res.status(204).json(updatedGameClass);
+    return res.status(200).json(updatedGameClass);
   } catch (error) {
     console.error(`Error with /api/class/${id} PATCH endpoint:`, error);
     return res.status(500).json({ error: "Internal server error" });
@@ -38,7 +52,14 @@ export const updateGameClass = async (req, res) => {
 
 export const deleteGameClass = async (req, res) => {
   try {
-    const deleted = await GameClassModel.deleteOne({ _id: req.params.id });
+    const id = req.params.id;
+
+    const gameClass = await GameClassModel.findById(id);
+    if (!gameClass) {
+      return res.status(404).json({ message: "Class not found" });
+    }
+
+    const deleted = await GameClassModel.deleteOne({ _id: id });
     return res.status(410).json(deleted);
   } catch (error) {
     console.error(`Error with /api/class/${id} DELETE endpoint:`, error);
