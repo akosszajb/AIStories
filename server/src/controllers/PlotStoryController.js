@@ -4,7 +4,6 @@ import PlotStoryModel from "../models/plotStory.model.js";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { imageCreator } from "../utils/imageCreator.js";
 import geminiPlotPromptGenerator from "../utils/geminiPlotPromptCreator.js";
-import pkg from "gridfs-stream";
 
 const { GEMINIKEY } = process.env;
 
@@ -14,10 +13,14 @@ const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 export const getPlotStoryList = async (req, res) => {
   try {
     const plotStories = await PlotStoryModel.find({}, "title _id");
+
+    if (plotStories.length === 0) {
+      return res.status(404).json({ message: "Plot stories not found!" });
+    }
     res.status(200).json(plotStories);
   } catch (error) {
     console.error(error);
-    res.status(500).json({
+    return res.status(500).json({
       message: "Internal Server Error",
       error: error.message,
     });
@@ -27,6 +30,7 @@ export const getPlotStoryList = async (req, res) => {
 export const getSelectedPlotStory = async (req, res) => {
   try {
     const userId = req.userId;
+
     if (!userId) {
       return res.status(400).json({ message: "User ID is missing." });
     }
@@ -44,12 +48,12 @@ export const getSelectedPlotStory = async (req, res) => {
     }
     const plotStories = plotStory.StarterFullStories.join("");
     const plotCharacter = await PlotCharacterModel.findById(plotCharacterID);
-
+    if (!plotCharacter) {
+      return res.status(404).json({ message: "Plot character not found" });
+    }
     plotCharacter.fullStories.push(plotStories);
-
     await plotCharacter.save();
-
-    res.status(200).json({
+    return res.status(200).json({
       plotstories: plotStories,
       buttonText1: plotStory.firstChoiceOptions[0],
       buttonText2: plotStory.firstChoiceOptions[1],
@@ -71,15 +75,23 @@ export const generatePlotStoryAndPicture = async (req, res) => {
     if (!userId) {
       return res.status(400).json({ message: "User ID is missing." });
     }
+    const user = await UserModel.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found!" });
+    }
     if (!input) {
       return res.status(400).json({ message: "Prompt is missing." });
     }
-    const user = await UserModel.findById(userId);
+    if (!plotCharacterID) {
+      return res.status(400).json({ message: "plotCharacterID is missing." });
+    }
     const plotCharacter = await PlotCharacterModel.findById(plotCharacterID);
+    if (!plotCharacter) {
+      return res.status(404).json({ message: "plotCharacter not found!" });
+    }
     const result = await model.generateContent(
       geminiPlotPromptGenerator(plotCharacter, input)
     );
-
     const responseText = result.response.text();
     const cleanedText = responseText.replace(/```json|```/g, "").trim();
 
@@ -151,7 +163,6 @@ export const createPlotStory = async (req, res) => {
     };
 
     const saved = await PlotStoryModel.create(newPlotStory);
-    console.log("Saved new plot story:", saved.title);
 
     return res.status(201).json({
       status: "success",
@@ -234,7 +245,10 @@ export const updatePlotStory = async (req, res) => {
       { new: true }
     );
 
-    res.status(200).json(plotStory);
+    if (!plotStory) {
+      return res.status(404).json({ message: "plot Story is not found!" });
+    }
+    return res.status(200).json(plotStory);
   } catch (error) {
     console.error(error);
     res.status(500).json({
@@ -252,11 +266,16 @@ export const deletePlotStory = async (req, res) => {
         .status(400)
         .json({ message: "Plot Story _id is required (deletePlotStory)" });
     }
-    const deleted = await PlotStoryModel.findByIdAndDelete(_id);
+
+    const storyToDelete = await PlotStoryModel.findById(_id);
+    if (!storyToDelete) {
+      return res.status(404).json({ message: "Plot Story is not found." });
+    }
+    const deleted = await PlotStoryModel.findByIdAndDelete(storyToDelete._id);
     return res.status(200).json(deleted);
   } catch (error) {
     console.error(error);
-    res.status(500).json({
+    return res.status(500).json({
       message: "Internal Server Error",
       error: error.message,
     });

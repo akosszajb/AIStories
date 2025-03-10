@@ -1,14 +1,7 @@
 import "../setupEnv.js";
 import supertest from "supertest";
 import app from "../setupTests.js";
-import {
-  loginAndGetToken,
-  registrateBeforeLogin,
-} from "./setupLoginAndGetToken.js";
-
-const username = "01_testuser";
-const password = "password1";
-const email = "test@test.hu";
+import { loginAndGetToken } from "../loginAndGetToken.js";
 
 test("getUserProfilePicture_test_01_valid request", async () => {
   const token = await loginAndGetToken();
