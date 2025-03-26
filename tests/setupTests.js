@@ -7,6 +7,7 @@ import gameClassControllerRouter from "../server/src/routes/gameClassRoutes.js";
 import { verifyToken } from "../server/src/middlewares/authMiddleware.js";
 import plotStoryRouter from "../server/src/routes/plotStoryRoutes.js";
 import { fakeDataBaseCreator } from "./fakeDataBaseCreator.js";
+import plotCharacterRouter from "../server/src/routes/plotCharacterRoutes.js";
 
 let mongoServer;
 
@@ -16,6 +17,7 @@ app.use(express.json());
 app.use("", router);
 app.use("", gameClassControllerRouter);
 app.use("", plotStoryRouter);
+app.use("", plotCharacterRouter);
 
 // fake endpoint
 app.get("/protected", verifyToken, (req, res) => {
@@ -26,10 +28,7 @@ beforeAll(async () => {
   mongoServer = await MongoMemoryServer.create();
   const mongoUri = mongoServer.getUri();
 
-  await mongoose.connect(mongoUri, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  });
+  await mongoose.connect(mongoUri, {});
 
   await fakeDataBaseCreator();
 

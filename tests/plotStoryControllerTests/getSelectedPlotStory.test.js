@@ -99,7 +99,6 @@ test("getSelectedPlotStory_test_05_user's fullStories should be updated", async 
   const firstPlotCharacterId = user.plotCharacter[0];
   const plotCharacter = await PlotCharacterModel.findById(firstPlotCharacterId);
   const originalFullstories = plotCharacter.fullStories.join("");
-  console.log(originalFullstories);
 
   const response = await supertest(app)
     .get("/plotstorieslist")
@@ -121,9 +120,11 @@ test("getSelectedPlotStory_test_05_user's fullStories should be updated", async 
     updatedfirstPlotCharacterId
   );
   const updatedFullstories = updatedplotCharacter.fullStories.join("");
+
   const isNotEqual = updatedFullstories === originalFullstories;
-  console.log(originalFullstories);
-  console.log(updatedFullstories);
+  console.log("originalFullstories" + originalFullstories);
+  console.log("updatedFullstories" + updatedFullstories);
+  console.log("isNotEqual: " + isNotEqual);
 
   expect(isNotEqual).toBe(false);
   expect(originalFullstories).toBe("");
