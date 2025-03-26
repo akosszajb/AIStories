@@ -72,7 +72,6 @@ test("updateGameClass_test_04_duplicated class (not unique classname), should re
     .patch(`/gameclass/${secondElementId}`)
     .send(newClass);
 
-  console.log(updateResponse2.body);
   expect(updateResponse2.status).toBe(500);
   expect(updateResponse2.ok).toBe(false);
 });
@@ -85,8 +84,6 @@ test("updateGameClass_test_05_invalid data format - empty -  should return 500",
     .send({});
 
   const getResponse = await supertest(app).get("/gameclass");
-  console.log(updateResponse.body);
-  console.log(getResponse.body);
 
   expect(updateResponse.status).toBe(400);
   expect(updateResponse.body.message).toBe(

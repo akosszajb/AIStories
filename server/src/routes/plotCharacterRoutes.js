@@ -11,14 +11,42 @@ import {
   sendPlotCharacterStoryViaEmail,
 } from "../controllers/plotCharacterController.js";
 
-const router = express.Router();
+const plotCharacterRouter = express.Router();
 
-router.post("/createplotcharacter", verifyToken, createPlotCharacter);
-router.post("/plotcharacter/:id", verifyToken, updatePlotCharacter);
-router.delete("/plotcharacter/:id", verifyToken, deletePlotCharacter);
-router.get("/plotcharacterlist", verifyToken, getUserAllPlotCharacters);
-router.get("/selectedplotcharacter/:id", verifyToken, getPlotCharacter);
-router.post("/rebootcharacter/:id", verifyToken, rebootPlotCharacter);
-router.post("/send-email/:id", verifyToken, sendPlotCharacterStoryViaEmail);
+plotCharacterRouter.post(
+  "/createplotcharacter",
+  verifyToken,
+  createPlotCharacter
+);
+plotCharacterRouter.post(
+  "/plotcharacter/:id",
+  verifyToken,
+  updatePlotCharacter
+);
+plotCharacterRouter.delete(
+  "/plotcharacter/:id",
+  verifyToken,
+  deletePlotCharacter
+);
+plotCharacterRouter.get(
+  "/plotcharacterlist",
+  verifyToken,
+  getUserAllPlotCharacters
+);
+plotCharacterRouter.get(
+  "/selectedplotcharacter/:id",
+  verifyToken,
+  getPlotCharacter
+);
+plotCharacterRouter.post(
+  "/rebootcharacter/:id",
+  verifyToken,
+  rebootPlotCharacter
+);
+plotCharacterRouter.post(
+  "/send-email/:id",
+  verifyToken,
+  sendPlotCharacterStoryViaEmail
+);
 
-export default router;
+export default plotCharacterRouter;

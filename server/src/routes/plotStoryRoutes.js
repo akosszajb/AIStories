@@ -12,19 +12,27 @@ import {
   deletePlotStory,
 } from "../controllers/PlotStoryController.js";
 
-const router = express.Router();
+const plotStoryRouter = express.Router();
 
-router.get("/plotstorieslist", verifyToken, getPlotStoryList);
-router.post("/selectedplotstory", verifyToken, getSelectedPlotStory);
-router.post("/generate-plotstory", verifyToken, generatePlotStoryAndPicture);
-router.get("/plotstorytitles", verifyToken, getPlotStoryTitles);
-router.post("/createplotstory", verifyToken, createPlotStory);
-router.post(
+plotStoryRouter.get("/plotstorieslist", verifyToken, getPlotStoryList);
+plotStoryRouter.post("/selectedplotstory", verifyToken, getSelectedPlotStory);
+plotStoryRouter.post(
+  "/generate-plotstory",
+  verifyToken,
+  generatePlotStoryAndPicture
+);
+plotStoryRouter.get("/plotstorytitles", verifyToken, getPlotStoryTitles);
+plotStoryRouter.post("/createplotstory", verifyToken, createPlotStory);
+plotStoryRouter.post(
   "/selectedplotstorytomodify",
   verifyToken,
   getSelectedPlotStoryToModify
 );
-router.post("/updateselectedplotstory", verifyToken, updatePlotStory);
-router.delete("/deleteselectedplotstory", verifyToken, deletePlotStory);
+plotStoryRouter.post("/updateselectedplotstory", verifyToken, updatePlotStory);
+plotStoryRouter.delete(
+  "/deleteselectedplotstory",
+  verifyToken,
+  deletePlotStory
+);
 
-export default router;
+export default plotStoryRouter;

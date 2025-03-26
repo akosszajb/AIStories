@@ -1,11 +1,7 @@
 import "../setupEnv.js";
 import supertest from "supertest";
 import app from "../setupTests.js";
-import {
-  loginAndGetToken,
-  registrateBeforeLogin,
-} from "./setupLoginAndGetToken.js";
-import { userProfilePictureCreator } from "../../server/src/utils/imageCreator.js";
+import { loginAndGetToken } from "../loginAndGetToken.js";
 
 const prompt = ["test", "exclamation mark", "red", "sign"];
 

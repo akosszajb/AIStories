@@ -30,7 +30,7 @@ app.use(
 );
 
 app.get("/", async (req, res) => {
-  res.send("Backend is working! - / endpoint");
+  res.status(200).send("Backend is working! - / endpoint");
 });
 
 //use routes

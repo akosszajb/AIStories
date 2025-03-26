@@ -4,10 +4,9 @@ import app from "../setupTests.js";
 import {
   loginAndGetToken,
   registrateBeforeLogin,
-} from "./setupLoginAndGetToken.js";
+} from "../loginAndGetToken.js";
 
 const username = "01_testuser";
-const password = "password1";
 const email = "test@test.hu";
 
 test("getUserData_test_01_valid_userdata", async () => {
