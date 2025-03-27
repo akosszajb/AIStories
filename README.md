@@ -1,12 +1,12 @@
 <a id="readme-top"></a>
-[![Stargazers][stars-shield]][stars-url]
-[![LinkedIn][linkedin-shield]][linkedin-url]
+[![Stargazers](https://img.shields.io/github/stars/akosszajb/AIStories?style=social)](https://github.com/akosszajb/AIStories/stargazers)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-blue)](https://www.linkedin.com/in/akos-szajbert-7b489126b/)
 
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
   <a href="https://github.com/akosszajb/AIStories">
-    <img src="AIStories/imgages/logo.jpeg" alt="Logo" width="80" height="60">
+    <img src="images/logo.jpeg" alt="Logo" width="80" height="60">
   </a>
 
 <h3 align="center">AIStories - Interactive storytelling with AI-generated text and images</h3>
@@ -30,6 +30,7 @@
     <li>
       <a href="#project-description">Project Description</a>
       <ul>
+      <li><a href="#features">Features</a></li>
         <li><a href="#built-with">Built With</a></li>
       </ul>
     </li>
@@ -49,7 +50,7 @@
 <!-- PROJECT DESCRIPTION-->
 
 <div align="center">
-    <img src="UITAP-tests/images/main.PNG" alt="main" width="750" height="450">
+   <img src="images/main.PNG" alt="main" width="750" height="450">
 </div>
 
 ## Project Description
@@ -74,26 +75,26 @@ AI Stories is a text-based adventure game web application built using the MERN s
 
 List of the major frameworks/libraries/IDE used to bootstrap this project.
 
-- [![MongoDB][MongoDB]][MongoDB-url]
-- [![Express.js][Express.js]][Express-url]
-- [![React][React]][React-url]
-- [![Node.js][Node.js]][Node.js-url]
-- [![Mongoose][Mongoose]][Mongoose-url]
-- [![TailwindCSS][TailwindCSS]][TailwindCSS-url]
-- [![React Router][ReactRouter]][ReactRouter-url]
-- [![Vite][Vite]][Vite-url]
-- [![OpenAI API][OpenAI]][OpenAI-url]
-- [![Google Generative AI (Gemini)][GoogleAI]][GoogleAI-url]
-- [![Bcrypt][Bcrypt]][Bcrypt-url]
-- [![CORS][CORS]][CORS-url]
-- [![JWT (jsonwebtoken)][JWT]][JWT-url]
-- [![Nodemailer][Nodemailer]][Nodemailer-url]
-- [![GitHub][GitHub]][GitHub-url]
-- [![Thunder Client][ThunderClient]][ThunderClient-url]
-- [![Jest][Jest]][Jest-url]
-- [![Supertest][Supertest]][Supertest-url]
-- [![MongoDB Memory Server][MongoMemoryServer]][MongoMemoryServer-url]
-- [![Pollinations][Pollinations]][Pollinations-url]
+[![MongoDB](https://img.shields.io/badge/MongoDB-4.2-green)](https://www.mongodb.com/)
+[![Express.js](https://img.shields.io/badge/Express.js-4.0-blue)](https://expressjs.com/)
+[![React](https://img.shields.io/badge/React-17.0-lightblue)](https://reactjs.org/)
+[![Node.js](https://img.shields.io/badge/Node.js-14.0-brightgreen)](https://nodejs.org/)
+[![Mongoose](https://img.shields.io/badge/Mongoose-5.10-blue)](https://mongoosejs.com/)
+[![TailwindCSS](https://img.shields.io/badge/TailwindCSS-2.0-indigo)](https://tailwindcss.com/)
+[![React Router](https://img.shields.io/badge/React_Router-5.1.0-lightgrey)](https://reactrouter.com/)
+[![Vite](https://img.shields.io/badge/Vite-2.3.8-orange)](https://vitejs.dev/)
+[![OpenAI API](https://img.shields.io/badge/OpenAI_API-4-blue)](https://openai.com/)
+[![Google Generative AI (Gemini)](https://img.shields.io/badge/Google_Generative_AI_Gemini-blue)](https://ai.google/)
+[![Bcrypt](https://img.shields.io/badge/Bcrypt-5.0.0-yellow)](https://www.npmjs.com/package/bcrypt)
+[![CORS](https://img.shields.io/badge/CORS-2.8.5-blue)](https://www.npmjs.com/package/cors)
+[![JWT (jsonwebtoken)](<https://img.shields.io/badge/JWT%20(jsonwebtoken)-8.5.1-yellowgreen>)](https://www.npmjs.com/package/jsonwebtoken)
+[![Nodemailer](https://img.shields.io/badge/Nodemailer-6.6-blue)](https://nodemailer.com/)
+[![GitHub](https://img.shields.io/badge/GitHub-4.0-orange)](https://github.com/)
+[![Thunder Client](https://img.shields.io/badge/Thunder_Client-2.3.5-lightgrey)](https://www.thunderclient.com/)
+[![Jest](https://img.shields.io/badge/Jest-27.0-blue)](https://jestjs.io/)
+[![Supertest](https://img.shields.io/badge/Supertest-6.1.3-green)](https://www.npmjs.com/package/supertest)
+[![MongoDB Memory Server](https://img.shields.io/badge/MongoDB_Memory_Server-6.9-blue)](https://www.npmjs.com/package/mongodb-memory-server)
+[![Pollinations](https://img.shields.io/badge/Pollinations-1.0-yellow)](https://pollinations.ai/)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -203,27 +204,3 @@ Resources I find helpful and would like to give credit to.
 - [Codecool](https://codecool.com/en/)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-<!-- MARKDOWN LINKS & IMAGES -->
-<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-
-[MongoDB-url]: https://www.mongodb.com/
-[Express-url]: https://expressjs.com/
-[React-url]: https://react.dev/
-[Node.js-url]: https://nodejs.org/
-[Mongoose-url]: https://mongoosejs.com/
-[TailwindCSS-url]: https://tailwindcss.com/
-[ReactRouter-url]: https://reactrouter.com/
-[Vite-url]: https://vitejs.dev/
-[OpenAI-url]: https://openai.com/
-[GoogleAI-url]: https://ai.google.dev/
-[Bcrypt-url]: https://www.npmjs.com/package/bcrypt
-[CORS-url]: https://www.npmjs.com/package/cors
-[JWT-url]: https://www.npmjs.com/package/jsonwebtoken
-[Nodemailer-url]: https://nodemailer.com/
-[GitHub-url]: https://github.com/
-[ThunderClient-url]: https://www.thunderclient.com/
-[Jest-url]: https://jestjs.io/
-[Supertest-url]: https://www.npmjs.com/package/supertest
-[MongoMemoryServer-url]: https://www.npmjs.com/package/mongodb-memory-server
-[Pollinations-url]: https://pollinations.ai/
