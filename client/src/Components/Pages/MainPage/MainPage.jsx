@@ -20,10 +20,6 @@ const MainPage = () => {
         <ul>
           <li>Discover the fascinating world of AI-driven storytelling</li>
           <li>Learn about the project and its educational purpose</li>
-          <li>
-            Read about the game rules and the adventure behind "The Floating
-            Tower" or "Galaxy Quest" stories
-          </li>
           <li>Register or log in to personalize your experience</li>
           <li>Start a new game or continue your journey</li>
         </ul>

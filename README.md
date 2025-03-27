@@ -6,7 +6,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/akosszajb/AIStories">
-    <img src="AIStories\logo.jpeg" alt="Logo" width="80" height="60">
+    <img src="AIStories/imgages/logo.jpeg" alt="Logo" width="80" height="60">
   </a>
 
 <h3 align="center">AIStories - Interactive storytelling with AI-generated text and images</h3>
@@ -47,6 +47,10 @@
 </details>
 
 <!-- PROJECT DESCRIPTION-->
+
+<div align="center">
+    <img src="UITAP-tests/images/main.PNG" alt="main" width="750" height="450">
+</div>
 
 ## Project Description
 
@@ -141,13 +145,13 @@ EMAILPSW=your_email_password
 EMAILPSW2=your_email_password2
 ```
 
-4. Launch the backend server form the server folder:
+4. Launch the backend server from the server folder:
 
 ```bash
 node server.js
 ```
 
-Launch the frontend script form the client folder:
+Launch the frontend script from the client folder:
 
 ```bash
 npm run dev
