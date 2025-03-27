@@ -1,13 +1,9 @@
 import "../setupEnv.js";
 import supertest from "supertest";
 import app from "../setupTests.js";
-import {
-  loginAndGetToken,
-  registrateBeforeLogin,
-} from "./setupLoginAndGetToken.js";
+import { loginAndGetToken } from "../loginAndGetToken.js";
 
 import bcrypt from "bcrypt";
-import { newUserProfilePictureGenerator } from "../../server/src/controllers/userController.js";
 
 const defaultTestUser = {
   username: "testuser",
@@ -194,8 +190,6 @@ test("updateUser_test_08_failed update for non-existent user", async () => {
     .set("Authorization", `Bearer ${token}`)
     .send(JSON.stringify(newUser));
 
-  console.log(response.body);
-
   expect(response.status).toBe(404);
   expect(response.body.message).toBe("User not found.");
 });
@@ -365,7 +359,6 @@ test("updateUser_test_18_userNotFound", async () => {
     password: defaultTestUser.password,
   };
   const response = await updateUserRequest(invalidUserIdToken, newUser);
-  console.log(response.body);
 
   const isPasswordCorrect = await comparePasswords(
     newUser.password,

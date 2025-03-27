@@ -6,11 +6,11 @@ import {
   deleteGameClass,
 } from "../controllers/gameClassController.js";
 
-const router = express.Router();
+const gameClassControllerRouter = express.Router();
 
-router.get("/gameclass", getAllGameClasses);
-router.post("/gameclasscreator", createGameClass);
-router.patch("/gameclass/:id", updateGameClass);
-router.delete("/gameclass/:id", deleteGameClass);
+gameClassControllerRouter.get("/gameclass", getAllGameClasses);
+gameClassControllerRouter.post("/gameclasscreator", createGameClass);
+gameClassControllerRouter.patch("/gameclass/:id", updateGameClass);
+gameClassControllerRouter.delete("/gameclass/:id", deleteGameClass);
 
-export default router;
+export default gameClassControllerRouter;

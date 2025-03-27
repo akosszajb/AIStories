@@ -45,10 +45,6 @@ export const createPlotCharacter = async (req, res) => {
       },
       { new: true }
     );
-
-    if (!updatedUser) {
-      return res.status(404).json({ error: "Plot character not found" });
-    }
     updatedUser.save();
 
     return res.status(201).json(updatedUser);
@@ -68,7 +64,7 @@ export const updatePlotCharacter = async (req, res) => {
     !Array.isArray(charStoryKeywords) ||
     !Array.isArray(pictureKeywords)
   ) {
-    return res.status(400).json({ error: "Invalid input data" });
+    return res.status(400).json({ message: "Invalid input data" });
   }
 
   try {
@@ -86,7 +82,7 @@ export const updatePlotCharacter = async (req, res) => {
     );
 
     if (!updatedPlotCharacter) {
-      return res.status(404).json({ error: "Plot character not found" });
+      return res.status(404).json({ message: "Plot character not found" });
     }
 
     return res.status(200).json(updatedPlotCharacter);
@@ -99,7 +95,11 @@ export const updatePlotCharacter = async (req, res) => {
 export const deletePlotCharacter = async (req, res) => {
   try {
     const id = req.params.id;
+
     const deleted = await PlotCharacterModel.findByIdAndDelete(id);
+    if (!deleted) {
+      return res.status(404).json({ message: "Plot character is not found!" });
+    }
     return res.status(410).json(deleted);
   } catch (error) {
     console.error(`Error with /api/plotcharacter/:id DELETE endpoint:`, error);
@@ -165,7 +165,7 @@ export const rebootPlotCharacter = async (req, res) => {
     !Array.isArray(charStoryKeywords) ||
     !Array.isArray(pictureKeywords)
   ) {
-    return res.status(400).json({ error: "Invalid input data" });
+    return res.status(400).json({ message: "Invalid input data" });
   }
 
   try {
@@ -209,7 +209,6 @@ const transporter = nodemailer.createTransport({
 
 export const sendPlotCharacterStoryViaEmail = async (req, res) => {
   const characterId = req.params.id;
-  console.log(characterId);
 
   const userId = req.userId;
   const user = await UserModel.findById(userId);
@@ -335,10 +334,14 @@ export const sendPlotCharacterStoryViaEmail = async (req, res) => {
   };
 
   try {
+    console.log("Attempting to send email...");
     await transporter.sendMail(mailOptions);
+    console.log("Email sent successfully!");
     res.status(200).json({ message: "Email sent successfully!" });
   } catch (error) {
     console.error(`Error with the sendPlotCharacterStoryViaEmail:`, error);
-    return res.status(500).json({ error: "Internal server error" });
+    return res
+      .status(500)
+      .json({ error: "sendPlotCharacterStoryViaEmail: Internal server error" });
   }
 };

@@ -1,6 +1,7 @@
-import "../setupEnv.js";
+import "./setupEnv.js";
 import supertest from "supertest";
-import app from "../setupTests.js";
+import app from "./setupTests.js";
+import jwt from "jsonwebtoken";
 
 const username = "01_testuser";
 const password = "password1";
@@ -25,14 +26,20 @@ export const loginAndGetToken = async () => {
   await registrateBeforeLogin();
 
   const loginResponse = await supertest(app).post("/login").send({
-    username: "01_testuser",
-    password: "password1",
+    username: username,
+    password: password,
   });
 
   expect(loginResponse.status).toBe(200);
   expect(loginResponse.body.message).toBe(
-    `Login with 01_testuser username was successful!`
+    `Login with ${username} username was successful!`
   );
+
   const token = loginResponse.body.token;
   return token;
+};
+
+export const getUserIdFromToken = async (token) => {
+  const decodedToken = jwt.decode(token);
+  return decodedToken ? decodedToken.userid : null;
 };

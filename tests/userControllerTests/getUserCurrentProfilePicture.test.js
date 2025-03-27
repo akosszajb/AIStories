@@ -1,7 +1,7 @@
 import "../setupEnv.js";
 import supertest from "supertest";
 import app from "../setupTests.js";
-import { loginAndGetToken } from "./setupLoginAndGetToken.js";
+import { loginAndGetToken } from "../loginAndGetToken.js";
 
 const defaultProfielPicture =
   "https://image.pollinations.ai/prompt/avatarboy%20picture%20default?width=500&height=500&seed=1234&enhance=true&model=flux";
