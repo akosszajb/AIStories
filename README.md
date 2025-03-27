@@ -50,7 +50,7 @@
 <!-- PROJECT DESCRIPTION-->
 
 <div align="center">
-   <img src="images/main.PNG" alt="main" width="750" height="450">
+   <img src="images/main.PNG" alt="main" width="650" height="450">
 </div>
 
 ## Project Description
